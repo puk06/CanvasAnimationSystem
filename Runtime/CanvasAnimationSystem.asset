@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
-  m_Name: CanvasAnimation
+  m_Name: CanvasAnimationSystem
   m_EditorClassIdentifier: 
   serializedUdonProgramAsset: {fileID: 11400000, guid: f65325c34173a664783b5f7bd9c03742, type: 2}
   udonAssembly: 
   assemblyError: 
-  sourceCsScript: {fileID: 11500000, guid: 42c522fc010a3d6419f67672a9907ef7, type: 3}
+  sourceCsScript: {fileID: 11500000, guid: 328af410c403d4a46a9b51948c596d2c, type: 3}
   scriptVersion: 2
   compiledVersion: 2
   behaviourSyncMode: 1
   hasInteractEvent: 0
-  scriptID: -8190642733616833430
+  scriptID: -1480029921430464496
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
@@ -865,7 +865,7 @@ MonoBehaviour:
       Data: 50|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: net.puk06.CanvasAnimation.TransitionType[], net.puk06.canvas-animation-system
+      Data: net.puk06.CanvasAnimation.Models.TransitionType[], net.puk06.canvas-animation-system
     - Name: 
       Entry: 8
       Data: 
@@ -919,7 +919,7 @@ MonoBehaviour:
       Data: 53|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: net.puk06.CanvasAnimation.ElementType[], net.puk06.canvas-animation-system
+      Data: net.puk06.CanvasAnimation.Models.ElementType[], net.puk06.canvas-animation-system
     - Name: 
       Entry: 8
       Data: 
@@ -973,7 +973,7 @@ MonoBehaviour:
       Data: 56|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: net.puk06.CanvasAnimation.AnimationMode[], net.puk06.canvas-animation-system
+      Data: net.puk06.CanvasAnimation.Models.AnimationMode[], net.puk06.canvas-animation-system
     - Name: 
       Entry: 8
       Data: 
