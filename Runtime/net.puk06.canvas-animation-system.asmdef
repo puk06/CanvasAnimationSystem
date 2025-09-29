@@ -1,0 +1,18 @@
+{
+    "name": "net.puk06.canvas-animation-system",
+    "rootNamespace": "",
+    "references": [
+        "UdonSharp.Runtime",
+        "Unity.TextMeshPro",
+        "net.puk06.udon-utils"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
