@@ -36,12 +36,14 @@ namespace net.puk06.CanvasAnimation
         private const int START_LOCATION_INDEX = 5;
         private const int START_ROTATION_INDEX = 6;
         private const int START_SCALE_INDEX = 7;
-        private const int TRANSITION_TYPE_INDEX = 8;
-        private const int ANIMATION_MODE_INDEX = 9;
-        private const int ELEMENT_TYPE_INDEX = 10;
-        private const int TARGET_POINT_INDEX = 11;
-        private const int TARGET_ROTATION_INDEX = 12;
-        private const int TARGET_SCALE_INDEX = 13;
+        private const int START_COLOR_INDEX = 8;
+        private const int TRANSITION_TYPE_INDEX = 9;
+        private const int ANIMATION_MODE_INDEX = 10;
+        private const int ELEMENT_TYPE_INDEX = 11;
+        private const int TARGET_POINT_INDEX = 12;
+        private const int TARGET_ROTATION_INDEX = 13;
+        private const int TARGET_SCALE_INDEX = 14;
+        private const int TARGET_COLOR_INDEX = 15;
 
         private string[] m_currentTasks;
 
@@ -63,9 +65,12 @@ namespace net.puk06.CanvasAnimation
         private int[] m_pixelOffsets;
         private float[] m_startTimes;
         private float[] m_timeoutTimes;
+
         private Vector3[] m_startLocations;
         private Vector3[] m_startRotations;
         private Vector3[] m_startScales;
+        private Color[] m_startColors;
+
         private TransitionType[] m_transitionTypes;
         private ElementType[] m_elementTypes;
         private AnimationMode[] m_animationModes;
@@ -73,6 +78,7 @@ namespace net.puk06.CanvasAnimation
         private Vector3[] m_targetPoints;
         private Vector3[] m_targetScales;
         private Vector3[] m_targetRotations;
+        private Color[] m_targetColors;
 
         void Start()
         {
@@ -88,26 +94,35 @@ namespace net.puk06.CanvasAnimation
             m_pixelOffsets = new int[maxConcurrentAnimations];
             m_startTimes = new float[maxConcurrentAnimations];
             m_timeoutTimes = new float[maxConcurrentAnimations];
+
             m_startLocations = new Vector3[maxConcurrentAnimations];
             m_startRotations = new Vector3[maxConcurrentAnimations];
             m_startScales = new Vector3[maxConcurrentAnimations];
+            m_startColors = new Color[maxConcurrentAnimations];
+
             m_transitionTypes = new TransitionType[maxConcurrentAnimations];
             m_elementTypes = new ElementType[maxConcurrentAnimations];
             m_animationModes = new AnimationMode[maxConcurrentAnimations];
+
             m_targetPoints = new Vector3[maxConcurrentAnimations];
             m_targetScales = new Vector3[maxConcurrentAnimations];
             m_targetRotations = new Vector3[maxConcurrentAnimations];
+            m_targetColors = new Color[maxConcurrentAnimations];
 
             ArrayUtils.InitializeValues(m_durations);
             ArrayUtils.InitializeValues(m_pixelOffsets);
             ArrayUtils.InitializeValues(m_startTimes);
             ArrayUtils.InitializeValues(m_timeoutTimes);
+
             ArrayUtils.InitializeValues(m_startLocations);
             ArrayUtils.InitializeValues(m_startRotations);
             ArrayUtils.InitializeValues(m_startScales);
+            ArrayUtils.InitializeValues(m_startColors);
+            
             ArrayUtils.InitializeValues(m_targetPoints);
             ArrayUtils.InitializeValues(m_targetScales);
             ArrayUtils.InitializeValues(m_targetRotations);
+            ArrayUtils.InitializeValues(m_targetColors);
         }
 
         public CanvasAnimationSystem Show(Text element)
@@ -151,7 +166,7 @@ namespace net.puk06.CanvasAnimation
                 case FadeType.Out: animationMode = AnimationMode.FadeOut; break;
             }
 
-            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity);
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor());
             return this;
         }
 
@@ -177,7 +192,7 @@ namespace net.puk06.CanvasAnimation
                 default: animationMode = AnimationMode.MoveUp; break;
             }
 
-            AddTask(element, duration, after, pixelOffset, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity);
+            AddTask(element, duration, after, pixelOffset, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor());
             return this;
         }
 
@@ -200,7 +215,7 @@ namespace net.puk06.CanvasAnimation
                 case AnimationDirection.From: animationMode = AnimationMode.MoveFrom; break;
             }
 
-            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, targetPoint, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity);
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, targetPoint, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor());
             return this;
         }
 
@@ -216,7 +231,7 @@ namespace net.puk06.CanvasAnimation
             => MoveFromToInternal(element, ElementType.TMP_Text, duration, after, startPoint, targetPoint, transitionType);
         private CanvasAnimationSystem MoveFromToInternal(Component element, ElementType elementType, float duration, float after, Vector3 startPoint, Vector3 targetPoint, TransitionType transitionType)
         {
-            AddTask(element, duration, after, -1, transitionType, AnimationMode.MoveTo, elementType, targetPoint, Vector3.positiveInfinity, Vector3.positiveInfinity, startPoint, Vector3.positiveInfinity, Vector3.positiveInfinity);
+            AddTask(element, duration, after, -1, transitionType, AnimationMode.MoveTo, elementType, targetPoint, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), startPoint, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor());
             return this;
         }
 
@@ -239,7 +254,7 @@ namespace net.puk06.CanvasAnimation
                 case AnimationDirection.From: animationMode = AnimationMode.RotateFrom; break;
             }
 
-            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity);
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor());
             return this;
         }
 
@@ -255,7 +270,7 @@ namespace net.puk06.CanvasAnimation
             => RotateFromToInternal(element, ElementType.TMP_Text, duration, after, startRotation, targetRotation, transitionType);
         private CanvasAnimationSystem RotateFromToInternal(Component element, ElementType elementType, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
         {
-            AddTask(element, duration, after, -1, transitionType, AnimationMode.RotateTo, elementType, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, Vector3.positiveInfinity, startRotation, Vector3.positiveInfinity);
+            AddTask(element, duration, after, -1, transitionType, AnimationMode.RotateTo, elementType, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, startRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor());
             return this;
         }
 
@@ -278,7 +293,7 @@ namespace net.puk06.CanvasAnimation
                 case AnimationDirection.From: animationMode = AnimationMode.ScaleFrom; break;
             }
 
-            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, targetScale, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity);
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, targetScale, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor());
             return this;
         }
 
@@ -294,7 +309,46 @@ namespace net.puk06.CanvasAnimation
             => ScaleFromToInternal(element, ElementType.TMP_Text, duration, after, startScale, targetScale, transitionType);
         private CanvasAnimationSystem ScaleFromToInternal(Component element, ElementType elementType, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
         {
-            AddTask(element, duration, after, -1, transitionType, AnimationMode.ScaleTo, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, targetScale, Vector3.positiveInfinity, Vector3.positiveInfinity, startScale);
+            AddTask(element, duration, after, -1, transitionType, AnimationMode.ScaleTo, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, targetScale, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, startScale, ColorUtils.GetInvalidColor());
+            return this;
+        }
+        
+        public CanvasAnimationSystem Color(Text element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType)
+            => ColorInternal(element, ElementType.Text, duration, after, animationDirection, targetColor, transitionType);
+        public CanvasAnimationSystem Color(Button element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType)
+            => ColorInternal(element, ElementType.Button, duration, after, animationDirection, targetColor, transitionType);
+        public CanvasAnimationSystem Color(Image element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType)
+            => ColorInternal(element, ElementType.Image, duration, after, animationDirection, targetColor, transitionType);
+        public CanvasAnimationSystem Color(RawImage element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType)
+            => ColorInternal(element, ElementType.RawImage, duration, after, animationDirection, targetColor, transitionType);
+        public CanvasAnimationSystem Color(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType)
+            => ColorInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetColor, transitionType);
+        private CanvasAnimationSystem ColorInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType)
+        {
+            AnimationMode animationMode = AnimationMode.None;
+            switch (animationDirection)
+            {
+                case AnimationDirection.To: animationMode = AnimationMode.ColorTo; break;
+                case AnimationDirection.From: animationMode = AnimationMode.ColorFrom; break;
+            }
+
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, targetColor, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor());
+            return this;
+        }
+
+        public CanvasAnimationSystem ColorFromTo(Text element, float duration, float after, Color startColor, Color targetColor, TransitionType transitionType)
+            => ColorFromToInternal(element, ElementType.Text, duration, after, startColor, targetColor, transitionType);
+        public CanvasAnimationSystem ColorFromTo(Button element, float duration, float after, Color startColor, Color targetColor, TransitionType transitionType)
+            => ColorFromToInternal(element, ElementType.Button, duration, after, startColor, targetColor, transitionType);
+        public CanvasAnimationSystem ColorFromTo(Image element, float duration, float after, Color startColor, Color targetColor, TransitionType transitionType)
+            => ColorFromToInternal(element, ElementType.Image, duration, after, startColor, targetColor, transitionType);
+        public CanvasAnimationSystem ColorFromTo(RawImage element, float duration, float after, Color startColor, Color targetColor, TransitionType transitionType)
+            => ColorFromToInternal(element, ElementType.RawImage, duration, after, startColor, targetColor, transitionType);
+        public CanvasAnimationSystem ColorFromTo(TMP_Text element, float duration, float after, Color startColor, Color targetColor, TransitionType transitionType)
+            => ColorFromToInternal(element, ElementType.TMP_Text, duration, after, startColor, targetColor, transitionType);
+        private CanvasAnimationSystem ColorFromToInternal(Component element, ElementType elementType, float duration, float after, Color startColor, Color targetColor, TransitionType transitionType)
+        {
+            AddTask(element, duration, after, -1, transitionType, AnimationMode.ColorTo, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, targetColor, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, startColor);
             return this;
         }
 
@@ -322,7 +376,7 @@ namespace net.puk06.CanvasAnimation
                 ElementType objectElementType = int.Parse(parsedStrData[ELEMENT_TYPE_INDEX]) == -1 ? ElementType.None : m_elementTypes[int.Parse(parsedStrData[ELEMENT_TYPE_INDEX])];
                 if (elementType != objectElementType) continue;
 
-                Object targetObj = null;
+                Component targetObj = null;
                 switch (elementType)
                 {
                     case ElementType.Text: targetObj = m_targetTexts[objectIndex]; break;
@@ -373,8 +427,8 @@ namespace net.puk06.CanvasAnimation
             TransitionType transition,
             AnimationMode mode,
             ElementType elementType,
-            Vector3 targetPoint, Vector3 targetRotation, Vector3 targetScale,
-            Vector3 startPoint, Vector3 startRotation, Vector3 startScale
+            Vector3 targetPoint, Vector3 targetRotation, Vector3 targetScale, Color targetColor,
+            Vector3 startPoint, Vector3 startRotation, Vector3 startScale, Color startColor
         )
         {
             int objectIndex;
@@ -415,20 +469,15 @@ namespace net.puk06.CanvasAnimation
                     return;
             }
 
-            string stats = AssignData(objectIndex, time, after, pixelOffset, transition, mode, elementType, targetPoint, targetScale, targetRotation, startPoint, startRotation, startScale);
+            string stats = AssignData(objectIndex, time, after, pixelOffset, transition, mode, elementType, targetPoint, targetRotation, targetScale, targetColor, startPoint, startRotation, startScale, startColor);
 
             int statsIndex = ArrayUtils.AssignArrayValue(m_currentTasks, stats);
-            if (statsIndex == -1)
-            {
-                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Failed to create Animation Task");
-            }
-            else
-            {
-                Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Task Created - Object: {element.name} - Task: {statsIndex}");
-            }
+
+            if (statsIndex == -1) Debug.LogError($"{string.Format(LogTag, ColoredTag)} Failed to create Animation Task");
+            else Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Task Created - Object: {element.name} - Task: {statsIndex}");
         }
 
-        private string AssignData(int objectIndex, float time, float after, int pixelOffset, TransitionType transitionType, AnimationMode mode, ElementType elementType, Vector3 targetPoint, Vector3 targetScale, Vector3 targetRotation, Vector3 startPoint, Vector3 startRotation, Vector3 startScale)
+        private string AssignData(int objectIndex, float time, float after, int pixelOffset, TransitionType transitionType, AnimationMode mode, ElementType elementType, Vector3 targetPoint, Vector3 targetRotation, Vector3 targetScale, Color targetColor, Vector3 startPoint, Vector3 startRotation, Vector3 startScale, Color startColor)
         {
             int durationIndex = ArrayUtils.AssignArrayValue(m_durations, time);
             int startTimeIndex = ArrayUtils.AssignArrayValue(m_startTimes, Time.time);
@@ -437,14 +486,16 @@ namespace net.puk06.CanvasAnimation
             int startLocationIndex = MathUtils.IsPositiveInfinity(startPoint) ? -1 : ArrayUtils.AssignArrayValue(m_startLocations, startPoint);
             int startRotationIndex = MathUtils.IsPositiveInfinity(startRotation) ? -1 : ArrayUtils.AssignArrayValue(m_startRotations, startRotation);
             int startScaleIndex = MathUtils.IsPositiveInfinity(startScale) ? -1 : ArrayUtils.AssignArrayValue(m_startScales, startScale);
+            int startColorIndex = ColorUtils.IsInvalidColor(startColor) ? -1 : ArrayUtils.AssignArrayValue(m_startColors, startColor);
             int transitionTypeIndex = ArrayUtils.AssignArrayValue(m_transitionTypes, transitionType);
             int elementTypeIndex = ArrayUtils.AssignArrayValue(m_elementTypes, elementType);
             int modesIndex = ArrayUtils.AssignArrayValue(m_animationModes, mode);
             int targetPointIndex = ArrayUtils.AssignArrayValue(m_targetPoints, targetPoint);
             int targetRotationIndex = ArrayUtils.AssignArrayValue(m_targetRotations, targetRotation);
             int targetScaleIndex = ArrayUtils.AssignArrayValue(m_targetScales, targetScale);
+            int targetColorIndex = ArrayUtils.AssignArrayValue(m_targetColors, targetColor);
 
-            return $"{objectIndex},,,{durationIndex},,,{startTimeIndex},,,{pixelOffsetIndex},,,{timeoutTimesIndex},,,{startLocationIndex},,,{startRotationIndex},,,{startScaleIndex},,,{transitionTypeIndex},,,{modesIndex},,,{elementTypeIndex},,,{targetPointIndex},,,{targetRotationIndex},,,{targetScaleIndex}";
+            return $"{objectIndex},,,{durationIndex},,,{startTimeIndex},,,{pixelOffsetIndex},,,{timeoutTimesIndex},,,{startLocationIndex},,,{startRotationIndex},,,{startScaleIndex},,,{startColorIndex},,,{transitionTypeIndex},,,{modesIndex},,,{elementTypeIndex},,,{targetPointIndex},,,{targetRotationIndex},,,{targetScaleIndex},,,{targetColorIndex}";
         }
 
         private void Update()
@@ -465,16 +516,19 @@ namespace net.puk06.CanvasAnimation
                 Vector3 startLocation = int.Parse(parsedStrData[START_LOCATION_INDEX]) == -1 ? Vector3.positiveInfinity : m_startLocations[int.Parse(parsedStrData[START_LOCATION_INDEX])];
                 Vector3 startRotation = int.Parse(parsedStrData[START_ROTATION_INDEX]) == -1 ? Vector3.positiveInfinity : m_startRotations[int.Parse(parsedStrData[START_ROTATION_INDEX])];
                 Vector3 startScale = int.Parse(parsedStrData[START_SCALE_INDEX]) == -1 ? Vector3.positiveInfinity : m_startScales[int.Parse(parsedStrData[START_SCALE_INDEX])];
+                Color startColor = int.Parse(parsedStrData[START_COLOR_INDEX]) == -1 ? ColorUtils.GetInvalidColor() : m_startColors[int.Parse(parsedStrData[START_COLOR_INDEX])];
                 TransitionType transitionType = int.Parse(parsedStrData[TRANSITION_TYPE_INDEX]) == -1 ? TransitionType.None : m_transitionTypes[int.Parse(parsedStrData[TRANSITION_TYPE_INDEX])];
                 AnimationMode animationMode = int.Parse(parsedStrData[ANIMATION_MODE_INDEX]) == -1 ? AnimationMode.None : m_animationModes[int.Parse(parsedStrData[ANIMATION_MODE_INDEX])];
                 ElementType elementType = int.Parse(parsedStrData[ELEMENT_TYPE_INDEX]) == -1 ? ElementType.None : m_elementTypes[int.Parse(parsedStrData[ELEMENT_TYPE_INDEX])];
                 Vector3 targetPoint = int.Parse(parsedStrData[TARGET_POINT_INDEX]) == -1 ? Vector3.positiveInfinity : m_targetPoints[int.Parse(parsedStrData[TARGET_POINT_INDEX])];
                 Vector3 targetRotation = int.Parse(parsedStrData[TARGET_ROTATION_INDEX]) == -1 ? Vector3.positiveInfinity : m_targetRotations[int.Parse(parsedStrData[TARGET_ROTATION_INDEX])];
                 Vector3 targetScale = int.Parse(parsedStrData[TARGET_SCALE_INDEX]) == -1 ? Vector3.positiveInfinity : m_targetScales[int.Parse(parsedStrData[TARGET_SCALE_INDEX])];
+                Color targetColor = int.Parse(parsedStrData[TARGET_COLOR_INDEX]) == -1 ? ColorUtils.GetInvalidColor() : m_targetColors[int.Parse(parsedStrData[TARGET_COLOR_INDEX])];
+
 
                 if (objectIndex == -1) continue;
 
-                Object targetObj = null;
+                Component targetObj = null;
                 switch (elementType)
                 {
                     case ElementType.Text: targetObj = m_targetTexts[objectIndex]; break;
@@ -490,7 +544,7 @@ namespace net.puk06.CanvasAnimation
 
                 if (int.Parse(parsedStrData[START_LOCATION_INDEX]) == -1)
                 {
-                    Vector3 startLocationLocal = ((Component)targetObj).GetComponent<RectTransform>().localPosition;
+                    Vector3 startLocationLocal = targetObj.GetComponent<RectTransform>().localPosition;
                     int startLocationIndex = ArrayUtils.AssignArrayValue(m_startLocations, startLocationLocal);
                     parsedStrData[START_LOCATION_INDEX] = startLocationIndex.ToString();
                     m_currentTasks[i] = string.Join(",,,", parsedStrData);
@@ -500,7 +554,7 @@ namespace net.puk06.CanvasAnimation
 
                 if (int.Parse(parsedStrData[START_ROTATION_INDEX]) == -1)
                 {
-                    Vector3 startRotationLocal = ((Component)targetObj).GetComponent<RectTransform>().localEulerAngles;
+                    Vector3 startRotationLocal = targetObj.GetComponent<RectTransform>().localEulerAngles;
                     int startRotationIndex = ArrayUtils.AssignArrayValue(m_startRotations, startRotationLocal);
                     parsedStrData[START_ROTATION_INDEX] = startRotationIndex.ToString();
                     m_currentTasks[i] = string.Join(",,,", parsedStrData);
@@ -510,12 +564,22 @@ namespace net.puk06.CanvasAnimation
 
                 if (int.Parse(parsedStrData[START_SCALE_INDEX]) == -1)
                 {
-                    Vector3 startScaleLocal = ((Component)targetObj).GetComponent<RectTransform>().localScale;
+                    Vector3 startScaleLocal = targetObj.GetComponent<RectTransform>().localScale;
                     int startScaleIndex = ArrayUtils.AssignArrayValue(m_startScales, startScaleLocal);
                     parsedStrData[START_SCALE_INDEX] = startScaleIndex.ToString();
                     m_currentTasks[i] = string.Join(",,,", parsedStrData);
 
                     startScale = startScaleLocal;
+                }
+
+                if (int.Parse(parsedStrData[START_COLOR_INDEX]) == -1)
+                {
+                    Color startColorLocal = ColorUtils.GetColor(targetObj, elementType);
+                    int startColorIndex = ArrayUtils.AssignArrayValue(m_startColors, startColorLocal);
+                    parsedStrData[START_COLOR_INDEX] = startColorIndex.ToString();
+                    m_currentTasks[i] = string.Join(",,,", parsedStrData);
+
+                    startColor = startColorLocal;
                 }
 
                 float t = 1f;
@@ -527,108 +591,66 @@ namespace net.puk06.CanvasAnimation
                 {
                     case AnimationMode.FadeIn:
                         {
-                            float alpha = eased;
-                            switch (elementType)
-                            {
-                                case ElementType.Text:
-                                    Text text = (Text)targetObj;
-                                    var c1 = text.color; c1.a = alpha; text.color = c1;
-                                    break;
-                                case ElementType.TMP_Text:
-                                    TMP_Text tmp = (TMP_Text)targetObj;
-                                    var c2 = tmp.color; c2.a = alpha; tmp.color = c2;
-                                    break;
-                                case ElementType.Image:
-                                    Image img = (Image)targetObj;
-                                    var c3 = img.color; c3.a = alpha; img.color = c3;
-                                    break;
-                                case ElementType.RawImage:
-                                    RawImage raw = (RawImage)targetObj;
-                                    var c4 = raw.color; c4.a = alpha; raw.color = c4;
-                                    break;
-                                case ElementType.Button:
-                                    Button btn = (Button)targetObj;
-                                    var c5 = btn.targetGraphic.color; c5.a = alpha; btn.targetGraphic.color = c5;
-                                    break;
-                            }
+                            Color objectColor = ColorUtils.GetColor(targetObj, elementType);
+                            objectColor.a = eased;
+                            ColorUtils.SetColor(targetObj, elementType, objectColor);
                             break;
                         }
                     case AnimationMode.FadeOut:
                         {
-                            float alpha = 1f - eased;
-                            switch (elementType)
-                            {
-                                case ElementType.Text:
-                                    Text text = (Text)targetObj;
-                                    var c1 = text.color; c1.a = alpha; text.color = c1;
-                                    break;
-                                case ElementType.TMP_Text:
-                                    TMP_Text tmp = (TMP_Text)targetObj;
-                                    var c2 = tmp.color; c2.a = alpha; tmp.color = c2;
-                                    break;
-                                case ElementType.Image:
-                                    Image img = (Image)targetObj;
-                                    var c3 = img.color; c3.a = alpha; img.color = c3;
-                                    break;
-                                case ElementType.RawImage:
-                                    RawImage raw = (RawImage)targetObj;
-                                    var c4 = raw.color; c4.a = alpha; raw.color = c4;
-                                    break;
-                                case ElementType.Button:
-                                    Button btn = (Button)targetObj;
-                                    var c5 = btn.targetGraphic.color; c5.a = alpha; btn.targetGraphic.color = c5;
-                                    break;
-                            }
+                            Color objectColor = ColorUtils.GetColor(targetObj, elementType);
+                            objectColor.a = 1f - eased;
+                            ColorUtils.SetColor(targetObj, elementType, objectColor);
                             break;
                         }
                     case AnimationMode.MoveDown:
                         {
                             Vector3 newPos = startLocation;
                             newPos.y += pixelOffset * (1f - eased);
-                            ((Component)targetObj).GetComponent<RectTransform>().localPosition = newPos;
+                            targetObj.GetComponent<RectTransform>().localPosition = newPos;
                             break;
                         }
                     case AnimationMode.MoveUp:
                         {
                             Vector3 newPos = startLocation;
                             newPos.y -= pixelOffset * (1f - eased);
-                            ((Component)targetObj).GetComponent<RectTransform>().localPosition = newPos;
+                            targetObj.GetComponent<RectTransform>().localPosition = newPos;
                             break;
                         }
                     case AnimationMode.MoveLeft:
                         {
                             Vector3 newPos = startLocation;
                             newPos.x += pixelOffset * (1f - eased);
-                            ((Component)targetObj).GetComponent<RectTransform>().localPosition = newPos;
+                            targetObj.GetComponent<RectTransform>().localPosition = newPos;
                             break;
                         }
                     case AnimationMode.MoveRight:
                         {
                             Vector3 newPos = startLocation;
                             newPos.x -= pixelOffset * (1f - eased);
-                            ((Component)targetObj).GetComponent<RectTransform>().localPosition = newPos;
+                            targetObj.GetComponent<RectTransform>().localPosition = newPos;
                             break;
                         }
                     case AnimationMode.MoveTo:
                         {
-                            Vector3 newPos = new Vector3(
+                            Vector3 newPosition = new Vector3(
                                 targetPoint.x == float.PositiveInfinity ? startLocation.x : startLocation.x + ((targetPoint.x - startLocation.x) * eased),
                                 targetPoint.y == float.PositiveInfinity ? startLocation.y : startLocation.y + ((targetPoint.y - startLocation.y) * eased),
                                 targetPoint.z == float.PositiveInfinity ? startLocation.z : startLocation.z + ((targetPoint.z - startLocation.z) * eased)
                             );
 
-                            ((Component)targetObj).GetComponent<RectTransform>().localPosition = newPos;
+                            targetObj.GetComponent<RectTransform>().localPosition = newPosition;
                             break;
                         }
                     case AnimationMode.MoveFrom:
                         {
-                            Vector3 newPos = new Vector3(
+                            Vector3 newPosition = new Vector3(
                                 targetPoint.x == float.PositiveInfinity ? startLocation.x : targetPoint.x + ((startLocation.x - targetPoint.x) * eased),
                                 targetPoint.y == float.PositiveInfinity ? startLocation.y : targetPoint.y + ((startLocation.y - targetPoint.y) * eased),
                                 targetPoint.z == float.PositiveInfinity ? startLocation.z : targetPoint.z + ((startLocation.z - targetPoint.z) * eased)
                             );
 
-                            ((Component)targetObj).GetComponent<RectTransform>().localPosition = newPos;
+                            targetObj.GetComponent<RectTransform>().localPosition = newPosition;
                             break;
                         }
                     case AnimationMode.ScaleTo:
@@ -639,7 +661,7 @@ namespace net.puk06.CanvasAnimation
                                 targetScale.z == float.PositiveInfinity ? startScale.z : startScale.z + ((targetScale.z - startScale.z) * eased)
                             );
 
-                            ((Component)targetObj).GetComponent<RectTransform>().localScale = newScale;
+                            targetObj.GetComponent<RectTransform>().localScale = newScale;
                             break;
                         }
                     case AnimationMode.ScaleFrom:
@@ -650,7 +672,7 @@ namespace net.puk06.CanvasAnimation
                                 targetScale.z == float.PositiveInfinity ? startScale.z : targetScale.z + ((startScale.z - targetScale.z) * eased)
                             );
 
-                            ((Component)targetObj).GetComponent<RectTransform>().localScale = newScale;
+                            targetObj.GetComponent<RectTransform>().localScale = newScale;
                             break;
                         }
                     case AnimationMode.RotateTo:
@@ -661,7 +683,7 @@ namespace net.puk06.CanvasAnimation
                                 targetRotation.z == float.PositiveInfinity ? startRotation.z : startRotation.z + ((targetRotation.z - startRotation.z) * eased)
                             );
 
-                            ((Component)targetObj).GetComponent<RectTransform>().localEulerAngles = newEulerAngles;
+                            targetObj.GetComponent<RectTransform>().localEulerAngles = newEulerAngles;
                             break;
                         }
                     case AnimationMode.RotateFrom:
@@ -672,7 +694,31 @@ namespace net.puk06.CanvasAnimation
                                 targetRotation.z == float.PositiveInfinity ? startRotation.z : targetRotation.z + ((startRotation.z - targetRotation.z) * eased)
                             );
 
-                            ((Component)targetObj).GetComponent<RectTransform>().localEulerAngles = newEulerAngles;
+                            targetObj.GetComponent<RectTransform>().localEulerAngles = newEulerAngles;
+                            break;
+                        }
+                    case AnimationMode.ColorTo:
+                        {
+                            Color newColor = new Color(
+                                float.IsPositiveInfinity(targetColor.r) ? startColor.r : startColor.r + ((targetColor.r - startColor.r) * eased),
+                                float.IsPositiveInfinity(targetColor.g) ? startColor.g : startColor.g + ((targetColor.g - startColor.g) * eased),
+                                float.IsPositiveInfinity(targetColor.b) ? startColor.b : startColor.b + ((targetColor.b - startColor.b) * eased),
+                                float.IsPositiveInfinity(targetColor.a) ? startColor.a : startColor.a + ((targetColor.a - startColor.a) * eased)
+                            );
+
+                            ColorUtils.SetColor(targetObj, elementType, newColor);
+                            break;
+                        }
+                    case AnimationMode.ColorFrom:
+                        {
+                            Color newColor = new Color(
+                                float.IsPositiveInfinity(targetColor.r) ? startColor.r : targetColor.r + ((startColor.r - targetColor.r) * eased),
+                                float.IsPositiveInfinity(targetColor.g) ? startColor.g : targetColor.g + ((startColor.g - targetColor.g) * eased),
+                                float.IsPositiveInfinity(targetColor.b) ? startColor.b : targetColor.b + ((startColor.b - targetColor.b) * eased),
+                                float.IsPositiveInfinity(targetColor.a) ? startColor.a : targetColor.a + ((startColor.a - targetColor.a) * eased)
+                            );
+
+                            ColorUtils.SetColor(targetObj, elementType, newColor);
                             break;
                         }
                 }
@@ -711,12 +757,14 @@ namespace net.puk06.CanvasAnimation
             if (int.Parse(parsedTaskDataString[START_LOCATION_INDEX]) != -1) m_startLocations[int.Parse(parsedTaskDataString[START_LOCATION_INDEX])] = Vector3.positiveInfinity;
             if (int.Parse(parsedTaskDataString[START_ROTATION_INDEX]) != -1) m_startRotations[int.Parse(parsedTaskDataString[START_ROTATION_INDEX])] = Vector3.positiveInfinity;
             if (int.Parse(parsedTaskDataString[START_SCALE_INDEX]) != -1) m_startScales[int.Parse(parsedTaskDataString[START_SCALE_INDEX])] = Vector3.positiveInfinity;
+            if (int.Parse(parsedTaskDataString[START_COLOR_INDEX]) != -1) m_startColors[int.Parse(parsedTaskDataString[START_COLOR_INDEX])] = ColorUtils.GetInvalidColor();
             if (int.Parse(parsedTaskDataString[TRANSITION_TYPE_INDEX]) != -1) m_transitionTypes[int.Parse(parsedTaskDataString[TRANSITION_TYPE_INDEX])] = TransitionType.None;
             if (int.Parse(parsedTaskDataString[ANIMATION_MODE_INDEX]) != -1) m_animationModes[int.Parse(parsedTaskDataString[ANIMATION_MODE_INDEX])] = AnimationMode.None;
             if (int.Parse(parsedTaskDataString[ELEMENT_TYPE_INDEX]) != -1) m_elementTypes[int.Parse(parsedTaskDataString[ELEMENT_TYPE_INDEX])] = ElementType.None;
             if (int.Parse(parsedTaskDataString[TARGET_POINT_INDEX]) != -1) m_targetPoints[int.Parse(parsedTaskDataString[TARGET_POINT_INDEX])] = Vector3.positiveInfinity;
             if (int.Parse(parsedTaskDataString[TARGET_ROTATION_INDEX]) != -1) m_targetRotations[int.Parse(parsedTaskDataString[TARGET_ROTATION_INDEX])] = Vector3.positiveInfinity;
             if (int.Parse(parsedTaskDataString[TARGET_SCALE_INDEX]) != -1) m_targetScales[int.Parse(parsedTaskDataString[TARGET_SCALE_INDEX])] = Vector3.positiveInfinity;
+            if (int.Parse(parsedTaskDataString[TARGET_COLOR_INDEX]) != -1) m_targetColors[int.Parse(parsedTaskDataString[TARGET_COLOR_INDEX])] = ColorUtils.GetInvalidColor();
 
             m_currentTasks[taskIndex] = null;
         }
