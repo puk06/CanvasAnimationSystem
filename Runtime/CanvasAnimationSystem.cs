@@ -367,7 +367,7 @@ namespace net.puk06.CanvasAnimation
         }
 
         private void AddTask(
-            object element,
+            Component element,
             float time, float after,
             int pixelOffset,
             TransitionType transition,
@@ -418,7 +418,14 @@ namespace net.puk06.CanvasAnimation
             string stats = AssignData(objectIndex, time, after, pixelOffset, transition, mode, elementType, targetPoint, targetScale, targetRotation, startPoint, startRotation, startScale);
 
             int statsIndex = ArrayUtils.AssignArrayValue(m_currentTasks, stats);
-            if (statsIndex == -1) Debug.LogError("Couldn't Assign Task Data.");
+            if (statsIndex == -1)
+            {
+                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Failed to create Animation Task");
+            }
+            else
+            {
+                Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Task Created - Object: {element.name} - Task: {statsIndex}");
+            }
         }
 
         private string AssignData(int objectIndex, float time, float after, int pixelOffset, TransitionType transitionType, AnimationMode mode, ElementType elementType, Vector3 targetPoint, Vector3 targetScale, Vector3 targetRotation, Vector3 startPoint, Vector3 startRotation, Vector3 startScale)

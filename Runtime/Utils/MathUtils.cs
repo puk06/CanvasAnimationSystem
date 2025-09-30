@@ -6,20 +6,20 @@ namespace net.puk06.CanvasAnimation.Utils
 {
     public class MathUtils : UdonSharpBehaviour
     {
-        public static float ApplyEasing(float t, TransitionType type)
+        public static float ApplyEasing(float time, TransitionType transitionType)
         {
-            switch (type)
+            switch (transitionType)
             {
                 case TransitionType.Linear:
-                    return t;
+                    return time;
                 case TransitionType.EaseIn:
-                    return t * t;
+                    return time * time;
                 case TransitionType.EaseOut:
-                    return 1f - ((1f - t) * (1f - t));
+                    return 1f - ((1f - time) * (1f - time));
                 case TransitionType.EaseInOut:
-                    return Mathf.SmoothStep(0f, 1f, t);
+                    return time * time * (3f - (2f * time));
                 default:
-                    return t;
+                    return time;
             }
         }
 
