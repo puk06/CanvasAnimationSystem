@@ -33,13 +33,16 @@ namespace net.puk06.CanvasAnimation
         private const int START_TIME_INDEX = 2;
         private const int PIXEL_OFFSET_INDEX = 3;
         private const int TIME_OUT_INDEX = 4;
+
         private const int START_LOCATION_INDEX = 5;
         private const int START_ROTATION_INDEX = 6;
         private const int START_SCALE_INDEX = 7;
         private const int START_COLOR_INDEX = 8;
+
         private const int TRANSITION_TYPE_INDEX = 9;
         private const int ANIMATION_MODE_INDEX = 10;
         private const int ELEMENT_TYPE_INDEX = 11;
+        
         private const int TARGET_POINT_INDEX = 12;
         private const int TARGET_ROTATION_INDEX = 13;
         private const int TARGET_SCALE_INDEX = 14;
@@ -483,13 +486,16 @@ namespace net.puk06.CanvasAnimation
             int startTimeIndex = ArrayUtils.AssignArrayValue(m_startTimes, Time.time);
             int pixelOffsetIndex = ArrayUtils.AssignArrayValue(m_pixelOffsets, pixelOffset);
             int timeoutTimesIndex = ArrayUtils.AssignArrayValue(m_timeoutTimes, after);
+
             int startLocationIndex = MathUtils.IsPositiveInfinity(startPoint) ? -1 : ArrayUtils.AssignArrayValue(m_startLocations, startPoint);
             int startRotationIndex = MathUtils.IsPositiveInfinity(startRotation) ? -1 : ArrayUtils.AssignArrayValue(m_startRotations, startRotation);
             int startScaleIndex = MathUtils.IsPositiveInfinity(startScale) ? -1 : ArrayUtils.AssignArrayValue(m_startScales, startScale);
             int startColorIndex = ColorUtils.IsInvalidColor(startColor) ? -1 : ArrayUtils.AssignArrayValue(m_startColors, startColor);
+
             int transitionTypeIndex = ArrayUtils.AssignArrayValue(m_transitionTypes, transitionType);
             int elementTypeIndex = ArrayUtils.AssignArrayValue(m_elementTypes, elementType);
             int modesIndex = ArrayUtils.AssignArrayValue(m_animationModes, mode);
+
             int targetPointIndex = ArrayUtils.AssignArrayValue(m_targetPoints, targetPoint);
             int targetRotationIndex = ArrayUtils.AssignArrayValue(m_targetRotations, targetRotation);
             int targetScaleIndex = ArrayUtils.AssignArrayValue(m_targetScales, targetScale);
@@ -513,13 +519,16 @@ namespace net.puk06.CanvasAnimation
                 float startTime = int.Parse(parsedStrData[START_TIME_INDEX]) == -1 ? 0f : m_startTimes[int.Parse(parsedStrData[START_TIME_INDEX])];
                 int pixelOffset = int.Parse(parsedStrData[PIXEL_OFFSET_INDEX]) == -1 ? 0 : m_pixelOffsets[int.Parse(parsedStrData[PIXEL_OFFSET_INDEX])];
                 float timeoutTime = int.Parse(parsedStrData[TIME_OUT_INDEX]) == -1 ? 0f : m_timeoutTimes[int.Parse(parsedStrData[TIME_OUT_INDEX])];
+
                 Vector3 startLocation = int.Parse(parsedStrData[START_LOCATION_INDEX]) == -1 ? Vector3.positiveInfinity : m_startLocations[int.Parse(parsedStrData[START_LOCATION_INDEX])];
                 Vector3 startRotation = int.Parse(parsedStrData[START_ROTATION_INDEX]) == -1 ? Vector3.positiveInfinity : m_startRotations[int.Parse(parsedStrData[START_ROTATION_INDEX])];
                 Vector3 startScale = int.Parse(parsedStrData[START_SCALE_INDEX]) == -1 ? Vector3.positiveInfinity : m_startScales[int.Parse(parsedStrData[START_SCALE_INDEX])];
                 Color startColor = int.Parse(parsedStrData[START_COLOR_INDEX]) == -1 ? ColorUtils.GetInvalidColor() : m_startColors[int.Parse(parsedStrData[START_COLOR_INDEX])];
+
                 TransitionType transitionType = int.Parse(parsedStrData[TRANSITION_TYPE_INDEX]) == -1 ? TransitionType.None : m_transitionTypes[int.Parse(parsedStrData[TRANSITION_TYPE_INDEX])];
                 AnimationMode animationMode = int.Parse(parsedStrData[ANIMATION_MODE_INDEX]) == -1 ? AnimationMode.None : m_animationModes[int.Parse(parsedStrData[ANIMATION_MODE_INDEX])];
                 ElementType elementType = int.Parse(parsedStrData[ELEMENT_TYPE_INDEX]) == -1 ? ElementType.None : m_elementTypes[int.Parse(parsedStrData[ELEMENT_TYPE_INDEX])];
+
                 Vector3 targetPoint = int.Parse(parsedStrData[TARGET_POINT_INDEX]) == -1 ? Vector3.positiveInfinity : m_targetPoints[int.Parse(parsedStrData[TARGET_POINT_INDEX])];
                 Vector3 targetRotation = int.Parse(parsedStrData[TARGET_ROTATION_INDEX]) == -1 ? Vector3.positiveInfinity : m_targetRotations[int.Parse(parsedStrData[TARGET_ROTATION_INDEX])];
                 Vector3 targetScale = int.Parse(parsedStrData[TARGET_SCALE_INDEX]) == -1 ? Vector3.positiveInfinity : m_targetScales[int.Parse(parsedStrData[TARGET_SCALE_INDEX])];
@@ -754,13 +763,16 @@ namespace net.puk06.CanvasAnimation
             if (int.Parse(parsedTaskDataString[PIXEL_OFFSET_INDEX]) != -1) m_pixelOffsets[int.Parse(parsedTaskDataString[PIXEL_OFFSET_INDEX])] = -1;
             if (int.Parse(parsedTaskDataString[START_TIME_INDEX]) != -1) m_startTimes[int.Parse(parsedTaskDataString[START_TIME_INDEX])] = -1;
             if (int.Parse(parsedTaskDataString[TIME_OUT_INDEX]) != -1) m_timeoutTimes[int.Parse(parsedTaskDataString[TIME_OUT_INDEX])] = -1;
+
             if (int.Parse(parsedTaskDataString[START_LOCATION_INDEX]) != -1) m_startLocations[int.Parse(parsedTaskDataString[START_LOCATION_INDEX])] = Vector3.positiveInfinity;
             if (int.Parse(parsedTaskDataString[START_ROTATION_INDEX]) != -1) m_startRotations[int.Parse(parsedTaskDataString[START_ROTATION_INDEX])] = Vector3.positiveInfinity;
             if (int.Parse(parsedTaskDataString[START_SCALE_INDEX]) != -1) m_startScales[int.Parse(parsedTaskDataString[START_SCALE_INDEX])] = Vector3.positiveInfinity;
             if (int.Parse(parsedTaskDataString[START_COLOR_INDEX]) != -1) m_startColors[int.Parse(parsedTaskDataString[START_COLOR_INDEX])] = ColorUtils.GetInvalidColor();
+
             if (int.Parse(parsedTaskDataString[TRANSITION_TYPE_INDEX]) != -1) m_transitionTypes[int.Parse(parsedTaskDataString[TRANSITION_TYPE_INDEX])] = TransitionType.None;
             if (int.Parse(parsedTaskDataString[ANIMATION_MODE_INDEX]) != -1) m_animationModes[int.Parse(parsedTaskDataString[ANIMATION_MODE_INDEX])] = AnimationMode.None;
             if (int.Parse(parsedTaskDataString[ELEMENT_TYPE_INDEX]) != -1) m_elementTypes[int.Parse(parsedTaskDataString[ELEMENT_TYPE_INDEX])] = ElementType.None;
+
             if (int.Parse(parsedTaskDataString[TARGET_POINT_INDEX]) != -1) m_targetPoints[int.Parse(parsedTaskDataString[TARGET_POINT_INDEX])] = Vector3.positiveInfinity;
             if (int.Parse(parsedTaskDataString[TARGET_ROTATION_INDEX]) != -1) m_targetRotations[int.Parse(parsedTaskDataString[TARGET_ROTATION_INDEX])] = Vector3.positiveInfinity;
             if (int.Parse(parsedTaskDataString[TARGET_SCALE_INDEX]) != -1) m_targetScales[int.Parse(parsedTaskDataString[TARGET_SCALE_INDEX])] = Vector3.positiveInfinity;
