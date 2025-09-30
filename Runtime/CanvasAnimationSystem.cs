@@ -239,7 +239,7 @@ namespace net.puk06.CanvasAnimation
                 case AnimationDirection.From: animationMode = AnimationMode.RotateFrom; break;
             }
 
-            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity);
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity);
             return this;
         }
 
@@ -255,7 +255,7 @@ namespace net.puk06.CanvasAnimation
             => RotateFromToInternal(element, ElementType.TMP_Text, duration, after, startRotation, targetRotation, transitionType);
         private CanvasAnimationSystem RotateFromToInternal(Component element, ElementType elementType, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
         {
-            AddTask(element, duration, after, -1, transitionType, AnimationMode.RotateTo, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, startRotation, Vector3.positiveInfinity);
+            AddTask(element, duration, after, -1, transitionType, AnimationMode.RotateTo, elementType, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, Vector3.positiveInfinity, startRotation, Vector3.positiveInfinity);
             return this;
         }
 
@@ -278,7 +278,7 @@ namespace net.puk06.CanvasAnimation
                 case AnimationDirection.From: animationMode = AnimationMode.ScaleFrom; break;
             }
 
-            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, targetScale, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity);
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, targetScale, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity);
             return this;
         }
 
@@ -294,7 +294,7 @@ namespace net.puk06.CanvasAnimation
             => ScaleFromToInternal(element, ElementType.TMP_Text, duration, after, startScale, targetScale, transitionType);
         private CanvasAnimationSystem ScaleFromToInternal(Component element, ElementType elementType, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
         {
-            AddTask(element, duration, after, -1, transitionType, AnimationMode.ScaleTo, elementType, Vector3.positiveInfinity, targetScale, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, startScale);
+            AddTask(element, duration, after, -1, transitionType, AnimationMode.ScaleTo, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, targetScale, Vector3.positiveInfinity, Vector3.positiveInfinity, startScale);
             return this;
         }
 
@@ -373,7 +373,7 @@ namespace net.puk06.CanvasAnimation
             TransitionType transition,
             AnimationMode mode,
             ElementType elementType,
-            Vector3 targetPoint, Vector3 targetScale, Vector3 targetRotation,
+            Vector3 targetPoint, Vector3 targetRotation, Vector3 targetScale,
             Vector3 startPoint, Vector3 startRotation, Vector3 startScale
         )
         {
