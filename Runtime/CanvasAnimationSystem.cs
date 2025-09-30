@@ -39,9 +39,9 @@ namespace net.puk06.CanvasAnimation
         private const int TRANSITION_TYPE_INDEX = 8;
         private const int ANIMATION_MODE_INDEX = 9;
         private const int ELEMENT_TYPE_INDEX = 10;
-        private const int DESTINATION_POINT_INDEX = 11;
-        private const int TARGET_SCALE_INDEX = 12;
-        private const int TARGET_ROTATION_INDEX = 13;
+        private const int TARGET_POINT_INDEX = 11;
+        private const int TARGET_ROTATION_INDEX = 12;
+        private const int TARGET_SCALE_INDEX = 13;
 
         private string[] m_currentTasks;
 
@@ -181,17 +181,17 @@ namespace net.puk06.CanvasAnimation
             return this;
         }
 
-        public CanvasAnimationSystem MoveTo(Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
-            => MoveToInternal(element, ElementType.Text, duration, after, animationDirection, targetPoint, transitionType);
-        public CanvasAnimationSystem MoveTo(Button element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
-            => MoveToInternal(element, ElementType.Button, duration, after, animationDirection, targetPoint, transitionType);
-        public CanvasAnimationSystem MoveTo(Image element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
-            => MoveToInternal(element, ElementType.Image, duration, after, animationDirection, targetPoint, transitionType);
-        public CanvasAnimationSystem MoveTo(RawImage element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
-            => MoveToInternal(element, ElementType.RawImage, duration, after, animationDirection, targetPoint, transitionType);
-        public CanvasAnimationSystem MoveTo(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
-            => MoveToInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetPoint, transitionType);
-        private CanvasAnimationSystem MoveToInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
+        public CanvasAnimationSystem MoveLocation(Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
+            => MoveLocationInternal(element, ElementType.Text, duration, after, animationDirection, targetPoint, transitionType);
+        public CanvasAnimationSystem MoveLocation(Button element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
+            => MoveLocationInternal(element, ElementType.Button, duration, after, animationDirection, targetPoint, transitionType);
+        public CanvasAnimationSystem MoveLocation(Image element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
+            => MoveLocationInternal(element, ElementType.Image, duration, after, animationDirection, targetPoint, transitionType);
+        public CanvasAnimationSystem MoveLocation(RawImage element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
+            => MoveLocationInternal(element, ElementType.RawImage, duration, after, animationDirection, targetPoint, transitionType);
+        public CanvasAnimationSystem MoveLocation(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
+            => MoveLocationInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetPoint, transitionType);
+        private CanvasAnimationSystem MoveLocationInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
         {
             AnimationMode animationMode = AnimationMode.None;
             switch (animationDirection)
@@ -368,18 +368,13 @@ namespace net.puk06.CanvasAnimation
 
         private void AddTask(
             object element,
-            float time,
-            float after,
+            float time, float after,
             int pixelOffset,
             TransitionType transition,
             AnimationMode mode,
             ElementType elementType,
-            Vector3 targetPoint,
-            Vector3 targetScale,
-            Vector3 targetRotation,
-            Vector3 startPoint,
-            Vector3 startRotation,
-            Vector3 startScale
+            Vector3 targetPoint, Vector3 targetScale, Vector3 targetRotation,
+            Vector3 startPoint, Vector3 startRotation, Vector3 startScale
         )
         {
             int objectIndex;
@@ -439,10 +434,10 @@ namespace net.puk06.CanvasAnimation
             int elementTypeIndex = ArrayUtils.AssignArrayValue(m_elementTypes, elementType);
             int modesIndex = ArrayUtils.AssignArrayValue(m_animationModes, mode);
             int targetPointIndex = ArrayUtils.AssignArrayValue(m_targetPoints, targetPoint);
-            int targetScaleIndex = ArrayUtils.AssignArrayValue(m_targetScales, targetScale);
             int targetRotationIndex = ArrayUtils.AssignArrayValue(m_targetRotations, targetRotation);
+            int targetScaleIndex = ArrayUtils.AssignArrayValue(m_targetScales, targetScale);
 
-            return $"{objectIndex},,,{durationIndex},,,{startTimeIndex},,,{pixelOffsetIndex},,,{timeoutTimesIndex},,,{startLocationIndex},,,{startRotationIndex},,,{startScaleIndex},,,{transitionTypeIndex},,,{modesIndex},,,{elementTypeIndex},,,{targetPointIndex},,,{targetScaleIndex},,,{targetRotationIndex}";
+            return $"{objectIndex},,,{durationIndex},,,{startTimeIndex},,,{pixelOffsetIndex},,,{timeoutTimesIndex},,,{startLocationIndex},,,{startRotationIndex},,,{startScaleIndex},,,{transitionTypeIndex},,,{modesIndex},,,{elementTypeIndex},,,{targetPointIndex},,,{targetRotationIndex},,,{targetScaleIndex}";
         }
 
         private void Update()
@@ -466,9 +461,9 @@ namespace net.puk06.CanvasAnimation
                 TransitionType transitionType = int.Parse(parsedStrData[TRANSITION_TYPE_INDEX]) == -1 ? TransitionType.None : m_transitionTypes[int.Parse(parsedStrData[TRANSITION_TYPE_INDEX])];
                 AnimationMode animationMode = int.Parse(parsedStrData[ANIMATION_MODE_INDEX]) == -1 ? AnimationMode.None : m_animationModes[int.Parse(parsedStrData[ANIMATION_MODE_INDEX])];
                 ElementType elementType = int.Parse(parsedStrData[ELEMENT_TYPE_INDEX]) == -1 ? ElementType.None : m_elementTypes[int.Parse(parsedStrData[ELEMENT_TYPE_INDEX])];
-                Vector3 targetPoint = int.Parse(parsedStrData[DESTINATION_POINT_INDEX]) == -1 ? Vector3.positiveInfinity : m_targetPoints[int.Parse(parsedStrData[DESTINATION_POINT_INDEX])];
-                Vector3 targetScale = int.Parse(parsedStrData[TARGET_SCALE_INDEX]) == -1 ? Vector3.positiveInfinity : m_targetScales[int.Parse(parsedStrData[TARGET_SCALE_INDEX])];
+                Vector3 targetPoint = int.Parse(parsedStrData[TARGET_POINT_INDEX]) == -1 ? Vector3.positiveInfinity : m_targetPoints[int.Parse(parsedStrData[TARGET_POINT_INDEX])];
                 Vector3 targetRotation = int.Parse(parsedStrData[TARGET_ROTATION_INDEX]) == -1 ? Vector3.positiveInfinity : m_targetRotations[int.Parse(parsedStrData[TARGET_ROTATION_INDEX])];
+                Vector3 targetScale = int.Parse(parsedStrData[TARGET_SCALE_INDEX]) == -1 ? Vector3.positiveInfinity : m_targetScales[int.Parse(parsedStrData[TARGET_SCALE_INDEX])];
 
                 if (objectIndex == -1) continue;
 
@@ -712,9 +707,9 @@ namespace net.puk06.CanvasAnimation
             if (int.Parse(parsedTaskDataString[TRANSITION_TYPE_INDEX]) != -1) m_transitionTypes[int.Parse(parsedTaskDataString[TRANSITION_TYPE_INDEX])] = TransitionType.None;
             if (int.Parse(parsedTaskDataString[ANIMATION_MODE_INDEX]) != -1) m_animationModes[int.Parse(parsedTaskDataString[ANIMATION_MODE_INDEX])] = AnimationMode.None;
             if (int.Parse(parsedTaskDataString[ELEMENT_TYPE_INDEX]) != -1) m_elementTypes[int.Parse(parsedTaskDataString[ELEMENT_TYPE_INDEX])] = ElementType.None;
-            if (int.Parse(parsedTaskDataString[DESTINATION_POINT_INDEX]) != -1) m_targetPoints[int.Parse(parsedTaskDataString[DESTINATION_POINT_INDEX])] = Vector3.positiveInfinity;
-            if (int.Parse(parsedTaskDataString[TARGET_SCALE_INDEX]) != -1) m_targetScales[int.Parse(parsedTaskDataString[TARGET_SCALE_INDEX])] = Vector3.positiveInfinity;
+            if (int.Parse(parsedTaskDataString[TARGET_POINT_INDEX]) != -1) m_targetPoints[int.Parse(parsedTaskDataString[TARGET_POINT_INDEX])] = Vector3.positiveInfinity;
             if (int.Parse(parsedTaskDataString[TARGET_ROTATION_INDEX]) != -1) m_targetRotations[int.Parse(parsedTaskDataString[TARGET_ROTATION_INDEX])] = Vector3.positiveInfinity;
+            if (int.Parse(parsedTaskDataString[TARGET_SCALE_INDEX]) != -1) m_targetScales[int.Parse(parsedTaskDataString[TARGET_SCALE_INDEX])] = Vector3.positiveInfinity;
 
             m_currentTasks[taskIndex] = null;
         }
