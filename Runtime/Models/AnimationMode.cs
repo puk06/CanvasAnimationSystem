@@ -13,6 +13,7 @@ namespace net.puk06.CanvasAnimation.Models
         MoveFrom,
         ScaleTo,
         ScaleFrom,
-        Toggle
+        RotateTo,
+        RotateFrom,
     }
 }
