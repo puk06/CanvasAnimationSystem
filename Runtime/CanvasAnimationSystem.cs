@@ -25,6 +25,22 @@ namespace net.puk06.CanvasAnimation
         [SerializeField] private int peakConcurrentAnimations = 0;
         #endregion
 
+        private const string LogTag = "[{0}]";
+        private readonly string ColoredTag = UdonUtils.ColorizeString("Canvas Animation System", "#4eb3ee");
+        
+        private const int OBJECT_INDEX = 0;
+        private const int DURATION_INDEX = 1;
+        private const int START_TIME_INDEX = 2;
+        private const int PIXEL_OFFSET_INDEX = 3;
+        private const int TIME_OUT_INDEX = 4;
+        private const int START_LOCATION_INDEX = 5;
+        private const int START_SCALE_INDEX = 6;
+        private const int TRANSITION_TYPE_INDEX = 7;
+        private const int ANIMATION_MODE_INDEX = 8;
+        private const int ELEMENT_TYPE_INDEX = 9;
+        private const int DESTINATION_POINT_INDEX = 10;
+        private const int TARGET_SCALE_INDEX = 11;
+
         private string[] m_currentTasks;
 
         private Text[] m_targetTexts;
@@ -46,9 +62,13 @@ namespace net.puk06.CanvasAnimation
         private float[] m_startTimes;
         private float[] m_timeoutTimes;
         private Vector3[] m_startLocations;
-        private TransitionType[] m_transitions;
+        private Vector3[] m_startScales;
+        private TransitionType[] m_transitionTypes;
         private ElementType[] m_elementTypes;
-        private AnimationMode[] m_modes;
+        private AnimationMode[] m_animationModes;
+
+        private Vector3[] m_targetPoints;
+        private Vector3[] m_targetScales;
 
         void Start()
         {
@@ -65,98 +85,82 @@ namespace net.puk06.CanvasAnimation
             m_startTimes = new float[maxConcurrentAnimations];
             m_timeoutTimes = new float[maxConcurrentAnimations];
             m_startLocations = new Vector3[maxConcurrentAnimations];
-            m_transitions = new TransitionType[maxConcurrentAnimations];
+            m_startScales = new Vector3[maxConcurrentAnimations];
+            m_transitionTypes = new TransitionType[maxConcurrentAnimations];
             m_elementTypes = new ElementType[maxConcurrentAnimations];
-            m_modes = new AnimationMode[maxConcurrentAnimations];
+            m_animationModes = new AnimationMode[maxConcurrentAnimations];
+            m_targetPoints = new Vector3[maxConcurrentAnimations];
+            m_targetScales = new Vector3[maxConcurrentAnimations];
 
             ArrayUtils.InitializeValues(m_durations);
             ArrayUtils.InitializeValues(m_pixelOffsets);
             ArrayUtils.InitializeValues(m_startTimes);
             ArrayUtils.InitializeValues(m_timeoutTimes);
             ArrayUtils.InitializeValues(m_startLocations);
+            ArrayUtils.InitializeValues(m_startScales);
+            ArrayUtils.InitializeValues(m_targetPoints);
+            ArrayUtils.InitializeValues(m_targetScales);
         }
 
-        /// <summary>
-        /// Gradually increases the target’s opacity from transparent to fully visible.
-        /// </summary>
-        /// <param name="text"></param>
-        /// <param name="time"></param>
-        /// <param name="after"></param>
-        /// <param name="transition"></param>
-        /// <returns></returns>
-        public CanvasAnimationSystem FadeIn(Text text, float time, float after, TransitionType transition)
-        {
-            AddTask(text, time, after, 0, transition, AnimationMode.FadeIn, ElementType.Text);
-            return this;
-        }
-        public CanvasAnimationSystem FadeIn(Button button, float time, float after, TransitionType transition)
-        {
-            AddTask(button, time, after, 0, transition, AnimationMode.FadeIn, ElementType.Button);
-            return this;
-        }
-        public CanvasAnimationSystem FadeIn(Image image, float time, float after, TransitionType transition)
-        {
-            AddTask(image, time, after, 0, transition, AnimationMode.FadeIn, ElementType.Image);
-            return this;
-        }
-        public CanvasAnimationSystem FadeIn(RawImage rawImage, float time, float after, TransitionType transition)
-        {
-            AddTask(rawImage, time, after, 0, transition, AnimationMode.FadeIn, ElementType.RawImage);
-            return this;
-        }
-        public CanvasAnimationSystem FadeIn(TMP_Text text, float time, float after, TransitionType transition)
-        {
-            AddTask(text, time, after, 0, transition, AnimationMode.FadeIn, ElementType.TMP_Text);
-            return this;
-        }
+        public CanvasAnimationSystem Show(Text element)
+            => FadeInternal(element, ElementType.Text, 0f, 0f, FadeType.In, TransitionType.None);
+        public CanvasAnimationSystem Show(Button element)
+            => FadeInternal(element, ElementType.Button, 0f, 0f, FadeType.In, TransitionType.None);
+        public CanvasAnimationSystem Show(Image element)
+            => FadeInternal(element, ElementType.Image, 0f, 0f, FadeType.In, TransitionType.None);
+        public CanvasAnimationSystem Show(RawImage element)
+            => FadeInternal(element, ElementType.RawImage, 0f, 0f, FadeType.In, TransitionType.None);
+        public CanvasAnimationSystem Show(TMP_Text element)
+            => FadeInternal(element, ElementType.TMP_Text, 0f, 0f, FadeType.In, TransitionType.None);
 
-        /// <summary>
-        /// Gradually decreases the target’s opacity from fully visible to transparent.
-        /// </summary>
-        /// <param name="text"></param>
-        /// <param name="time"></param>
-        /// <param name="after"></param>
-        /// <param name="transition"></param>
-        /// <returns></returns>
-        public CanvasAnimationSystem FadeOut(Text text, float time, float after, TransitionType transition)
+        public CanvasAnimationSystem Hide(Text element)
+            => FadeInternal(element, ElementType.Text, 0f, 0f, FadeType.Out, TransitionType.None);
+        public CanvasAnimationSystem Hide(Button element)
+            => FadeInternal(element, ElementType.Button, 0f, 0f, FadeType.Out, TransitionType.None);
+        public CanvasAnimationSystem Hide(Image element)
+            => FadeInternal(element, ElementType.Image, 0f, 0f, FadeType.Out, TransitionType.None);
+        public CanvasAnimationSystem Hide(RawImage element)
+            => FadeInternal(element, ElementType.RawImage, 0f, 0f, FadeType.Out, TransitionType.None);
+        public CanvasAnimationSystem Hide(TMP_Text element)
+            => FadeInternal(element, ElementType.TMP_Text, 0f, 0f, FadeType.Out, TransitionType.None);
+
+        public CanvasAnimationSystem Fade(Text element, float duration, float after, FadeType fadeType, TransitionType transitionType)
+            => FadeInternal(element, ElementType.Text, duration, after, fadeType, transitionType);
+        public CanvasAnimationSystem Fade(Button element, float duration, float after, FadeType fadeType, TransitionType transitionType)
+            => FadeInternal(element, ElementType.Button, duration, after, fadeType, transitionType);
+        public CanvasAnimationSystem Fade(Image element, float duration, float after, FadeType fadeType, TransitionType transitionType)
+            => FadeInternal(element, ElementType.Image, duration, after, fadeType, transitionType);
+        public CanvasAnimationSystem Fade(RawImage element, float duration, float after, FadeType fadeType, TransitionType transitionType)
+            => FadeInternal(element, ElementType.RawImage, duration, after, fadeType, transitionType);
+        public CanvasAnimationSystem Fade(TMP_Text element, float duration, float after, FadeType fadeType, TransitionType transitionType)
+            => FadeInternal(element, ElementType.TMP_Text, duration, after, fadeType, transitionType);
+        private CanvasAnimationSystem FadeInternal(Component element, ElementType elementType, float duration, float after, FadeType fadeType, TransitionType transitionType)
         {
-            AddTask(text, time, after, 0, transition, AnimationMode.FadeOut, ElementType.Text);
-            return this;
-        }
-        public CanvasAnimationSystem FadeOut(Button button, float time, float after, TransitionType transition)
-        {
-            AddTask(button, time, after, 0, transition, AnimationMode.FadeOut, ElementType.Button);
-            return this;
-        }
-        public CanvasAnimationSystem FadeOut(Image image, float time, float after, TransitionType transition)
-        {
-            AddTask(image, time, after, 0, transition, AnimationMode.FadeOut, ElementType.Image);
-            return this;
-        }
-        public CanvasAnimationSystem FadeOut(RawImage rawImage, float time, float after, TransitionType transition)
-        {
-            AddTask(rawImage, time, after, 0, transition, AnimationMode.FadeOut, ElementType.RawImage);
-            return this;
-        }
-        public CanvasAnimationSystem FadeOut(TMP_Text text, float time, float after, TransitionType transition)
-        {
-            AddTask(text, time, after, 0, transition, AnimationMode.FadeOut, ElementType.TMP_Text);
+            AnimationMode animationMode = AnimationMode.None;
+            switch (fadeType)
+            {
+                case FadeType.In: animationMode = AnimationMode.FadeIn; break;
+                case FadeType.Out: animationMode = AnimationMode.FadeOut; break;
+            }
+
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity);
             return this;
         }
 
-        /// <summary>
-        /// Moves the target downward by the specified distance over the given duration.
-        /// </summary>
-        /// <param name="text"></param>
-        /// <param name="time"></param>
-        /// <param name="after"></param>
-        /// <param name="pixelOffset"></param>
-        /// <param name="transition"></param>
-        /// <returns></returns>
-        public CanvasAnimationSystem Move(Text text, float time, float after, int pixelOffset, MoveDirection directionType, TransitionType transition)
+        public CanvasAnimationSystem Move(Text element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType)
+            => MoveInternal(element, ElementType.Text, duration, after, pixelOffset, moveDirection, transitionType);
+        public CanvasAnimationSystem Move(Button element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType)
+            => MoveInternal(element, ElementType.Button, duration, after, pixelOffset, moveDirection, transitionType);
+        public CanvasAnimationSystem Move(Image element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType)
+            => MoveInternal(element, ElementType.Image, duration, after, pixelOffset, moveDirection, transitionType);
+        public CanvasAnimationSystem Move(RawImage element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType)
+            => MoveInternal(element, ElementType.RawImage, duration, after, pixelOffset, moveDirection, transitionType);
+        public CanvasAnimationSystem Move(TMP_Text element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType)
+            => MoveInternal(element, ElementType.TMP_Text, duration, after, pixelOffset, moveDirection, transitionType);
+        private CanvasAnimationSystem MoveInternal(Component element, ElementType elementType, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType)
         {
             AnimationMode animationMode;
-            switch (directionType)
+            switch (moveDirection)
             {
                 case MoveDirection.Up: animationMode = AnimationMode.MoveUp; break;
                 case MoveDirection.Down: animationMode = AnimationMode.MoveDown; break;
@@ -165,71 +169,74 @@ namespace net.puk06.CanvasAnimation
                 default: animationMode = AnimationMode.MoveUp; break;
             }
 
-            AddTask(text, time, after, pixelOffset, transition, animationMode, ElementType.Text);
+            AddTask(element, duration, after, pixelOffset, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity);
             return this;
         }
-        public CanvasAnimationSystem Move(Button button, float time, float after, int pixelOffset, MoveDirection directionType, TransitionType transition)
+
+        public CanvasAnimationSystem MoveLocation(Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
+            => MoveLocationInternal(element, ElementType.Text, duration, after, animationDirection, targetPoint, transitionType);
+        public CanvasAnimationSystem MoveLocation(Button element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
+            => MoveLocationInternal(element, ElementType.Button, duration, after, animationDirection, targetPoint, transitionType);
+        public CanvasAnimationSystem MoveLocation(Image element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
+            => MoveLocationInternal(element, ElementType.Image, duration, after, animationDirection, targetPoint, transitionType);
+        public CanvasAnimationSystem MoveLocation(RawImage element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
+            => MoveLocationInternal(element, ElementType.RawImage, duration, after, animationDirection, targetPoint, transitionType);
+        public CanvasAnimationSystem MoveLocation(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
+            => MoveLocationInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetPoint, transitionType);
+        private CanvasAnimationSystem MoveLocationInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
         {
-            AnimationMode animationMode;
-            switch (directionType)
+            AnimationMode animationMode = AnimationMode.None;
+            switch (animationDirection)
             {
-                case MoveDirection.Up: animationMode = AnimationMode.MoveUp; break;
-                case MoveDirection.Down: animationMode = AnimationMode.MoveDown; break;
-                case MoveDirection.Left: animationMode = AnimationMode.MoveLeft; break;
-                case MoveDirection.Right: animationMode = AnimationMode.MoveRight; break;
-                default: animationMode = AnimationMode.MoveUp; break;
+                case AnimationDirection.To: animationMode = AnimationMode.MoveTo; break;
+                case AnimationDirection.From: animationMode = AnimationMode.MoveFrom; break;
             }
 
-            AddTask(button, time, after, pixelOffset, transition, animationMode, ElementType.Button);
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, targetPoint, Vector3.positiveInfinity);
             return this;
         }
-        public CanvasAnimationSystem Move(Image image, float time, float after, int pixelOffset, MoveDirection directionType, TransitionType transition)
+
+        public CanvasAnimationSystem Scale(Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
+            => ScaleInternal(element, ElementType.Text, duration, after, animationDirection,targetScale, transitionType);
+        public CanvasAnimationSystem Scale(Button element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
+            => ScaleInternal(element, ElementType.Button, duration, after, animationDirection,targetScale, transitionType);
+        public CanvasAnimationSystem Scale(Image element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
+            => ScaleInternal(element, ElementType.Image, duration, after, animationDirection,targetScale, transitionType);
+        public CanvasAnimationSystem Scale(RawImage element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
+            => ScaleInternal(element, ElementType.RawImage, duration, after, animationDirection,targetScale, transitionType);
+        public CanvasAnimationSystem Scale(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
+            => ScaleInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetScale, transitionType);
+        private CanvasAnimationSystem ScaleInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
         {
-            AnimationMode animationMode;
-            switch (directionType)
+            AnimationMode animationMode = AnimationMode.None;
+            switch (animationDirection)
             {
-                case MoveDirection.Up: animationMode = AnimationMode.MoveUp; break;
-                case MoveDirection.Down: animationMode = AnimationMode.MoveDown; break;
-                case MoveDirection.Left: animationMode = AnimationMode.MoveLeft; break;
-                case MoveDirection.Right: animationMode = AnimationMode.MoveRight; break;
-                default: animationMode = AnimationMode.MoveUp; break;
+                case AnimationDirection.To: animationMode = AnimationMode.ScaleTo; break;
+                case AnimationDirection.From: animationMode = AnimationMode.ScaleFrom; break;
             }
 
-            AddTask(image, time, after, pixelOffset, transition, animationMode, ElementType.Image);
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, targetScale);
             return this;
         }
-        public CanvasAnimationSystem Move(RawImage rawImage, float time, float after, int pixelOffset, MoveDirection directionType, TransitionType transition)
+
+        public void Exit()
         {
-            AnimationMode animationMode;
-            switch (directionType)
-            {
-                case MoveDirection.Up: animationMode = AnimationMode.MoveUp; break;
-                case MoveDirection.Down: animationMode = AnimationMode.MoveDown; break;
-                case MoveDirection.Left: animationMode = AnimationMode.MoveLeft; break;
-                case MoveDirection.Right: animationMode = AnimationMode.MoveRight; break;
-                default: animationMode = AnimationMode.MoveUp; break;
-            }
-
-            AddTask(rawImage, time, after, pixelOffset, transition, animationMode, ElementType.RawImage);
-            return this;
-        }
-        public CanvasAnimationSystem Move(TMP_Text text, float time, float after, int pixelOffset, MoveDirection directionType, TransitionType transition)
-        {
-            AnimationMode animationMode;
-            switch (directionType)
-            {
-                case MoveDirection.Up: animationMode = AnimationMode.MoveUp; break;
-                case MoveDirection.Down: animationMode = AnimationMode.MoveDown; break;
-                case MoveDirection.Left: animationMode = AnimationMode.MoveLeft; break;
-                case MoveDirection.Right: animationMode = AnimationMode.MoveRight; break;
-                default: animationMode = AnimationMode.MoveUp; break;
-            }
-
-            AddTask(text, time, after, pixelOffset, transition, animationMode, ElementType.TMP_Text);
-            return this;
+            Debug.Log($"{string.Format(LogTag, ColoredTag)} Exit triggered - disabling component...");
+            if (runningAnimations > 0) Debug.LogWarning($"{string.Format(LogTag, ColoredTag)} Some animations are still playing, but the component is being disabled.");
+            Destroy(this);
         }
 
-        private void AddTask(object element, float time, float after, int pixelOffset, TransitionType transition, AnimationMode mode, ElementType elementType)
+        private void AddTask(
+            object element,
+            float time,
+            float after,
+            int pixelOffset,
+            TransitionType transition,
+            AnimationMode mode,
+            ElementType elementType,
+            Vector3 targetPoint,
+            Vector3 targetScale
+        )
         {
             string stats;
 
@@ -239,35 +246,35 @@ namespace net.puk06.CanvasAnimation
                     {
                         Text text = (Text)element;
                         int objectIndex = ArrayUtils.AssignArrayValue(m_targetTexts, text);
-                        stats = AssignData(objectIndex, text.gameObject, time, after, pixelOffset, transition, mode, elementType);
+                        stats = AssignData(objectIndex, time, after, pixelOffset, transition, mode, elementType, targetPoint, targetScale);
                         break;
                     }
                 case ElementType.Button:
                     {
                         Button button = (Button)element;
                         int objectIndex = ArrayUtils.AssignArrayValue(m_targetButtons, button);
-                        stats = AssignData(objectIndex, button.gameObject, time, after, pixelOffset, transition, mode, elementType);
+                        stats = AssignData(objectIndex, time, after, pixelOffset, transition, mode, elementType, targetPoint, targetScale);
                         break;
                     }
                 case ElementType.Image:
                     {
                         Image image = (Image)element;
                         int objectIndex = ArrayUtils.AssignArrayValue(m_targetImages, image);
-                        stats = AssignData(objectIndex, image.gameObject, time, after, pixelOffset, transition, mode, elementType);
+                        stats = AssignData(objectIndex, time, after, pixelOffset, transition, mode, elementType, targetPoint, targetScale);
                         break;
                     }
                 case ElementType.RawImage:
                     {
                         RawImage rawImage = (RawImage)element;
                         int objectIndex = ArrayUtils.AssignArrayValue(m_targetRawImages, rawImage);
-                        stats = AssignData(objectIndex, rawImage.gameObject, time, after, pixelOffset, transition, mode, elementType);
+                        stats = AssignData(objectIndex, time, after, pixelOffset, transition, mode, elementType, targetPoint, targetScale);
                         break;
                     }
                 case ElementType.TMP_Text:
                     {
                         TMP_Text tmpText = (TMP_Text)element;
                         int objectIndex = ArrayUtils.AssignArrayValue(m_targetTMPTexts, tmpText);
-                        stats = AssignData(objectIndex, tmpText.gameObject, time, after, pixelOffset, transition, mode, elementType);
+                        stats = AssignData(objectIndex, time, after, pixelOffset, transition, mode, elementType, targetPoint, targetScale);
                         break;
                     }
                 default:
@@ -275,35 +282,25 @@ namespace net.puk06.CanvasAnimation
             }
 
             int statsIndex = ArrayUtils.AssignArrayValue(m_currentTasks, stats);
-            if (statsIndex == -1)
-            {
-                Debug.LogError("Couldn't Assign Task Data.");
-            }
+            if (statsIndex == -1) Debug.LogError("Couldn't Assign Task Data.");
         }
 
-        private string AssignData(int objectIndex, GameObject gameObject, float time, float after, int pixelOffset, TransitionType transition, AnimationMode mode, ElementType elementType)
+        private string AssignData(int objectIndex,  float time, float after, int pixelOffset, TransitionType transitionType, AnimationMode mode, ElementType elementType, Vector3 targetPoint, Vector3 targetScale)
         {
             int durationIndex = ArrayUtils.AssignArrayValue(m_durations, time);
             int startTimeIndex = ArrayUtils.AssignArrayValue(m_startTimes, Time.time);
             int pixelOffsetIndex = ArrayUtils.AssignArrayValue(m_pixelOffsets, pixelOffset);
             int timeoutTimesIndex = ArrayUtils.AssignArrayValue(m_timeoutTimes, after);
-            int startLocationIndex = ArrayUtils.AssignArrayValue(m_startLocations, gameObject.transform.localPosition);
-            int transitionTypeIndex = ArrayUtils.AssignArrayValue(m_transitions, transition);
+            int startLocationIndex = -1; // Automatically assigned at runtime
+            int startScaleIndex = -1; // Automatically assigned at runtime
+            int transitionTypeIndex = ArrayUtils.AssignArrayValue(m_transitionTypes, transitionType);
             int elementTypeIndex = ArrayUtils.AssignArrayValue(m_elementTypes, elementType);
-            int modesIndex = ArrayUtils.AssignArrayValue(m_modes, mode);
+            int modesIndex = ArrayUtils.AssignArrayValue(m_animationModes, mode);
+            int targetPointIndex = ArrayUtils.AssignArrayValue(m_targetPoints, targetPoint);
+            int targetScaleIndex = ArrayUtils.AssignArrayValue(m_targetScales, targetScale);
 
-            return $"{objectIndex},,,{durationIndex},,,{startTimeIndex},,,{pixelOffsetIndex},,,{timeoutTimesIndex},,,{startLocationIndex},,,{transitionTypeIndex},,,{modesIndex},,,{elementTypeIndex}";
+            return $"{objectIndex},,,{durationIndex},,,{startTimeIndex},,,{pixelOffsetIndex},,,{timeoutTimesIndex},,,{startLocationIndex},,,{startScaleIndex},,,{transitionTypeIndex},,,{modesIndex},,,{elementTypeIndex},,,{targetPointIndex},,,{targetScaleIndex}";
         }
-
-        private const int OBJECT_INDEX = 0;
-        private const int DURATION_INDEX = 1;
-        private const int START_TIME_INDEX = 2;
-        private const int PIXEL_OFFSET_INDEX = 3;
-        private const int TIME_OUT_INDEX = 4;
-        private const int START_LOCATION_INDEX = 5;
-        private const int TRANSITION_TYPE_INDEX = 6;
-        private const int ANIMATION_MODE_INDEX = 7;
-        private const int ELEMENT_TYPE_INDEX = 8;
 
         private void Update()
         {
@@ -315,36 +312,66 @@ namespace net.puk06.CanvasAnimation
 
                 string[] parsedStrData = UdonUtils.ParseDataString(m_currentTasks[i]);
 
+                int objectIndex = int.Parse(parsedStrData[OBJECT_INDEX]);
+                float duration = int.Parse(parsedStrData[DURATION_INDEX]) == -1 ? 0f : m_durations[int.Parse(parsedStrData[DURATION_INDEX])];
+                float startTime = int.Parse(parsedStrData[START_TIME_INDEX]) == -1 ? 0f : m_startTimes[int.Parse(parsedStrData[START_TIME_INDEX])];
+                int pixelOffset = int.Parse(parsedStrData[PIXEL_OFFSET_INDEX]) == -1 ? 0 : m_pixelOffsets[int.Parse(parsedStrData[PIXEL_OFFSET_INDEX])];
+                float timeoutTime = int.Parse(parsedStrData[TIME_OUT_INDEX]) == -1 ? 0f : m_timeoutTimes[int.Parse(parsedStrData[TIME_OUT_INDEX])];
+                Vector3 startLocation = int.Parse(parsedStrData[START_LOCATION_INDEX]) == -1 ? Vector3.positiveInfinity : m_startLocations[int.Parse(parsedStrData[START_LOCATION_INDEX])];
+                Vector3 startScale = int.Parse(parsedStrData[START_SCALE_INDEX]) == -1 ? Vector3.positiveInfinity : m_startScales[int.Parse(parsedStrData[START_SCALE_INDEX])];
+                TransitionType transitionType = int.Parse(parsedStrData[TRANSITION_TYPE_INDEX]) == -1 ? TransitionType.None : m_transitionTypes[int.Parse(parsedStrData[TRANSITION_TYPE_INDEX])];
+                AnimationMode animationMode = int.Parse(parsedStrData[ANIMATION_MODE_INDEX]) == -1 ? AnimationMode.None : m_animationModes[int.Parse(parsedStrData[ANIMATION_MODE_INDEX])];
+                ElementType elementType = int.Parse(parsedStrData[ELEMENT_TYPE_INDEX]) == -1 ? ElementType.None : m_elementTypes[int.Parse(parsedStrData[ELEMENT_TYPE_INDEX])];
+                Vector3 targetPoint = int.Parse(parsedStrData[DESTINATION_POINT_INDEX]) == -1 ? Vector3.positiveInfinity : m_targetPoints[int.Parse(parsedStrData[DESTINATION_POINT_INDEX])];
+                Vector3 targetScale = int.Parse(parsedStrData[TARGET_SCALE_INDEX]) == -1 ? Vector3.positiveInfinity : m_targetScales[int.Parse(parsedStrData[TARGET_SCALE_INDEX])];
+
+                if (objectIndex == -1) continue;
+
                 Object targetObj = null;
-                switch (m_elementTypes[int.Parse(parsedStrData[ELEMENT_TYPE_INDEX])])
+                switch (elementType)
                 {
-                    case ElementType.Text: targetObj = m_targetTexts[int.Parse(parsedStrData[OBJECT_INDEX])]; break;
-                    case ElementType.TMP_Text: targetObj = m_targetTMPTexts[int.Parse(parsedStrData[OBJECT_INDEX])]; break;
-                    case ElementType.Image: targetObj = m_targetImages[int.Parse(parsedStrData[OBJECT_INDEX])]; break;
-                    case ElementType.RawImage: targetObj = m_targetRawImages[int.Parse(parsedStrData[OBJECT_INDEX])]; break;
-                    case ElementType.Button: targetObj = m_targetButtons[int.Parse(parsedStrData[OBJECT_INDEX])]; break;
+                    case ElementType.Text: targetObj = m_targetTexts[objectIndex]; break;
+                    case ElementType.TMP_Text: targetObj = m_targetTMPTexts[objectIndex]; break;
+                    case ElementType.Image: targetObj = m_targetImages[objectIndex]; break;
+                    case ElementType.RawImage: targetObj = m_targetRawImages[objectIndex]; break;
+                    case ElementType.Button: targetObj = m_targetButtons[objectIndex]; break;
                 }
 
                 if (targetObj == null) continue;
 
-                if ((Time.time - (m_startTimes[int.Parse(parsedStrData[START_TIME_INDEX])] + m_timeoutTimes[int.Parse(parsedStrData[TIME_OUT_INDEX])])) <= 0f) continue;
+                if ((Time.time - (startTime + timeoutTime)) <= 0f) continue;
 
-                float t = 1f;
-                if (m_durations[int.Parse(parsedStrData[DURATION_INDEX])] > 0f)
+                if (int.Parse(parsedStrData[START_LOCATION_INDEX]) == -1)
                 {
-                    t = (Time.time - (m_startTimes[int.Parse(parsedStrData[START_TIME_INDEX])] + m_timeoutTimes[int.Parse(parsedStrData[TIME_OUT_INDEX])])) / m_durations[int.Parse(parsedStrData[DURATION_INDEX])];
+                    Vector3 startLocationLocal = ((Component)targetObj).GetComponent<RectTransform>().localPosition;
+                    int startLocationIndex = ArrayUtils.AssignArrayValue(m_startLocations, startLocationLocal);
+                    parsedStrData[START_LOCATION_INDEX] = startLocationIndex.ToString();
+                    m_currentTasks[i] = string.Join(",,,", parsedStrData);
+
+                    startLocation = startLocationLocal;
                 }
 
-                if (t > 1f) t = 1f;
+                if (int.Parse(parsedStrData[START_SCALE_INDEX]) == -1)
+                {
+                    Vector3 startScaleLocal = ((Component)targetObj).GetComponent<RectTransform>().localScale;
+                    int startScaleIndex = ArrayUtils.AssignArrayValue(m_startScales, startScaleLocal);
+                    parsedStrData[START_SCALE_INDEX] = startScaleIndex.ToString();
+                    m_currentTasks[i] = string.Join(",,,", parsedStrData);
 
-                float eased = MathUtils.ApplyEasing(t, m_transitions[int.Parse(parsedStrData[TRANSITION_TYPE_INDEX])]);
+                    startScale = startScaleLocal;
+                }
 
-                switch (m_modes[int.Parse(parsedStrData[ANIMATION_MODE_INDEX])])
+                float t = 1f;
+                if (duration > 0f) t = UdonUtils.Clamp((Time.time - (startTime + timeoutTime)) / duration, 0f, 1f);
+
+                float eased = MathUtils.ApplyEasing(t, transitionType);
+
+                switch (animationMode)
                 {
                     case AnimationMode.FadeIn:
                         {
                             float alpha = eased;
-                            switch (m_elementTypes[int.Parse(parsedStrData[ELEMENT_TYPE_INDEX])])
+                            switch (elementType)
                             {
                                 case ElementType.Text:
                                     Text text = (Text)targetObj;
@@ -372,7 +399,7 @@ namespace net.puk06.CanvasAnimation
                     case AnimationMode.FadeOut:
                         {
                             float alpha = 1f - eased;
-                            switch (m_elementTypes[int.Parse(parsedStrData[ELEMENT_TYPE_INDEX])])
+                            switch (elementType)
                             {
                                 case ElementType.Text:
                                     Text text = (Text)targetObj;
@@ -399,54 +426,103 @@ namespace net.puk06.CanvasAnimation
                         }
                     case AnimationMode.MoveDown:
                         {
-                            Vector3 newPos = m_startLocations[int.Parse(parsedStrData[START_LOCATION_INDEX])];
-                            newPos.y += m_pixelOffsets[int.Parse(parsedStrData[PIXEL_OFFSET_INDEX])] * (1f - eased);
-                            ((Component)targetObj).gameObject.transform.localPosition = newPos;
+                            Vector3 newPos = startLocation;
+                            newPos.y += pixelOffset * (1f - eased);
+                            ((Component)targetObj).GetComponent<RectTransform>().localPosition = newPos;
                             break;
                         }
                     case AnimationMode.MoveUp:
                         {
-                            Vector3 newPos = m_startLocations[int.Parse(parsedStrData[START_LOCATION_INDEX])];
-                            newPos.y -= m_pixelOffsets[int.Parse(parsedStrData[PIXEL_OFFSET_INDEX])] * (1f - eased);
-                            ((Component)targetObj).gameObject.transform.localPosition = newPos;
+                            Vector3 newPos = startLocation;
+                            newPos.y -= pixelOffset * (1f - eased);
+                            ((Component)targetObj).GetComponent<RectTransform>().localPosition = newPos;
                             break;
                         }
                     case AnimationMode.MoveLeft:
                         {
-                            Vector3 newPos = m_startLocations[int.Parse(parsedStrData[START_LOCATION_INDEX])];
-                            newPos.x += m_pixelOffsets[int.Parse(parsedStrData[PIXEL_OFFSET_INDEX])] * (1f - eased);
-                            ((Component)targetObj).gameObject.transform.localPosition = newPos;
+                            Vector3 newPos = startLocation;
+                            newPos.x += pixelOffset * (1f - eased);
+                            ((Component)targetObj).GetComponent<RectTransform>().localPosition = newPos;
                             break;
                         }
                     case AnimationMode.MoveRight:
                         {
-                            Vector3 newPos = m_startLocations[int.Parse(parsedStrData[START_LOCATION_INDEX])];
-                            newPos.x -= m_pixelOffsets[int.Parse(parsedStrData[PIXEL_OFFSET_INDEX])] * (1f - eased);
-                            ((Component)targetObj).gameObject.transform.localPosition = newPos;
+                            Vector3 newPos = startLocation;
+                            newPos.x -= pixelOffset * (1f - eased);
+                            ((Component)targetObj).GetComponent<RectTransform>().localPosition = newPos;
+                            break;
+                        }
+                    case AnimationMode.MoveTo:
+                        {
+                            Vector3 newPos = new Vector3(
+                                targetPoint.x == float.PositiveInfinity ? startLocation.x : startLocation.x + ((targetPoint.x - startLocation.x) * eased),
+                                targetPoint.y == float.PositiveInfinity ? startLocation.y : startLocation.y + ((targetPoint.y - startLocation.y) * eased),
+                                targetPoint.z == float.PositiveInfinity ? startLocation.z : startLocation.z + ((targetPoint.z - startLocation.z) * eased)
+                            );
+
+                            ((Component)targetObj).GetComponent<RectTransform>().localPosition = newPos;
+                            break;
+                        }
+                    case AnimationMode.MoveFrom:
+                        {
+                            Vector3 newPos = new Vector3(
+                                targetPoint.x == float.PositiveInfinity ? startLocation.x : targetPoint.x + ((startLocation.x - targetPoint.x) * eased),
+                                targetPoint.y == float.PositiveInfinity ? startLocation.y : targetPoint.y + ((startLocation.y - targetPoint.y) * eased),
+                                targetPoint.z == float.PositiveInfinity ? startLocation.z : targetPoint.z + ((startLocation.z - targetPoint.z) * eased)
+                            );
+
+                            ((Component)targetObj).GetComponent<RectTransform>().localPosition = newPos;
+                            break;
+                        }
+                    case AnimationMode.ScaleTo:
+                        {
+                            Vector3 newScale = new Vector3(
+                                targetScale.x == float.PositiveInfinity ? startScale.x : startScale.x + ((targetScale.x - startScale.x) * eased),
+                                targetScale.y == float.PositiveInfinity ? startScale.y : startScale.y + ((targetScale.y - startScale.y) * eased),
+                                targetScale.z == float.PositiveInfinity ? startScale.z : startScale.z + ((targetScale.z - startScale.z) * eased)
+                            );
+
+                            ((Component)targetObj).GetComponent<RectTransform>().localScale = newScale;
+                            break;
+                        }
+                    case AnimationMode.ScaleFrom:
+                        {
+                            Vector3 newScale = new Vector3(
+                                targetScale.x == float.PositiveInfinity ? startScale.x : targetScale.x + ((startScale.x - targetScale.x) * eased),
+                                targetScale.y == float.PositiveInfinity ? startScale.y : targetScale.y + ((startScale.y - targetScale.y) * eased),
+                                targetScale.z == float.PositiveInfinity ? startScale.z : targetScale.z + ((startScale.z - targetScale.z) * eased)
+                            );
+
+                            ((Component)targetObj).GetComponent<RectTransform>().localScale = newScale;
                             break;
                         }
                 }
 
                 if (t >= 1f)
                 {
-                    Debug.Log($"[{UdonUtils.ColorizeString("Canvas Animation System", "#4eb3ee")}] Animation Finished!");
-                    switch (m_elementTypes[int.Parse(parsedStrData[ELEMENT_TYPE_INDEX])])
+                    Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Finished - Object: {targetObj.name} - Task: {i}");
+
+                    switch (elementType)
                     {
-                        case ElementType.Text: m_targetTexts[int.Parse(parsedStrData[OBJECT_INDEX])] = null; break;
-                        case ElementType.TMP_Text: m_targetTMPTexts[int.Parse(parsedStrData[OBJECT_INDEX])] = null; break;
-                        case ElementType.Image: m_targetImages[int.Parse(parsedStrData[OBJECT_INDEX])] = null; break;
-                        case ElementType.RawImage: m_targetRawImages[int.Parse(parsedStrData[OBJECT_INDEX])] = null; break;
-                        case ElementType.Button: m_targetButtons[int.Parse(parsedStrData[OBJECT_INDEX])] = null; break;
+                        case ElementType.Text: m_targetTexts[objectIndex] = null; break;
+                        case ElementType.TMP_Text: m_targetTMPTexts[objectIndex] = null; break;
+                        case ElementType.Image: m_targetImages[objectIndex] = null; break;
+                        case ElementType.RawImage: m_targetRawImages[objectIndex] = null; break;
+                        case ElementType.Button: m_targetButtons[objectIndex] = null; break;
                     }
 
-                    m_durations[int.Parse(parsedStrData[DURATION_INDEX])] = -1;
-                    m_pixelOffsets[int.Parse(parsedStrData[PIXEL_OFFSET_INDEX])] = -1;
-                    m_startTimes[int.Parse(parsedStrData[START_TIME_INDEX])] = -1;
-                    m_timeoutTimes[int.Parse(parsedStrData[TIME_OUT_INDEX])] = -1;
-                    m_startLocations[int.Parse(parsedStrData[START_LOCATION_INDEX])] = Vector3.positiveInfinity;
-                    m_transitions[int.Parse(parsedStrData[TRANSITION_TYPE_INDEX])] = TransitionType.None;
-                    m_modes[int.Parse(parsedStrData[ANIMATION_MODE_INDEX])] = AnimationMode.None;
-                    m_elementTypes[int.Parse(parsedStrData[ELEMENT_TYPE_INDEX])] = ElementType.None;
+                    if (int.Parse(parsedStrData[DURATION_INDEX]) != -1) m_durations[int.Parse(parsedStrData[DURATION_INDEX])] = -1;
+                    if (int.Parse(parsedStrData[PIXEL_OFFSET_INDEX]) != -1) m_pixelOffsets[int.Parse(parsedStrData[PIXEL_OFFSET_INDEX])] = -1;
+                    if (int.Parse(parsedStrData[START_TIME_INDEX]) != -1) m_startTimes[int.Parse(parsedStrData[START_TIME_INDEX])] = -1;
+                    if (int.Parse(parsedStrData[TIME_OUT_INDEX]) != -1) m_timeoutTimes[int.Parse(parsedStrData[TIME_OUT_INDEX])] = -1;
+                    if (int.Parse(parsedStrData[START_LOCATION_INDEX]) != -1) m_startLocations[int.Parse(parsedStrData[START_LOCATION_INDEX])] = Vector3.positiveInfinity;
+                    if (int.Parse(parsedStrData[START_SCALE_INDEX]) != -1) m_startScales[int.Parse(parsedStrData[START_SCALE_INDEX])] = Vector3.positiveInfinity;
+                    if (int.Parse(parsedStrData[TRANSITION_TYPE_INDEX]) != -1) m_transitionTypes[int.Parse(parsedStrData[TRANSITION_TYPE_INDEX])] = TransitionType.None;
+                    if (int.Parse(parsedStrData[ANIMATION_MODE_INDEX]) != -1) m_animationModes[int.Parse(parsedStrData[ANIMATION_MODE_INDEX])] = AnimationMode.None;
+                    if (int.Parse(parsedStrData[ELEMENT_TYPE_INDEX]) != -1) m_elementTypes[int.Parse(parsedStrData[ELEMENT_TYPE_INDEX])] = ElementType.None;
+                    if (int.Parse(parsedStrData[DESTINATION_POINT_INDEX]) != -1) m_targetPoints[int.Parse(parsedStrData[DESTINATION_POINT_INDEX])] = Vector3.positiveInfinity;
+                    if (int.Parse(parsedStrData[TARGET_SCALE_INDEX]) != -1) m_targetScales[int.Parse(parsedStrData[TARGET_SCALE_INDEX])] = Vector3.positiveInfinity;
+
                     m_currentTasks[i] = null;
                 }
             }

@@ -1,5 +1,4 @@
-﻿
-using net.puk06.CanvasAnimation.Models;
+﻿using net.puk06.CanvasAnimation.Models;
 using UdonSharp;
 using UnityEngine;
 

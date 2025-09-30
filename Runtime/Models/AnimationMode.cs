@@ -9,6 +9,10 @@ namespace net.puk06.CanvasAnimation.Models
         MoveUp,
         MoveLeft,
         MoveRight,
+        MoveTo,
+        MoveFrom,
+        ScaleTo,
+        ScaleFrom,
         Toggle
     }
 }
