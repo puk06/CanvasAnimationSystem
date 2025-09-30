@@ -37,7 +37,7 @@ namespace net.puk06.CanvasAnimation.Utils
                 array[i] = ColorUtils.GetInvalidColor();
             }
         }
-        
+
         public static int AssignArrayValue<T>(T[] array, T value)
         {
             if (value == null) return -1;

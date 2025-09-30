@@ -1,8 +1,8 @@
 using net.puk06.CanvasAnimation.Models;
+using TMPro;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 namespace net.puk06.CanvasAnimation.Utils
 {

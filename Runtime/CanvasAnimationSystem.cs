@@ -42,7 +42,7 @@ namespace net.puk06.CanvasAnimation
         private const int TRANSITION_TYPE_INDEX = 9;
         private const int ANIMATION_MODE_INDEX = 10;
         private const int ELEMENT_TYPE_INDEX = 11;
-        
+
         private const int TARGET_POINT_INDEX = 12;
         private const int TARGET_ROTATION_INDEX = 13;
         private const int TARGET_SCALE_INDEX = 14;
@@ -121,7 +121,7 @@ namespace net.puk06.CanvasAnimation
             ArrayUtils.InitializeValues(m_startRotations);
             ArrayUtils.InitializeValues(m_startScales);
             ArrayUtils.InitializeValues(m_startColors);
-            
+
             ArrayUtils.InitializeValues(m_targetPoints);
             ArrayUtils.InitializeValues(m_targetScales);
             ArrayUtils.InitializeValues(m_targetRotations);
@@ -315,7 +315,7 @@ namespace net.puk06.CanvasAnimation
             AddTask(element, duration, after, -1, transitionType, AnimationMode.ScaleTo, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, targetScale, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, startScale, ColorUtils.GetInvalidColor());
             return this;
         }
-        
+
         public CanvasAnimationSystem Color(Text element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType)
             => ColorInternal(element, ElementType.Text, duration, after, animationDirection, targetColor, transitionType);
         public CanvasAnimationSystem Color(Button element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType)
@@ -394,7 +394,7 @@ namespace net.puk06.CanvasAnimation
                 Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Cannceled - Object: {targetObj.name} - Task: {i}");
                 RemoveTask(parsedStrData, i);
             }
-            
+
             return this;
         }
 
