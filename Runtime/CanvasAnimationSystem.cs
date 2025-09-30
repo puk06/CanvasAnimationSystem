@@ -151,7 +151,7 @@ namespace net.puk06.CanvasAnimation
                 case FadeType.Out: animationMode = AnimationMode.FadeOut; break;
             }
 
-            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity);
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity);
             return this;
         }
 
@@ -177,21 +177,21 @@ namespace net.puk06.CanvasAnimation
                 default: animationMode = AnimationMode.MoveUp; break;
             }
 
-            AddTask(element, duration, after, pixelOffset, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity);
+            AddTask(element, duration, after, pixelOffset, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity);
             return this;
         }
 
-        public CanvasAnimationSystem MoveLocation(Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
-            => MoveLocationInternal(element, ElementType.Text, duration, after, animationDirection, targetPoint, transitionType);
-        public CanvasAnimationSystem MoveLocation(Button element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
-            => MoveLocationInternal(element, ElementType.Button, duration, after, animationDirection, targetPoint, transitionType);
-        public CanvasAnimationSystem MoveLocation(Image element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
-            => MoveLocationInternal(element, ElementType.Image, duration, after, animationDirection, targetPoint, transitionType);
-        public CanvasAnimationSystem MoveLocation(RawImage element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
-            => MoveLocationInternal(element, ElementType.RawImage, duration, after, animationDirection, targetPoint, transitionType);
-        public CanvasAnimationSystem MoveLocation(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
-            => MoveLocationInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetPoint, transitionType);
-        private CanvasAnimationSystem MoveLocationInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
+        public CanvasAnimationSystem MoveTo(Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
+            => MoveToInternal(element, ElementType.Text, duration, after, animationDirection, targetPoint, transitionType);
+        public CanvasAnimationSystem MoveTo(Button element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
+            => MoveToInternal(element, ElementType.Button, duration, after, animationDirection, targetPoint, transitionType);
+        public CanvasAnimationSystem MoveTo(Image element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
+            => MoveToInternal(element, ElementType.Image, duration, after, animationDirection, targetPoint, transitionType);
+        public CanvasAnimationSystem MoveTo(RawImage element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
+            => MoveToInternal(element, ElementType.RawImage, duration, after, animationDirection, targetPoint, transitionType);
+        public CanvasAnimationSystem MoveTo(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
+            => MoveToInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetPoint, transitionType);
+        private CanvasAnimationSystem MoveToInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
         {
             AnimationMode animationMode = AnimationMode.None;
             switch (animationDirection)
@@ -200,30 +200,23 @@ namespace net.puk06.CanvasAnimation
                 case AnimationDirection.From: animationMode = AnimationMode.MoveFrom; break;
             }
 
-            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, targetPoint, Vector3.positiveInfinity, Vector3.positiveInfinity);
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, targetPoint, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity);
             return this;
         }
 
-        public CanvasAnimationSystem Scale(Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
-            => ScaleInternal(element, ElementType.Text, duration, after, animationDirection, targetScale, transitionType);
-        public CanvasAnimationSystem Scale(Button element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
-            => ScaleInternal(element, ElementType.Button, duration, after, animationDirection, targetScale, transitionType);
-        public CanvasAnimationSystem Scale(Image element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
-            => ScaleInternal(element, ElementType.Image, duration, after, animationDirection, targetScale, transitionType);
-        public CanvasAnimationSystem Scale(RawImage element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
-            => ScaleInternal(element, ElementType.RawImage, duration, after, animationDirection, targetScale, transitionType);
-        public CanvasAnimationSystem Scale(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
-            => ScaleInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetScale, transitionType);
-        private CanvasAnimationSystem ScaleInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
+        public CanvasAnimationSystem MoveFromTo(Text element, float duration, float after, Vector3 startPoint, Vector3 targetPoint, TransitionType transitionType)
+            => MoveFromToInternal(element, ElementType.Text, duration, after, startPoint, targetPoint, transitionType);
+        public CanvasAnimationSystem MoveFromTo(Button element, float duration, float after, Vector3 startPoint, Vector3 targetPoint, TransitionType transitionType)
+            => MoveFromToInternal(element, ElementType.Button, duration, after, startPoint, targetPoint, transitionType);
+        public CanvasAnimationSystem MoveFromTo(Image element, float duration, float after, Vector3 startPoint, Vector3 targetPoint, TransitionType transitionType)
+            => MoveFromToInternal(element, ElementType.Image, duration, after, startPoint, targetPoint, transitionType);
+        public CanvasAnimationSystem MoveFromTo(RawImage element, float duration, float after, Vector3 startPoint, Vector3 targetPoint, TransitionType transitionType)
+            => MoveFromToInternal(element, ElementType.RawImage, duration, after, startPoint, targetPoint, transitionType);
+        public CanvasAnimationSystem MoveFromTo(TMP_Text element, float duration, float after, Vector3 startPoint, Vector3 targetPoint, TransitionType transitionType)
+            => MoveFromToInternal(element, ElementType.TMP_Text, duration, after, startPoint, targetPoint, transitionType);
+        private CanvasAnimationSystem MoveFromToInternal(Component element, ElementType elementType, float duration, float after, Vector3 startPoint, Vector3 targetPoint, TransitionType transitionType)
         {
-            AnimationMode animationMode = AnimationMode.None;
-            switch (animationDirection)
-            {
-                case AnimationDirection.To: animationMode = AnimationMode.ScaleTo; break;
-                case AnimationDirection.From: animationMode = AnimationMode.ScaleFrom; break;
-            }
-
-            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, targetScale, Vector3.positiveInfinity);
+            AddTask(element, duration, after, -1, transitionType, AnimationMode.MoveTo, elementType, targetPoint, Vector3.positiveInfinity, Vector3.positiveInfinity, startPoint, Vector3.positiveInfinity, Vector3.positiveInfinity);
             return this;
         }
 
@@ -246,7 +239,62 @@ namespace net.puk06.CanvasAnimation
                 case AnimationDirection.From: animationMode = AnimationMode.RotateFrom; break;
             }
 
-            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, targetRotation);
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity);
+            return this;
+        }
+
+        public CanvasAnimationSystem RotateFromTo(Text element, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
+            => RotateFromToInternal(element, ElementType.Text, duration, after, startRotation, targetRotation, transitionType);
+        public CanvasAnimationSystem RotateFromTo(Button element, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
+            => RotateFromToInternal(element, ElementType.Button, duration, after, startRotation, targetRotation, transitionType);
+        public CanvasAnimationSystem RotateFromTo(Image element, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
+            => RotateFromToInternal(element, ElementType.Image, duration, after, startRotation, targetRotation, transitionType);
+        public CanvasAnimationSystem RotateFromTo(RawImage element, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
+            => RotateFromToInternal(element, ElementType.RawImage, duration, after, startRotation, targetRotation, transitionType);
+        public CanvasAnimationSystem RotateFromTo(TMP_Text element, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
+            => RotateFromToInternal(element, ElementType.TMP_Text, duration, after, startRotation, targetRotation, transitionType);
+        private CanvasAnimationSystem RotateFromToInternal(Component element, ElementType elementType, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
+        {
+            AddTask(element, duration, after, -1, transitionType, AnimationMode.RotateTo, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, startRotation, Vector3.positiveInfinity);
+            return this;
+        }
+
+        public CanvasAnimationSystem Scale(Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
+            => ScaleInternal(element, ElementType.Text, duration, after, animationDirection, targetScale, transitionType);
+        public CanvasAnimationSystem Scale(Button element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
+            => ScaleInternal(element, ElementType.Button, duration, after, animationDirection, targetScale, transitionType);
+        public CanvasAnimationSystem Scale(Image element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
+            => ScaleInternal(element, ElementType.Image, duration, after, animationDirection, targetScale, transitionType);
+        public CanvasAnimationSystem Scale(RawImage element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
+            => ScaleInternal(element, ElementType.RawImage, duration, after, animationDirection, targetScale, transitionType);
+        public CanvasAnimationSystem Scale(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
+            => ScaleInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetScale, transitionType);
+        private CanvasAnimationSystem ScaleInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
+        {
+            AnimationMode animationMode = AnimationMode.None;
+            switch (animationDirection)
+            {
+                case AnimationDirection.To: animationMode = AnimationMode.ScaleTo; break;
+                case AnimationDirection.From: animationMode = AnimationMode.ScaleFrom; break;
+            }
+
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, targetScale, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity);
+            return this;
+        }
+
+        public CanvasAnimationSystem ScaleFromTo(Text element, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
+            => ScaleFromToInternal(element, ElementType.Text, duration, after, startScale, targetScale, transitionType);
+        public CanvasAnimationSystem ScaleFromTo(Button element, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
+            => ScaleFromToInternal(element, ElementType.Button, duration, after, startScale, targetScale, transitionType);
+        public CanvasAnimationSystem ScaleFromTo(Image element, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
+            => ScaleFromToInternal(element, ElementType.Image, duration, after, startScale, targetScale, transitionType);
+        public CanvasAnimationSystem ScaleFromTo(RawImage element, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
+            => ScaleFromToInternal(element, ElementType.RawImage, duration, after, startScale, targetScale, transitionType);
+        public CanvasAnimationSystem ScaleFromTo(TMP_Text element, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
+            => ScaleFromToInternal(element, ElementType.TMP_Text, duration, after, startScale, targetScale, transitionType);
+        private CanvasAnimationSystem ScaleFromToInternal(Component element, ElementType elementType, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
+        {
+            AddTask(element, duration, after, -1, transitionType, AnimationMode.ScaleTo, elementType, Vector3.positiveInfinity, targetScale, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, startScale);
             return this;
         }
 
@@ -289,6 +337,24 @@ namespace net.puk06.CanvasAnimation
                 Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Cannceled - Object: {targetObj.name} - Task: {i}");
                 RemoveTask(parsedStrData, i);
             }
+            
+            return this;
+        }
+
+        public CanvasAnimationSystem CancelAll()
+            => CancelAllInternal();
+        private CanvasAnimationSystem CancelAllInternal()
+        {
+            for (int i = 0; i < m_currentTasks.Length; i++)
+            {
+                if (m_currentTasks[i] == null || m_currentTasks[i] == "") continue;
+
+                string[] parsedStrData = UdonUtils.ParseDataString(m_currentTasks[i]);
+
+                Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Cannceled - Task: {i}");
+                RemoveTask(parsedStrData, i);
+            }
+
             return this;
         }
 
@@ -296,6 +362,7 @@ namespace net.puk06.CanvasAnimation
         {
             Debug.Log($"{string.Format(LogTag, ColoredTag)} Exit triggered - disabling component...");
             if (runningAnimations > 0) Debug.LogWarning($"{string.Format(LogTag, ColoredTag)} Some animations are still playing, but the component is being disabled.");
+
             Destroy(this);
         }
 
@@ -309,7 +376,10 @@ namespace net.puk06.CanvasAnimation
             ElementType elementType,
             Vector3 targetPoint,
             Vector3 targetScale,
-            Vector3 targetRotations
+            Vector3 targetRotation,
+            Vector3 startPoint,
+            Vector3 startRotation,
+            Vector3 startScale
         )
         {
             int objectIndex;
@@ -350,21 +420,21 @@ namespace net.puk06.CanvasAnimation
                     return;
             }
 
-            string stats = AssignData(objectIndex, time, after, pixelOffset, transition, mode, elementType, targetPoint, targetScale, targetRotations);
+            string stats = AssignData(objectIndex, time, after, pixelOffset, transition, mode, elementType, targetPoint, targetScale, targetRotation, startPoint, startRotation, startScale);
 
             int statsIndex = ArrayUtils.AssignArrayValue(m_currentTasks, stats);
             if (statsIndex == -1) Debug.LogError("Couldn't Assign Task Data.");
         }
 
-        private string AssignData(int objectIndex, float time, float after, int pixelOffset, TransitionType transitionType, AnimationMode mode, ElementType elementType, Vector3 targetPoint, Vector3 targetScale, Vector3 targetRotation)
+        private string AssignData(int objectIndex, float time, float after, int pixelOffset, TransitionType transitionType, AnimationMode mode, ElementType elementType, Vector3 targetPoint, Vector3 targetScale, Vector3 targetRotation, Vector3 startPoint, Vector3 startRotation, Vector3 startScale)
         {
             int durationIndex = ArrayUtils.AssignArrayValue(m_durations, time);
             int startTimeIndex = ArrayUtils.AssignArrayValue(m_startTimes, Time.time);
             int pixelOffsetIndex = ArrayUtils.AssignArrayValue(m_pixelOffsets, pixelOffset);
             int timeoutTimesIndex = ArrayUtils.AssignArrayValue(m_timeoutTimes, after);
-            int startLocationIndex = -1; // Automatically assigned at runtime
-            int startRotationIndex = -1; // Automatically assigned at runtime
-            int startScaleIndex = -1; // Automatically assigned at runtime
+            int startLocationIndex = MathUtils.IsPositiveInfinity(startPoint) ? -1 : ArrayUtils.AssignArrayValue(m_startLocations, startPoint);
+            int startRotationIndex = MathUtils.IsPositiveInfinity(startRotation) ? -1 : ArrayUtils.AssignArrayValue(m_startRotations, startRotation);
+            int startScaleIndex = MathUtils.IsPositiveInfinity(startScale) ? -1 : ArrayUtils.AssignArrayValue(m_startScales, startScale);
             int transitionTypeIndex = ArrayUtils.AssignArrayValue(m_transitionTypes, transitionType);
             int elementTypeIndex = ArrayUtils.AssignArrayValue(m_elementTypes, elementType);
             int modesIndex = ArrayUtils.AssignArrayValue(m_animationModes, mode);
