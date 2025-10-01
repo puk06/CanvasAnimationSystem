@@ -34,7 +34,7 @@ namespace net.puk06.CanvasAnimation
         private const int PIXEL_OFFSET_INDEX = 3;
         private const int TIME_OUT_INDEX = 4;
 
-        private const int START_LOCATION_INDEX = 5;
+        private const int START_POSITION_INDEX = 5;
         private const int START_ROTATION_INDEX = 6;
         private const int START_SCALE_INDEX = 7;
         private const int START_COLOR_INDEX = 8;
@@ -48,28 +48,26 @@ namespace net.puk06.CanvasAnimation
         private const int TARGET_SCALE_INDEX = 14;
         private const int TARGET_COLOR_INDEX = 15;
 
+        private const int USE_DEFINED_POSITION_INDEX = 16;
+        private const int USE_DEFINED_ROTATION_INDEX = 17;
+        private const int USE_DEFINED_SCALE_INDEX = 18;
+        private const int USE_DEFINED_COLOR_INDEX = 19;
+
+        private const int DEFINITION_OBJECT_INDEX = 0;
+        private const int DEFINITION_POSITION_INDEX = 1;
+        private const int DEFINITION_ROTATION_INDEX = 2;
+        private const int DEFINITION_SCALE_INDEX = 3;
+        private const int DEFINITION_COLOR_INDEX = 4;
+
         private string[] m_currentTasks;
 
-        private Text[] m_targetTexts;
-        private Button[] m_targetButtons;
-        // private Dropdown[] targetDropDowns;
-        // private InputField[] targetInputFields;
-        private Image[] m_targetImages;
-        private RawImage[] m_targetRawImages;
-        // private Toggle[] targetToggles;
-        // private Slider[] targetSliders;
-        // private Scrollbar[] targetScrollbars;
-
-        private TMP_Text[] m_targetTMPTexts;
-        // private TMP_Dropdown[] targetTMPDropDowns;
-        // private TMP_InputField[] targetTMPInputFields;
-
+        private Component[] m_targetObjects;
         private float[] m_durations;
         private int[] m_pixelOffsets;
         private float[] m_startTimes;
         private float[] m_timeoutTimes;
 
-        private Vector3[] m_startLocations;
+        private Vector3[] m_startPositions;
         private Vector3[] m_startRotations;
         private Vector3[] m_startScales;
         private Color[] m_startColors;
@@ -83,22 +81,24 @@ namespace net.puk06.CanvasAnimation
         private Vector3[] m_targetRotations;
         private Color[] m_targetColors;
 
+        private string[] m_definedStats;
+        private Component[] m_definedObjects;
+        private Vector3[] m_definedPosition;
+        private Vector3[] m_definedRotations;
+        private Vector3[] m_definedScales;
+        private Color[] m_definedColors;
+
         void Start()
         {
             m_currentTasks = new string[maxConcurrentAnimations];
 
-            m_targetTexts = new Text[maxConcurrentAnimations];
-            m_targetButtons = new Button[maxConcurrentAnimations];
-            m_targetImages = new Image[maxConcurrentAnimations];
-            m_targetRawImages = new RawImage[maxConcurrentAnimations];
-            m_targetTMPTexts = new TMP_Text[maxConcurrentAnimations];
-
+            m_targetObjects = new Component[maxConcurrentAnimations];
             m_durations = new float[maxConcurrentAnimations];
             m_pixelOffsets = new int[maxConcurrentAnimations];
             m_startTimes = new float[maxConcurrentAnimations];
             m_timeoutTimes = new float[maxConcurrentAnimations];
 
-            m_startLocations = new Vector3[maxConcurrentAnimations];
+            m_startPositions = new Vector3[maxConcurrentAnimations];
             m_startRotations = new Vector3[maxConcurrentAnimations];
             m_startScales = new Vector3[maxConcurrentAnimations];
             m_startColors = new Color[maxConcurrentAnimations];
@@ -112,12 +112,19 @@ namespace net.puk06.CanvasAnimation
             m_targetRotations = new Vector3[maxConcurrentAnimations];
             m_targetColors = new Color[maxConcurrentAnimations];
 
+            m_definedStats = new string[maxConcurrentAnimations];
+            m_definedObjects = new Component[maxConcurrentAnimations];
+            m_definedPosition = new Vector3[maxConcurrentAnimations];
+            m_definedScales = new Vector3[maxConcurrentAnimations];
+            m_definedRotations = new Vector3[maxConcurrentAnimations];
+            m_definedColors = new Color[maxConcurrentAnimations];
+
             ArrayUtils.InitializeValues(m_durations);
             ArrayUtils.InitializeValues(m_pixelOffsets);
             ArrayUtils.InitializeValues(m_startTimes);
             ArrayUtils.InitializeValues(m_timeoutTimes);
 
-            ArrayUtils.InitializeValues(m_startLocations);
+            ArrayUtils.InitializeValues(m_startPositions);
             ArrayUtils.InitializeValues(m_startRotations);
             ArrayUtils.InitializeValues(m_startScales);
             ArrayUtils.InitializeValues(m_startColors);
@@ -126,8 +133,14 @@ namespace net.puk06.CanvasAnimation
             ArrayUtils.InitializeValues(m_targetScales);
             ArrayUtils.InitializeValues(m_targetRotations);
             ArrayUtils.InitializeValues(m_targetColors);
+
+            ArrayUtils.InitializeValues(m_definedPosition);
+            ArrayUtils.InitializeValues(m_definedScales);
+            ArrayUtils.InitializeValues(m_definedRotations);
+            ArrayUtils.InitializeValues(m_definedColors);
         }
 
+        #region Show
         public CanvasAnimationSystem Show(Text element)
             => FadeInternal(element, ElementType.Text, 0f, 0f, FadeType.In, TransitionType.None);
         public CanvasAnimationSystem Show(Button element)
@@ -138,7 +151,9 @@ namespace net.puk06.CanvasAnimation
             => FadeInternal(element, ElementType.RawImage, 0f, 0f, FadeType.In, TransitionType.None);
         public CanvasAnimationSystem Show(TMP_Text element)
             => FadeInternal(element, ElementType.TMP_Text, 0f, 0f, FadeType.In, TransitionType.None);
+        #endregion
 
+        #region Hide
         public CanvasAnimationSystem Hide(Text element)
             => FadeInternal(element, ElementType.Text, 0f, 0f, FadeType.Out, TransitionType.None);
         public CanvasAnimationSystem Hide(Button element)
@@ -149,7 +164,9 @@ namespace net.puk06.CanvasAnimation
             => FadeInternal(element, ElementType.RawImage, 0f, 0f, FadeType.Out, TransitionType.None);
         public CanvasAnimationSystem Hide(TMP_Text element)
             => FadeInternal(element, ElementType.TMP_Text, 0f, 0f, FadeType.Out, TransitionType.None);
+        #endregion
 
+        #region Fade
         public CanvasAnimationSystem Fade(Text element, float duration, float after, FadeType fadeType, TransitionType transitionType)
             => FadeInternal(element, ElementType.Text, duration, after, fadeType, transitionType);
         public CanvasAnimationSystem Fade(Button element, float duration, float after, FadeType fadeType, TransitionType transitionType)
@@ -169,21 +186,23 @@ namespace net.puk06.CanvasAnimation
                 case FadeType.Out: animationMode = AnimationMode.FadeOut; break;
             }
 
-            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor());
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, true, true, true);
             return this;
         }
+        #endregion
 
-        public CanvasAnimationSystem Move(Text element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType)
-            => MoveInternal(element, ElementType.Text, duration, after, pixelOffset, moveDirection, transitionType);
-        public CanvasAnimationSystem Move(Button element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType)
-            => MoveInternal(element, ElementType.Button, duration, after, pixelOffset, moveDirection, transitionType);
-        public CanvasAnimationSystem Move(Image element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType)
-            => MoveInternal(element, ElementType.Image, duration, after, pixelOffset, moveDirection, transitionType);
-        public CanvasAnimationSystem Move(RawImage element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType)
-            => MoveInternal(element, ElementType.RawImage, duration, after, pixelOffset, moveDirection, transitionType);
-        public CanvasAnimationSystem Move(TMP_Text element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType)
-            => MoveInternal(element, ElementType.TMP_Text, duration, after, pixelOffset, moveDirection, transitionType);
-        private CanvasAnimationSystem MoveInternal(Component element, ElementType elementType, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType)
+        #region Move
+        public CanvasAnimationSystem Move(Text element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType, bool useDefinedPosition = true)
+            => MoveInternal(element, ElementType.Text, duration, after, pixelOffset, moveDirection, transitionType, useDefinedPosition);
+        public CanvasAnimationSystem Move(Button element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType, bool useDefinedPosition = true)
+            => MoveInternal(element, ElementType.Button, duration, after, pixelOffset, moveDirection, transitionType, useDefinedPosition);
+        public CanvasAnimationSystem Move(Image element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType, bool useDefinedPosition = true)
+            => MoveInternal(element, ElementType.Image, duration, after, pixelOffset, moveDirection, transitionType, useDefinedPosition);
+        public CanvasAnimationSystem Move(RawImage element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType, bool useDefinedPosition = true)
+            => MoveInternal(element, ElementType.RawImage, duration, after, pixelOffset, moveDirection, transitionType, useDefinedPosition);
+        public CanvasAnimationSystem Move(TMP_Text element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType, bool useDefinedPosition = true)
+            => MoveInternal(element, ElementType.TMP_Text, duration, after, pixelOffset, moveDirection, transitionType, useDefinedPosition);
+        private CanvasAnimationSystem MoveInternal(Component element, ElementType elementType, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType, bool useDefinedPosition)
         {
             AnimationMode animationMode;
             switch (moveDirection)
@@ -195,21 +214,23 @@ namespace net.puk06.CanvasAnimation
                 default: animationMode = AnimationMode.MoveUp; break;
             }
 
-            AddTask(element, duration, after, pixelOffset, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor());
+            AddTask(element, duration, after, pixelOffset, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), useDefinedPosition, true, true, true);
             return this;
         }
+        #endregion
 
-        public CanvasAnimationSystem MoveLocation(Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
-            => MoveLocationInternal(element, ElementType.Text, duration, after, animationDirection, targetPoint, transitionType);
-        public CanvasAnimationSystem MoveLocation(Button element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
-            => MoveLocationInternal(element, ElementType.Button, duration, after, animationDirection, targetPoint, transitionType);
-        public CanvasAnimationSystem MoveLocation(Image element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
-            => MoveLocationInternal(element, ElementType.Image, duration, after, animationDirection, targetPoint, transitionType);
-        public CanvasAnimationSystem MoveLocation(RawImage element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
-            => MoveLocationInternal(element, ElementType.RawImage, duration, after, animationDirection, targetPoint, transitionType);
-        public CanvasAnimationSystem MoveLocation(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
-            => MoveLocationInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetPoint, transitionType);
-        private CanvasAnimationSystem MoveLocationInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType)
+        #region MovePosition
+        public CanvasAnimationSystem MovePosition(Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType, bool useDefinedPosition = true)
+            => MovePositionInternal(element, ElementType.Text, duration, after, animationDirection, targetPoint, transitionType, useDefinedPosition);
+        public CanvasAnimationSystem MovePosition(Button element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType, bool useDefinedPosition = true)
+            => MovePositionInternal(element, ElementType.Button, duration, after, animationDirection, targetPoint, transitionType, useDefinedPosition);
+        public CanvasAnimationSystem MovePosition(Image element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType, bool useDefinedPosition = true)
+            => MovePositionInternal(element, ElementType.Image, duration, after, animationDirection, targetPoint, transitionType, useDefinedPosition);
+        public CanvasAnimationSystem MovePosition(RawImage element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType, bool useDefinedPosition = true)
+            => MovePositionInternal(element, ElementType.RawImage, duration, after, animationDirection, targetPoint, transitionType, useDefinedPosition);
+        public CanvasAnimationSystem MovePosition(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType, bool useDefinedPosition = true)
+            => MovePositionInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetPoint, transitionType, useDefinedPosition);
+        private CanvasAnimationSystem MovePositionInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType, bool useDefinedPosition)
         {
             AnimationMode animationMode = AnimationMode.None;
             switch (animationDirection)
@@ -218,10 +239,12 @@ namespace net.puk06.CanvasAnimation
                 case AnimationDirection.From: animationMode = AnimationMode.MoveFrom; break;
             }
 
-            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, targetPoint, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor());
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, targetPoint, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), useDefinedPosition, true, true, true);
             return this;
         }
+        #endregion
 
+        #region MoveFromTo
         public CanvasAnimationSystem MoveFromTo(Text element, float duration, float after, Vector3 startPoint, Vector3 targetPoint, TransitionType transitionType)
             => MoveFromToInternal(element, ElementType.Text, duration, after, startPoint, targetPoint, transitionType);
         public CanvasAnimationSystem MoveFromTo(Button element, float duration, float after, Vector3 startPoint, Vector3 targetPoint, TransitionType transitionType)
@@ -234,21 +257,23 @@ namespace net.puk06.CanvasAnimation
             => MoveFromToInternal(element, ElementType.TMP_Text, duration, after, startPoint, targetPoint, transitionType);
         private CanvasAnimationSystem MoveFromToInternal(Component element, ElementType elementType, float duration, float after, Vector3 startPoint, Vector3 targetPoint, TransitionType transitionType)
         {
-            AddTask(element, duration, after, -1, transitionType, AnimationMode.MoveTo, elementType, targetPoint, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), startPoint, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor());
+            AddTask(element, duration, after, -1, transitionType, AnimationMode.MoveTo, elementType, targetPoint, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), startPoint, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, true, true, true);
             return this;
         }
+        #endregion
 
-        public CanvasAnimationSystem Rotate(Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType)
-            => RotateInternal(element, ElementType.Text, duration, after, animationDirection, targetRotation, transitionType);
-        public CanvasAnimationSystem Rotate(Button element, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType)
-            => RotateInternal(element, ElementType.Button, duration, after, animationDirection, targetRotation, transitionType);
-        public CanvasAnimationSystem Rotate(Image element, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType)
-            => RotateInternal(element, ElementType.Image, duration, after, animationDirection, targetRotation, transitionType);
-        public CanvasAnimationSystem Rotate(RawImage element, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType)
-            => RotateInternal(element, ElementType.RawImage, duration, after, animationDirection, targetRotation, transitionType);
-        public CanvasAnimationSystem Rotate(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType)
-            => RotateInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetRotation, transitionType);
-        private CanvasAnimationSystem RotateInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType)
+        #region Rotate
+        public CanvasAnimationSystem Rotate(Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType, bool useDefinedRotation = true)
+            => RotateInternal(element, ElementType.Text, duration, after, animationDirection, targetRotation, transitionType, useDefinedRotation);
+        public CanvasAnimationSystem Rotate(Button element, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType, bool useDefinedRotation = true)
+            => RotateInternal(element, ElementType.Button, duration, after, animationDirection, targetRotation, transitionType, useDefinedRotation);
+        public CanvasAnimationSystem Rotate(Image element, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType, bool useDefinedRotation = true)
+            => RotateInternal(element, ElementType.Image, duration, after, animationDirection, targetRotation, transitionType, useDefinedRotation);
+        public CanvasAnimationSystem Rotate(RawImage element, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType, bool useDefinedRotation = true)
+            => RotateInternal(element, ElementType.RawImage, duration, after, animationDirection, targetRotation, transitionType, useDefinedRotation);
+        public CanvasAnimationSystem Rotate(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType, bool useDefinedRotation = true)
+            => RotateInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetRotation, transitionType, useDefinedRotation);
+        private CanvasAnimationSystem RotateInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType, bool useDefinedRotation)
         {
             AnimationMode animationMode = AnimationMode.None;
             switch (animationDirection)
@@ -257,10 +282,12 @@ namespace net.puk06.CanvasAnimation
                 case AnimationDirection.From: animationMode = AnimationMode.RotateFrom; break;
             }
 
-            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor());
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, useDefinedRotation, true, true);
             return this;
         }
+        #endregion
 
+        #region RotateFromTo
         public CanvasAnimationSystem RotateFromTo(Text element, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
             => RotateFromToInternal(element, ElementType.Text, duration, after, startRotation, targetRotation, transitionType);
         public CanvasAnimationSystem RotateFromTo(Button element, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
@@ -273,21 +300,23 @@ namespace net.puk06.CanvasAnimation
             => RotateFromToInternal(element, ElementType.TMP_Text, duration, after, startRotation, targetRotation, transitionType);
         private CanvasAnimationSystem RotateFromToInternal(Component element, ElementType elementType, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
         {
-            AddTask(element, duration, after, -1, transitionType, AnimationMode.RotateTo, elementType, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, startRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor());
+            AddTask(element, duration, after, -1, transitionType, AnimationMode.RotateTo, elementType, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, startRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, true, true, true);
             return this;
         }
+        #endregion
 
-        public CanvasAnimationSystem Scale(Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
-            => ScaleInternal(element, ElementType.Text, duration, after, animationDirection, targetScale, transitionType);
-        public CanvasAnimationSystem Scale(Button element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
-            => ScaleInternal(element, ElementType.Button, duration, after, animationDirection, targetScale, transitionType);
-        public CanvasAnimationSystem Scale(Image element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
-            => ScaleInternal(element, ElementType.Image, duration, after, animationDirection, targetScale, transitionType);
-        public CanvasAnimationSystem Scale(RawImage element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
-            => ScaleInternal(element, ElementType.RawImage, duration, after, animationDirection, targetScale, transitionType);
-        public CanvasAnimationSystem Scale(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
-            => ScaleInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetScale, transitionType);
-        private CanvasAnimationSystem ScaleInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType)
+        #region Scale
+        public CanvasAnimationSystem Scale(Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType, bool useDefinedScale = true)
+            => ScaleInternal(element, ElementType.Text, duration, after, animationDirection, targetScale, transitionType, useDefinedScale);
+        public CanvasAnimationSystem Scale(Button element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType, bool useDefinedScale = true)
+            => ScaleInternal(element, ElementType.Button, duration, after, animationDirection, targetScale, transitionType, useDefinedScale);
+        public CanvasAnimationSystem Scale(Image element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType, bool useDefinedScale = true)
+            => ScaleInternal(element, ElementType.Image, duration, after, animationDirection, targetScale, transitionType, useDefinedScale);
+        public CanvasAnimationSystem Scale(RawImage element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType, bool useDefinedScale = true)
+            => ScaleInternal(element, ElementType.RawImage, duration, after, animationDirection, targetScale, transitionType, useDefinedScale);
+        public CanvasAnimationSystem Scale(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType, bool useDefinedScale = true)
+            => ScaleInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetScale, transitionType, useDefinedScale);
+        private CanvasAnimationSystem ScaleInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType, bool useDefinedScale)
         {
             AnimationMode animationMode = AnimationMode.None;
             switch (animationDirection)
@@ -296,10 +325,12 @@ namespace net.puk06.CanvasAnimation
                 case AnimationDirection.From: animationMode = AnimationMode.ScaleFrom; break;
             }
 
-            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, targetScale, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor());
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, targetScale, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, true, useDefinedScale, true);
             return this;
         }
+        #endregion
 
+        #region ScaleFromTo
         public CanvasAnimationSystem ScaleFromTo(Text element, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
             => ScaleFromToInternal(element, ElementType.Text, duration, after, startScale, targetScale, transitionType);
         public CanvasAnimationSystem ScaleFromTo(Button element, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
@@ -312,21 +343,23 @@ namespace net.puk06.CanvasAnimation
             => ScaleFromToInternal(element, ElementType.TMP_Text, duration, after, startScale, targetScale, transitionType);
         private CanvasAnimationSystem ScaleFromToInternal(Component element, ElementType elementType, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
         {
-            AddTask(element, duration, after, -1, transitionType, AnimationMode.ScaleTo, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, targetScale, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, startScale, ColorUtils.GetInvalidColor());
+            AddTask(element, duration, after, -1, transitionType, AnimationMode.ScaleTo, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, targetScale, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, startScale, ColorUtils.GetInvalidColor(), true, true, true, true);
             return this;
         }
+        #endregion
 
-        public CanvasAnimationSystem Color(Text element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType)
-            => ColorInternal(element, ElementType.Text, duration, after, animationDirection, targetColor, transitionType);
-        public CanvasAnimationSystem Color(Button element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType)
-            => ColorInternal(element, ElementType.Button, duration, after, animationDirection, targetColor, transitionType);
-        public CanvasAnimationSystem Color(Image element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType)
-            => ColorInternal(element, ElementType.Image, duration, after, animationDirection, targetColor, transitionType);
-        public CanvasAnimationSystem Color(RawImage element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType)
-            => ColorInternal(element, ElementType.RawImage, duration, after, animationDirection, targetColor, transitionType);
-        public CanvasAnimationSystem Color(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType)
-            => ColorInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetColor, transitionType);
-        private CanvasAnimationSystem ColorInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType)
+        #region Color
+        public CanvasAnimationSystem Color(Text element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType, bool useDefinedColor = true)
+            => ColorInternal(element, ElementType.Text, duration, after, animationDirection, targetColor, transitionType, useDefinedColor);
+        public CanvasAnimationSystem Color(Button element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType, bool useDefinedColor = true)
+            => ColorInternal(element, ElementType.Button, duration, after, animationDirection, targetColor, transitionType, useDefinedColor);
+        public CanvasAnimationSystem Color(Image element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType, bool useDefinedColor = true)
+            => ColorInternal(element, ElementType.Image, duration, after, animationDirection, targetColor, transitionType, useDefinedColor);
+        public CanvasAnimationSystem Color(RawImage element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType, bool useDefinedColor = true)
+            => ColorInternal(element, ElementType.RawImage, duration, after, animationDirection, targetColor, transitionType, useDefinedColor);
+        public CanvasAnimationSystem Color(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType, bool useDefinedColor = true)
+            => ColorInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetColor, transitionType, useDefinedColor);
+        private CanvasAnimationSystem ColorInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType, bool useDefinedColor)
         {
             AnimationMode animationMode = AnimationMode.None;
             switch (animationDirection)
@@ -335,10 +368,12 @@ namespace net.puk06.CanvasAnimation
                 case AnimationDirection.From: animationMode = AnimationMode.ColorFrom; break;
             }
 
-            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, targetColor, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor());
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, targetColor, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, true, true, useDefinedColor);
             return this;
         }
+        #endregion
 
+        #region ColorFromTo
         public CanvasAnimationSystem ColorFromTo(Text element, float duration, float after, Color startColor, Color targetColor, TransitionType transitionType)
             => ColorFromToInternal(element, ElementType.Text, duration, after, startColor, targetColor, transitionType);
         public CanvasAnimationSystem ColorFromTo(Button element, float duration, float after, Color startColor, Color targetColor, TransitionType transitionType)
@@ -351,10 +386,420 @@ namespace net.puk06.CanvasAnimation
             => ColorFromToInternal(element, ElementType.TMP_Text, duration, after, startColor, targetColor, transitionType);
         private CanvasAnimationSystem ColorFromToInternal(Component element, ElementType elementType, float duration, float after, Color startColor, Color targetColor, TransitionType transitionType)
         {
-            AddTask(element, duration, after, -1, transitionType, AnimationMode.ColorTo, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, targetColor, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, startColor);
+            AddTask(element, duration, after, -1, transitionType, AnimationMode.ColorTo, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, targetColor, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, startColor, true, true, true, true);
+            return this;
+        }
+        #endregion
+
+        #region Flip
+        public CanvasAnimationSystem Flip(Text element, float duration, float after, CoordinateAxis coordinateAxis, TransitionType transitionType, bool useDefinedRotation = true)
+            => FlipInternal(element, ElementType.Text, duration, after, coordinateAxis, transitionType, useDefinedRotation);
+        public CanvasAnimationSystem Flip(Button element, float duration, float after, CoordinateAxis coordinateAxis, TransitionType transitionType, bool useDefinedRotation = true)
+            => FlipInternal(element, ElementType.Button, duration, after, coordinateAxis, transitionType, useDefinedRotation);
+        public CanvasAnimationSystem Flip(Image element, float duration, float after, CoordinateAxis coordinateAxis, TransitionType transitionType, bool useDefinedRotation = true)
+            => FlipInternal(element, ElementType.Image, duration, after, coordinateAxis, transitionType, useDefinedRotation);
+        public CanvasAnimationSystem Flip(RawImage element, float duration, float after, CoordinateAxis coordinateAxis, TransitionType transitionType, bool useDefinedRotation = true)
+            => FlipInternal(element, ElementType.RawImage, duration, after, coordinateAxis, transitionType, useDefinedRotation);
+        public CanvasAnimationSystem Flip(TMP_Text element, float duration, float after, CoordinateAxis coordinateAxis, TransitionType transitionType, bool useDefinedRotation = true)
+            => FlipInternal(element, ElementType.TMP_Text, duration, after, coordinateAxis, transitionType, useDefinedRotation);
+        private CanvasAnimationSystem FlipInternal(Component element, ElementType elementType, float duration, float after, CoordinateAxis coordinateAxis, TransitionType transitionType, bool useDefinedRotation)
+        {
+            AnimationMode animationMode = AnimationMode.None;
+            switch (coordinateAxis)
+            {
+                case CoordinateAxis.X: animationMode = AnimationMode.FlipX; break;
+                case CoordinateAxis.Y: animationMode = AnimationMode.FlipY; break;
+                case CoordinateAxis.Z: animationMode = AnimationMode.FlipZ; break;
+            }
+
+            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, useDefinedRotation, true, true);
+            return this;
+        }
+        #endregion
+
+        #region Save & Define & Reset Transform
+        public CanvasAnimationSystem SaveTransform(Component element, TransformType[] transformTypes)
+        {
+            if (element == null)
+            {
+                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Element is Null - Object: {element.name}");
+                return this;
+            }
+
+            RectTransform currentObjectRectTransform = RectTransformUtils.GetRectTransform(element);
+            if (currentObjectRectTransform == null)
+            {
+                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Couldn't Get RectTransform - Object: {element.name}");
+                return this;
+            }
+
+            Vector3 currentPosition = currentObjectRectTransform.localPosition;
+            Vector3 currentRotation = currentObjectRectTransform.localEulerAngles;
+            Vector3 currentScale = currentObjectRectTransform.localScale;
+
+            int objectIndex = UdonUtils.ArrayContains(m_definedObjects, element);
+
+            if (objectIndex != -1)
+            {
+                int definedStatsIndex = UdonUtils.DataArrayContains(m_definedStats, DEFINITION_OBJECT_INDEX, objectIndex.ToString());
+                string[] parsedStrData = UdonUtils.ParseDataString(m_definedStats[definedStatsIndex]);
+
+                if (UdonUtils.ArrayContains(transformTypes, TransformType.Position) != -1 && int.Parse(parsedStrData[DEFINITION_POSITION_INDEX]) != -1)
+                {
+                    m_definedPosition[int.Parse(parsedStrData[DEFINITION_POSITION_INDEX])] = Vector3.positiveInfinity;
+                }
+
+                if (UdonUtils.ArrayContains(transformTypes, TransformType.Rotation) != -1 && int.Parse(parsedStrData[DEFINITION_ROTATION_INDEX]) != -1)
+                {
+                    m_definedRotations[int.Parse(parsedStrData[DEFINITION_ROTATION_INDEX])] = Vector3.positiveInfinity;
+                }
+
+                if (UdonUtils.ArrayContains(transformTypes, TransformType.Scale) != -1 && int.Parse(parsedStrData[DEFINITION_SCALE_INDEX]) != -1)
+                {
+                    m_definedScales[int.Parse(parsedStrData[DEFINITION_SCALE_INDEX])] = Vector3.positiveInfinity;
+                }
+
+                int positionIndex = UdonUtils.ArrayContains(transformTypes, TransformType.Position) == -1 ? int.Parse(parsedStrData[DEFINITION_POSITION_INDEX]) : ArrayUtils.AssignArrayValue(m_definedPosition, currentPosition);
+                int rotationIndex = UdonUtils.ArrayContains(transformTypes, TransformType.Rotation) == -1 ? int.Parse(parsedStrData[DEFINITION_ROTATION_INDEX]) : ArrayUtils.AssignArrayValue(m_definedRotations, currentRotation);
+                int scaleIndex = UdonUtils.ArrayContains(transformTypes, TransformType.Scale) == -1 ? int.Parse(parsedStrData[DEFINITION_SCALE_INDEX]) : ArrayUtils.AssignArrayValue(m_definedScales, currentScale);
+                int colorIndex = int.Parse(parsedStrData[DEFINITION_COLOR_INDEX]);
+
+                string stats = $"{objectIndex},,,{positionIndex},,,{rotationIndex},,,{scaleIndex},,,{colorIndex}";
+                m_definedStats[definedStatsIndex] = stats;
+                Debug.Log($"{string.Format(LogTag, ColoredTag)} Object Definition Updated - Object: {element.name} - Definition: {definedStatsIndex}");
+            }
+            else
+            {
+                objectIndex = ArrayUtils.AssignArrayValue(m_definedObjects, element);
+
+                int positionIndex = UdonUtils.ArrayContains(transformTypes, TransformType.Position) == -1 ? -1 : ArrayUtils.AssignArrayValue(m_definedPosition, currentPosition);
+                int rotationIndex = UdonUtils.ArrayContains(transformTypes, TransformType.Rotation) == -1 ? -1 : ArrayUtils.AssignArrayValue(m_definedRotations, currentRotation);
+                int scaleIndex = UdonUtils.ArrayContains(transformTypes, TransformType.Scale) == -1 ? -1 : ArrayUtils.AssignArrayValue(m_definedScales, currentScale);
+                int colorIndex = -1;
+
+                string stats = $"{objectIndex},,,{positionIndex},,,{rotationIndex},,,{scaleIndex},,,{colorIndex}";
+                int statsIndex = ArrayUtils.AssignArrayValue(m_definedStats, stats);
+
+                if (statsIndex == -1) Debug.LogError($"{string.Format(LogTag, ColoredTag)} Failed to Define Object");
+                else Debug.Log($"{string.Format(LogTag, ColoredTag)} Object Definition Created - Object: {element.name} - Definition: {statsIndex}");
+            }
+
+            return this;
+        }
+            
+        public CanvasAnimationSystem DefineTransform(Component element, Vector3 transform, TransformType transformType)
+        {
+            if (element == null)
+            {
+                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Element is Null - Object: {element.name}");
+                return this;
+            }
+
+            RectTransform currentObjectRectTransform = RectTransformUtils.GetRectTransform(element);
+            if (currentObjectRectTransform == null)
+            {
+                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Couldn't Get RectTransform from Object: {element.name}");
+                return this;
+            }
+
+            int objectIndex = UdonUtils.ArrayContains(m_definedObjects, element);
+
+            if (objectIndex != -1)
+            {
+                int definedStatsIndex = UdonUtils.DataArrayContains(m_definedStats, DEFINITION_OBJECT_INDEX, objectIndex.ToString());
+                string[] parsedStrData = UdonUtils.ParseDataString(m_definedStats[definedStatsIndex]);
+
+                if (transformType == TransformType.Position && int.Parse(parsedStrData[DEFINITION_POSITION_INDEX]) != -1)
+                {
+                    m_definedPosition[int.Parse(parsedStrData[DEFINITION_POSITION_INDEX])] = Vector3.positiveInfinity;
+                }
+
+                if (transformType == TransformType.Rotation && int.Parse(parsedStrData[DEFINITION_ROTATION_INDEX]) != -1)
+                {
+                    m_definedRotations[int.Parse(parsedStrData[DEFINITION_ROTATION_INDEX])] = Vector3.positiveInfinity;
+                }
+
+                if (transformType == TransformType.Scale && int.Parse(parsedStrData[DEFINITION_SCALE_INDEX]) != -1)
+                {
+                    m_definedScales[int.Parse(parsedStrData[DEFINITION_SCALE_INDEX])] = Vector3.positiveInfinity;
+                }
+
+                int positionIndex = transformType != TransformType.Position ? int.Parse(parsedStrData[DEFINITION_POSITION_INDEX]) : ArrayUtils.AssignArrayValue(m_definedPosition, transform);
+                int rotationIndex = transformType != TransformType.Rotation ? int.Parse(parsedStrData[DEFINITION_ROTATION_INDEX]) : ArrayUtils.AssignArrayValue(m_definedRotations, transform);
+                int scaleIndex = transformType != TransformType.Scale ? int.Parse(parsedStrData[DEFINITION_SCALE_INDEX]) : ArrayUtils.AssignArrayValue(m_definedScales, transform);
+                int colorIndex = int.Parse(parsedStrData[DEFINITION_COLOR_INDEX]);
+
+                string stats = $"{objectIndex},,,{positionIndex},,,{rotationIndex},,,{scaleIndex},,,{colorIndex}";
+                m_definedStats[definedStatsIndex] = stats;
+                Debug.Log($"{string.Format(LogTag, ColoredTag)} Object Definition Updated - Object: {element.name} - Definition: {definedStatsIndex}");
+            }
+            else
+            {
+                objectIndex = ArrayUtils.AssignArrayValue(m_definedObjects, element);
+
+                int positionIndex = transformType != TransformType.Position ? -1 : ArrayUtils.AssignArrayValue(m_definedPosition, transform);
+                int rotationIndex = transformType != TransformType.Rotation ? -1 : ArrayUtils.AssignArrayValue(m_definedRotations, transform);
+                int scaleIndex = transformType != TransformType.Scale ? -1 : ArrayUtils.AssignArrayValue(m_definedScales, transform);
+                int colorIndex = -1;
+
+                string stats = $"{objectIndex},,,{positionIndex},,,{rotationIndex},,,{scaleIndex},,,{colorIndex}";
+                int statsIndex = ArrayUtils.AssignArrayValue(m_definedStats, stats);
+
+                if (statsIndex == -1) Debug.LogError($"{string.Format(LogTag, ColoredTag)} Failed to Define Object");
+                else Debug.Log($"{string.Format(LogTag, ColoredTag)} Object Define Created - Object: {element.name} - Definition: {statsIndex}");
+            }
+
             return this;
         }
 
+        public CanvasAnimationSystem ResetTransform(Component element, TransformType[] transformTypes)
+        {
+            if (element == null)
+            {
+                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Element is Null - Object: {element.name}");
+                return this;
+            }
+
+            int objectIndex = UdonUtils.ArrayContains(m_definedObjects, element);
+
+            if (objectIndex != -1)
+            {
+                int definedStatsIndex = UdonUtils.DataArrayContains(m_definedStats, DEFINITION_OBJECT_INDEX, objectIndex.ToString());
+                string[] parsedStrData = UdonUtils.ParseDataString(m_definedStats[definedStatsIndex]);
+
+                RectTransform currentObjectRectTransform = RectTransformUtils.GetRectTransform(element);
+                if (currentObjectRectTransform == null)
+                {
+                    Debug.LogError($"{string.Format(LogTag, ColoredTag)} Couldn't Get RectTransform - Object: {element.name}");
+                    return this;
+                }
+
+                if (UdonUtils.ArrayContains(transformTypes, TransformType.Position) != -1 && int.Parse(parsedStrData[DEFINITION_POSITION_INDEX]) != -1)
+                {
+                    currentObjectRectTransform.localPosition = m_definedPosition[int.Parse(parsedStrData[DEFINITION_POSITION_INDEX])];
+                }
+
+                if (UdonUtils.ArrayContains(transformTypes, TransformType.Position) != -1 && int.Parse(parsedStrData[DEFINITION_ROTATION_INDEX]) != -1)
+                {
+                    currentObjectRectTransform.localEulerAngles = m_definedRotations[int.Parse(parsedStrData[DEFINITION_ROTATION_INDEX])];
+                }
+
+                if (UdonUtils.ArrayContains(transformTypes, TransformType.Position) != -1 && int.Parse(parsedStrData[DEFINITION_SCALE_INDEX]) != -1)
+                {
+                    currentObjectRectTransform.localScale = m_definedScales[int.Parse(parsedStrData[DEFINITION_SCALE_INDEX])];
+                }
+            }
+            else
+            {
+                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Object Definition not found - Object: {element.name}");
+            }
+
+            return this;
+        }
+        #endregion
+
+        #region Save & Define & Reset Color
+        public CanvasAnimationSystem SaveColor(Text element)
+            => SaveColorInternal(element, ElementType.Text);
+        public CanvasAnimationSystem SaveColor(Button element)
+            => SaveColorInternal(element, ElementType.Button);
+        public CanvasAnimationSystem SaveColor(Image element)
+            => SaveColorInternal(element, ElementType.Image);
+        public CanvasAnimationSystem SaveColor(RawImage element)
+            => SaveColorInternal(element, ElementType.RawImage);
+        public CanvasAnimationSystem SaveColor(TMP_Text element)
+            => SaveColorInternal(element, ElementType.TMP_Text);
+        public CanvasAnimationSystem SaveColorInternal(Component element, ElementType elementType)
+        {
+            if (element == null)
+            {
+                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Element is Null - Object: {element.name}");
+                return this;
+            }
+
+            Color currentObjectColor = ColorUtils.GetColor(element, elementType);
+
+            int objectIndex = UdonUtils.ArrayContains(m_definedObjects, element);
+
+            if (objectIndex != -1)
+            {
+                int definedStatsIndex = UdonUtils.DataArrayContains(m_definedStats, DEFINITION_OBJECT_INDEX, objectIndex.ToString());
+                string[] parsedStrData = UdonUtils.ParseDataString(m_definedStats[definedStatsIndex]);
+
+                if (int.Parse(parsedStrData[DEFINITION_COLOR_INDEX]) != -1)
+                {
+                    m_definedColors[int.Parse(parsedStrData[DEFINITION_COLOR_INDEX])] = ColorUtils.GetInvalidColor();
+                }
+
+                int positionIndex = int.Parse(parsedStrData[DEFINITION_POSITION_INDEX]);
+                int rotationIndex = int.Parse(parsedStrData[DEFINITION_ROTATION_INDEX]);
+                int scaleIndex = int.Parse(parsedStrData[DEFINITION_SCALE_INDEX]);
+                int colorIndex = ArrayUtils.AssignArrayValue(m_definedColors, currentObjectColor);
+
+                string stats = $"{objectIndex},,,{positionIndex},,,{rotationIndex},,,{scaleIndex},,,{colorIndex}";
+                m_definedStats[definedStatsIndex] = stats;
+                Debug.Log($"{string.Format(LogTag, ColoredTag)} Object Definition Updated - Object: {element.name} - Definition: {definedStatsIndex}");
+            }
+            else
+            {
+                objectIndex = ArrayUtils.AssignArrayValue(m_definedObjects, element);
+
+                int positionIndex = -1;
+                int rotationIndex = -1;
+                int scaleIndex = -1;
+                int colorIndex = ArrayUtils.AssignArrayValue(m_definedColors, currentObjectColor);
+
+                string stats = $"{objectIndex},,,{positionIndex},,,{rotationIndex},,,{scaleIndex},,,{colorIndex}";
+                int statsIndex = ArrayUtils.AssignArrayValue(m_definedStats, stats);
+
+                if (statsIndex == -1) Debug.LogError($"{string.Format(LogTag, ColoredTag)} Failed to Define Object");
+                else Debug.Log($"{string.Format(LogTag, ColoredTag)} Object Definition Created - Object: {element.name} - Definition: {statsIndex}");
+            }
+
+            return this;
+        }
+        
+        public CanvasAnimationSystem DefineColor(Component element, Color color)
+        {
+            if (element == null)
+            {
+                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Element is Null - Object: {element.name}");
+                return this;
+            }
+
+            int objectIndex = UdonUtils.ArrayContains(m_definedObjects, element);
+
+            if (objectIndex != -1)
+            {
+                int definedStatsIndex = UdonUtils.DataArrayContains(m_definedStats, DEFINITION_OBJECT_INDEX, objectIndex.ToString());
+                string[] parsedStrData = UdonUtils.ParseDataString(m_definedStats[definedStatsIndex]);
+
+                if (int.Parse(parsedStrData[DEFINITION_COLOR_INDEX]) != -1)
+                {
+                    m_definedColors[int.Parse(parsedStrData[DEFINITION_COLOR_INDEX])] = ColorUtils.GetInvalidColor();
+                }
+
+                int positionIndex = int.Parse(parsedStrData[DEFINITION_POSITION_INDEX]);
+                int rotationIndex = int.Parse(parsedStrData[DEFINITION_ROTATION_INDEX]);
+                int scaleIndex = int.Parse(parsedStrData[DEFINITION_SCALE_INDEX]);
+                int colorIndex = ArrayUtils.AssignArrayValue(m_definedColors, color);
+
+                string stats = $"{objectIndex},,,{positionIndex},,,{rotationIndex},,,{scaleIndex},,,{colorIndex}";
+                m_definedStats[definedStatsIndex] = stats;
+                Debug.Log($"{string.Format(LogTag, ColoredTag)} Object Definition Updated - Object: {element.name} - Definition: {definedStatsIndex}");
+            }
+            else
+            {
+                objectIndex = ArrayUtils.AssignArrayValue(m_definedObjects, element);
+
+                int positionIndex = -1;
+                int rotationIndex = -1;
+                int scaleIndex = -1;
+                int colorIndex = ArrayUtils.AssignArrayValue(m_definedColors, color);
+
+                string stats = $"{objectIndex},,,{positionIndex},,,{rotationIndex},,,{scaleIndex},,,{colorIndex}";
+                int statsIndex = ArrayUtils.AssignArrayValue(m_definedStats, stats);
+
+                if (statsIndex == -1) Debug.LogError($"{string.Format(LogTag, ColoredTag)} Failed to Define Object");
+                else Debug.Log($"{string.Format(LogTag, ColoredTag)} Object Definition Created - Object: {element.name} - Definition: {statsIndex}");
+            }
+
+            return this;
+        }
+
+        public CanvasAnimationSystem ResetColor(Text element)
+            => ResetColorInternal(element, ElementType.Text);
+        public CanvasAnimationSystem ResetColor(Button element)
+            => ResetColorInternal(element, ElementType.Button);
+        public CanvasAnimationSystem ResetColor(Image element)
+            => ResetColorInternal(element, ElementType.Image);
+        public CanvasAnimationSystem ResetColor(RawImage element)
+            => ResetColorInternal(element, ElementType.RawImage);
+        public CanvasAnimationSystem ResetColor(TMP_Text element)
+            => ResetColorInternal(element, ElementType.TMP_Text);
+        public CanvasAnimationSystem ResetColorInternal(Component element, ElementType elementType)
+        {
+            if (element == null)
+            {
+                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Element is Null - Object: {element.name}");
+                return this;
+            }
+
+            int objectIndex = UdonUtils.ArrayContains(m_definedObjects, element);
+
+            if (objectIndex != -1)
+            {
+                int definedStatsIndex = UdonUtils.DataArrayContains(m_definedStats, DEFINITION_OBJECT_INDEX, objectIndex.ToString());
+                string[] parsedStrData = UdonUtils.ParseDataString(m_definedStats[definedStatsIndex]);
+
+                if (int.Parse(parsedStrData[DEFINITION_COLOR_INDEX]) != -1)
+                {
+                    ColorUtils.SetColor(element, elementType, m_definedColors[int.Parse(parsedStrData[DEFINITION_COLOR_INDEX])]);
+                }
+            }
+            else
+            {
+                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Object Definition not found - Object: {element.name}");
+            }
+
+            return this;
+        }
+        #endregion
+
+        #region Remove Define
+        public CanvasAnimationSystem RemoveDefine(Component element)
+        {
+            if (element == null)
+            {
+                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Element is Null - Object: {element.name}");
+                return this;
+            }
+
+            int objectIndex = UdonUtils.ArrayContains(m_definedObjects, element);
+
+            if (objectIndex != -1)
+            {
+                int definedStatsIndex = UdonUtils.DataArrayContains(m_definedStats, DEFINITION_OBJECT_INDEX, objectIndex.ToString());
+                string[] parsedStrData = UdonUtils.ParseDataString(m_definedStats[definedStatsIndex]);
+
+                if (int.Parse(parsedStrData[DEFINITION_OBJECT_INDEX]) != -1)
+                {
+                    m_definedObjects[int.Parse(parsedStrData[DEFINITION_OBJECT_INDEX])] = null;
+                }
+
+                if (int.Parse(parsedStrData[DEFINITION_POSITION_INDEX]) != -1)
+                {
+                    m_definedPosition[int.Parse(parsedStrData[DEFINITION_POSITION_INDEX])] = Vector3.positiveInfinity;
+                }
+
+                if (int.Parse(parsedStrData[DEFINITION_ROTATION_INDEX]) != -1)
+                {
+                    m_definedRotations[int.Parse(parsedStrData[DEFINITION_ROTATION_INDEX])] = Vector3.positiveInfinity;
+                }
+
+                if (int.Parse(parsedStrData[DEFINITION_SCALE_INDEX]) != -1)
+                {
+                    m_definedScales[int.Parse(parsedStrData[DEFINITION_SCALE_INDEX])] = Vector3.positiveInfinity;
+                }
+
+                if (int.Parse(parsedStrData[DEFINITION_COLOR_INDEX]) != -1)
+                {
+                    m_definedColors[int.Parse(parsedStrData[DEFINITION_COLOR_INDEX])] = ColorUtils.GetInvalidColor();
+                }
+
+                m_definedStats[definedStatsIndex] = null;
+                Debug.Log($"{string.Format(LogTag, ColoredTag)} Object Definition Removed - Object: {element.name} - Definition: {definedStatsIndex}");
+            }
+            else
+            {
+                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Object Definition not found - Object: {element.name}");
+            }
+
+            return this;
+        }
+        #endregion
+
+        #region Cancel
         public CanvasAnimationSystem Cancel(Text element)
             => CancelInternal(element, ElementType.Text);
         public CanvasAnimationSystem Cancel(Button element)
@@ -379,16 +824,7 @@ namespace net.puk06.CanvasAnimation
                 ElementType objectElementType = int.Parse(parsedStrData[ELEMENT_TYPE_INDEX]) == -1 ? ElementType.None : m_elementTypes[int.Parse(parsedStrData[ELEMENT_TYPE_INDEX])];
                 if (elementType != objectElementType) continue;
 
-                Component targetObj = null;
-                switch (elementType)
-                {
-                    case ElementType.Text: targetObj = m_targetTexts[objectIndex]; break;
-                    case ElementType.TMP_Text: targetObj = m_targetTMPTexts[objectIndex]; break;
-                    case ElementType.Image: targetObj = m_targetImages[objectIndex]; break;
-                    case ElementType.RawImage: targetObj = m_targetRawImages[objectIndex]; break;
-                    case ElementType.Button: targetObj = m_targetButtons[objectIndex]; break;
-                }
-
+                Component targetObj = m_targetObjects[objectIndex];
                 if (targetObj == null || targetObj != element) continue;
 
                 Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Cannceled - Object: {targetObj.name} - Task: {i}");
@@ -397,7 +833,9 @@ namespace net.puk06.CanvasAnimation
 
             return this;
         }
+        #endregion
 
+        #region CancelAll
         public CanvasAnimationSystem CancelAll()
             => CancelAllInternal();
         private CanvasAnimationSystem CancelAllInternal()
@@ -414,80 +852,37 @@ namespace net.puk06.CanvasAnimation
 
             return this;
         }
+        #endregion
 
+        #region Exit
         public void Exit()
         {
             Debug.Log($"{string.Format(LogTag, ColoredTag)} Exit triggered - disabling component...");
             if (runningAnimations > 0) Debug.LogWarning($"{string.Format(LogTag, ColoredTag)} Some animations are still playing, but the component is being disabled.");
 
-            Destroy(this);
+            enabled = false;
         }
+        #endregion
 
         private void AddTask(
             Component element,
             float time, float after,
             int pixelOffset,
-            TransitionType transition,
+            TransitionType transitionType,
             AnimationMode mode,
             ElementType elementType,
             Vector3 targetPoint, Vector3 targetRotation, Vector3 targetScale, Color targetColor,
-            Vector3 startPoint, Vector3 startRotation, Vector3 startScale, Color startColor
+            Vector3 startPoint, Vector3 startRotation, Vector3 startScale, Color startColor,
+            bool useDefinedPosition, bool useDefinedRotation, bool useDefinedScale, bool useDefinedColor
         )
         {
-            int objectIndex;
-
-            switch (elementType)
-            {
-                case ElementType.Text:
-                    {
-                        Text text = (Text)element;
-                        objectIndex = ArrayUtils.AssignArrayValue(m_targetTexts, text);
-                        break;
-                    }
-                case ElementType.Button:
-                    {
-                        Button button = (Button)element;
-                        objectIndex = ArrayUtils.AssignArrayValue(m_targetButtons, button);
-                        break;
-                    }
-                case ElementType.Image:
-                    {
-                        Image image = (Image)element;
-                        objectIndex = ArrayUtils.AssignArrayValue(m_targetImages, image);
-                        break;
-                    }
-                case ElementType.RawImage:
-                    {
-                        RawImage rawImage = (RawImage)element;
-                        objectIndex = ArrayUtils.AssignArrayValue(m_targetRawImages, rawImage);
-                        break;
-                    }
-                case ElementType.TMP_Text:
-                    {
-                        TMP_Text tmpText = (TMP_Text)element;
-                        objectIndex = ArrayUtils.AssignArrayValue(m_targetTMPTexts, tmpText);
-                        break;
-                    }
-                default:
-                    return;
-            }
-
-            string stats = AssignData(objectIndex, time, after, pixelOffset, transition, mode, elementType, targetPoint, targetRotation, targetScale, targetColor, startPoint, startRotation, startScale, startColor);
-
-            int statsIndex = ArrayUtils.AssignArrayValue(m_currentTasks, stats);
-
-            if (statsIndex == -1) Debug.LogError($"{string.Format(LogTag, ColoredTag)} Failed to create Animation Task");
-            else Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Task Created - Object: {element.name} - Task: {statsIndex}");
-        }
-
-        private string AssignData(int objectIndex, float time, float after, int pixelOffset, TransitionType transitionType, AnimationMode mode, ElementType elementType, Vector3 targetPoint, Vector3 targetRotation, Vector3 targetScale, Color targetColor, Vector3 startPoint, Vector3 startRotation, Vector3 startScale, Color startColor)
-        {
+            int objectIndex = ArrayUtils.AssignArrayValue(m_targetObjects, element);
             int durationIndex = ArrayUtils.AssignArrayValue(m_durations, time);
             int startTimeIndex = ArrayUtils.AssignArrayValue(m_startTimes, Time.time);
             int pixelOffsetIndex = ArrayUtils.AssignArrayValue(m_pixelOffsets, pixelOffset);
             int timeoutTimesIndex = ArrayUtils.AssignArrayValue(m_timeoutTimes, after);
 
-            int startLocationIndex = MathUtils.IsPositiveInfinity(startPoint) ? -1 : ArrayUtils.AssignArrayValue(m_startLocations, startPoint);
+            int startPositionIndex = MathUtils.IsPositiveInfinity(startPoint) ? -1 : ArrayUtils.AssignArrayValue(m_startPositions, startPoint);
             int startRotationIndex = MathUtils.IsPositiveInfinity(startRotation) ? -1 : ArrayUtils.AssignArrayValue(m_startRotations, startRotation);
             int startScaleIndex = MathUtils.IsPositiveInfinity(startScale) ? -1 : ArrayUtils.AssignArrayValue(m_startScales, startScale);
             int startColorIndex = ColorUtils.IsInvalidColor(startColor) ? -1 : ArrayUtils.AssignArrayValue(m_startColors, startColor);
@@ -501,7 +896,11 @@ namespace net.puk06.CanvasAnimation
             int targetScaleIndex = ArrayUtils.AssignArrayValue(m_targetScales, targetScale);
             int targetColorIndex = ArrayUtils.AssignArrayValue(m_targetColors, targetColor);
 
-            return $"{objectIndex},,,{durationIndex},,,{startTimeIndex},,,{pixelOffsetIndex},,,{timeoutTimesIndex},,,{startLocationIndex},,,{startRotationIndex},,,{startScaleIndex},,,{startColorIndex},,,{transitionTypeIndex},,,{modesIndex},,,{elementTypeIndex},,,{targetPointIndex},,,{targetRotationIndex},,,{targetScaleIndex},,,{targetColorIndex}";
+            string stats = $"{objectIndex},,,{durationIndex},,,{startTimeIndex},,,{pixelOffsetIndex},,,{timeoutTimesIndex},,,{startPositionIndex},,,{startRotationIndex},,,{startScaleIndex},,,{startColorIndex},,,{transitionTypeIndex},,,{modesIndex},,,{elementTypeIndex},,,{targetPointIndex},,,{targetRotationIndex},,,{targetScaleIndex},,,{targetColorIndex},,,{TypeUtils.BoolToInt(useDefinedPosition)},,,{TypeUtils.BoolToInt(useDefinedRotation)},,,{TypeUtils.BoolToInt(useDefinedScale)},,,{TypeUtils.BoolToInt(useDefinedColor)}";
+            int statsIndex = ArrayUtils.AssignArrayValue(m_currentTasks, stats);
+
+            if (statsIndex == -1) Debug.LogError($"{string.Format(LogTag, ColoredTag)} Failed to create Animation Task");
+            else Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Task Created - Object: {element.name} - Task: {statsIndex}");
         }
 
         private void Update()
@@ -520,7 +919,7 @@ namespace net.puk06.CanvasAnimation
                 int pixelOffset = int.Parse(parsedStrData[PIXEL_OFFSET_INDEX]) == -1 ? 0 : m_pixelOffsets[int.Parse(parsedStrData[PIXEL_OFFSET_INDEX])];
                 float timeoutTime = int.Parse(parsedStrData[TIME_OUT_INDEX]) == -1 ? 0f : m_timeoutTimes[int.Parse(parsedStrData[TIME_OUT_INDEX])];
 
-                Vector3 startLocation = int.Parse(parsedStrData[START_LOCATION_INDEX]) == -1 ? Vector3.positiveInfinity : m_startLocations[int.Parse(parsedStrData[START_LOCATION_INDEX])];
+                Vector3 startPosition = int.Parse(parsedStrData[START_POSITION_INDEX]) == -1 ? Vector3.positiveInfinity : m_startPositions[int.Parse(parsedStrData[START_POSITION_INDEX])];
                 Vector3 startRotation = int.Parse(parsedStrData[START_ROTATION_INDEX]) == -1 ? Vector3.positiveInfinity : m_startRotations[int.Parse(parsedStrData[START_ROTATION_INDEX])];
                 Vector3 startScale = int.Parse(parsedStrData[START_SCALE_INDEX]) == -1 ? Vector3.positiveInfinity : m_startScales[int.Parse(parsedStrData[START_SCALE_INDEX])];
                 Color startColor = int.Parse(parsedStrData[START_COLOR_INDEX]) == -1 ? ColorUtils.GetInvalidColor() : m_startColors[int.Parse(parsedStrData[START_COLOR_INDEX])];
@@ -534,38 +933,68 @@ namespace net.puk06.CanvasAnimation
                 Vector3 targetScale = int.Parse(parsedStrData[TARGET_SCALE_INDEX]) == -1 ? Vector3.positiveInfinity : m_targetScales[int.Parse(parsedStrData[TARGET_SCALE_INDEX])];
                 Color targetColor = int.Parse(parsedStrData[TARGET_COLOR_INDEX]) == -1 ? ColorUtils.GetInvalidColor() : m_targetColors[int.Parse(parsedStrData[TARGET_COLOR_INDEX])];
 
-
                 if (objectIndex == -1) continue;
 
-                Component targetObj = null;
-                switch (elementType)
-                {
-                    case ElementType.Text: targetObj = m_targetTexts[objectIndex]; break;
-                    case ElementType.TMP_Text: targetObj = m_targetTMPTexts[objectIndex]; break;
-                    case ElementType.Image: targetObj = m_targetImages[objectIndex]; break;
-                    case ElementType.RawImage: targetObj = m_targetRawImages[objectIndex]; break;
-                    case ElementType.Button: targetObj = m_targetButtons[objectIndex]; break;
-                }
-
+                Component targetObj = m_targetObjects[objectIndex];
                 if (targetObj == null) continue;
 
                 if ((Time.time - (startTime + timeoutTime)) <= 0f) continue;
 
-                if (int.Parse(parsedStrData[START_LOCATION_INDEX]) == -1)
+                if (int.Parse(parsedStrData[START_POSITION_INDEX]) == -1)
                 {
-                    Vector3 startLocationLocal = targetObj.GetComponent<RectTransform>().localPosition;
-                    int startLocationIndex = ArrayUtils.AssignArrayValue(m_startLocations, startLocationLocal);
-                    parsedStrData[START_LOCATION_INDEX] = startLocationIndex.ToString();
+                    Vector3 startPositionLocal = RectTransformUtils.GetPosition(targetObj);
+
+                    if (TypeUtils.IntToBool(int.Parse(parsedStrData[USE_DEFINED_POSITION_INDEX])))
+                    {
+                        int definedObjectIndex = UdonUtils.ArrayContains(m_definedObjects, targetObj);
+                        if (definedObjectIndex != -1)
+                        {
+                            int definedStatsIndex = UdonUtils.DataArrayContains(m_definedStats, DEFINITION_OBJECT_INDEX, definedObjectIndex.ToString());
+                            if (definedStatsIndex != -1)
+                            {
+                                string[] parsedStrDefinedData = UdonUtils.ParseDataString(m_definedStats[definedStatsIndex]);
+                                int defLocIndex = int.Parse(parsedStrDefinedData[DEFINITION_POSITION_INDEX]);
+
+                                if (defLocIndex != -1)
+                                {
+                                    startPositionLocal = m_definedPosition[defLocIndex];
+                                }
+                            }
+                        }
+                    }
+
+                    int startPositionIndex = ArrayUtils.AssignArrayValue(m_startPositions, startPositionLocal);
+                    parsedStrData[START_POSITION_INDEX] = startPositionIndex.ToString();
                     m_currentTasks[i] = string.Join(",,,", parsedStrData);
 
-                    startLocation = startLocationLocal;
+                    startPosition = startPositionLocal;
                 }
 
                 if (int.Parse(parsedStrData[START_ROTATION_INDEX]) == -1)
                 {
-                    Vector3 startRotationLocal = targetObj.GetComponent<RectTransform>().localEulerAngles;
-                    int startRotationIndex = ArrayUtils.AssignArrayValue(m_startRotations, startRotationLocal);
-                    parsedStrData[START_ROTATION_INDEX] = startRotationIndex.ToString();
+                    Vector3 startRotationLocal = RectTransformUtils.GetRotation(targetObj);
+
+                    if (TypeUtils.IntToBool(int.Parse(parsedStrData[USE_DEFINED_ROTATION_INDEX])))
+                    {
+                        int definedObjectIndex = UdonUtils.ArrayContains(m_definedObjects, targetObj);
+                        if (definedObjectIndex != -1)
+                        {
+                            int definedStatsIndex = UdonUtils.DataArrayContains(m_definedStats, DEFINITION_OBJECT_INDEX, definedObjectIndex.ToString());
+                            if (definedStatsIndex != -1)
+                            {
+                                string[] parsedStrDefinedData = UdonUtils.ParseDataString(m_definedStats[definedStatsIndex]);
+                                int definedRotationIndex = int.Parse(parsedStrDefinedData[DEFINITION_ROTATION_INDEX]);
+
+                                if (definedRotationIndex != -1)
+                                {
+                                    startRotationLocal = m_definedRotations[definedRotationIndex];
+                                }
+                            }
+                        }
+                    }
+
+                    int startPositionIndex = ArrayUtils.AssignArrayValue(m_startRotations, startRotationLocal);
+                    parsedStrData[START_ROTATION_INDEX] = startPositionIndex.ToString();
                     m_currentTasks[i] = string.Join(",,,", parsedStrData);
 
                     startRotation = startRotationLocal;
@@ -573,9 +1002,29 @@ namespace net.puk06.CanvasAnimation
 
                 if (int.Parse(parsedStrData[START_SCALE_INDEX]) == -1)
                 {
-                    Vector3 startScaleLocal = targetObj.GetComponent<RectTransform>().localScale;
-                    int startScaleIndex = ArrayUtils.AssignArrayValue(m_startScales, startScaleLocal);
-                    parsedStrData[START_SCALE_INDEX] = startScaleIndex.ToString();
+                    Vector3 startScaleLocal = targetObj.GetComponent<RectTransform>().localEulerAngles;
+
+                    if (TypeUtils.IntToBool(int.Parse(parsedStrData[USE_DEFINED_SCALE_INDEX])))
+                    {
+                        int definedObjectIndex = UdonUtils.ArrayContains(m_definedObjects, targetObj);
+                        if (definedObjectIndex != -1)
+                        {
+                            int definedStatsIndex = UdonUtils.DataArrayContains(m_definedStats, DEFINITION_OBJECT_INDEX, definedObjectIndex.ToString());
+                            if (definedStatsIndex != -1)
+                            {
+                                string[] parsedStrDefinedData = UdonUtils.ParseDataString(m_definedStats[definedStatsIndex]);
+                                int definedScaleIndex = int.Parse(parsedStrDefinedData[DEFINITION_SCALE_INDEX]);
+
+                                if (definedScaleIndex != -1)
+                                {
+                                    startScaleLocal = m_definedScales[definedScaleIndex];
+                                }
+                            }
+                        }
+                    }
+
+                    int startPositionIndex = ArrayUtils.AssignArrayValue(m_startScales, startScaleLocal);
+                    parsedStrData[START_SCALE_INDEX] = startPositionIndex.ToString();
                     m_currentTasks[i] = string.Join(",,,", parsedStrData);
 
                     startScale = startScaleLocal;
@@ -584,6 +1033,26 @@ namespace net.puk06.CanvasAnimation
                 if (int.Parse(parsedStrData[START_COLOR_INDEX]) == -1)
                 {
                     Color startColorLocal = ColorUtils.GetColor(targetObj, elementType);
+
+                    if (TypeUtils.IntToBool(int.Parse(parsedStrData[USE_DEFINED_COLOR_INDEX])))
+                    {
+                        int definedObjectIndex = UdonUtils.ArrayContains(m_definedObjects, targetObj);
+                        if (definedObjectIndex != -1)
+                        {
+                            int definedStatsIndex = UdonUtils.DataArrayContains(m_definedStats, DEFINITION_OBJECT_INDEX, definedObjectIndex.ToString());
+                            if (definedStatsIndex != -1)
+                            {
+                                string[] parsedStrDefinedData = UdonUtils.ParseDataString(m_definedStats[definedStatsIndex]);
+                                int definedColorIndex = int.Parse(parsedStrDefinedData[DEFINITION_COLOR_INDEX]);
+
+                                if (definedColorIndex != -1)
+                                {
+                                    startColorLocal = m_definedColors[definedColorIndex];
+                                }
+                            }
+                        }
+                    }
+
                     int startColorIndex = ArrayUtils.AssignArrayValue(m_startColors, startColorLocal);
                     parsedStrData[START_COLOR_INDEX] = startColorIndex.ToString();
                     m_currentTasks[i] = string.Join(",,,", parsedStrData);
@@ -614,52 +1083,52 @@ namespace net.puk06.CanvasAnimation
                         }
                     case AnimationMode.MoveDown:
                         {
-                            Vector3 newPos = startLocation;
-                            newPos.y += pixelOffset * (1f - eased);
-                            targetObj.GetComponent<RectTransform>().localPosition = newPos;
+                            Vector3 newPosition = startPosition;
+                            newPosition.y += pixelOffset * (1f - eased);
+                            RectTransformUtils.SetPosition(targetObj, newPosition);
                             break;
                         }
                     case AnimationMode.MoveUp:
                         {
-                            Vector3 newPos = startLocation;
-                            newPos.y -= pixelOffset * (1f - eased);
-                            targetObj.GetComponent<RectTransform>().localPosition = newPos;
+                            Vector3 newPosition = startPosition;
+                            newPosition.y -= pixelOffset * (1f - eased);
+                            RectTransformUtils.SetPosition(targetObj, newPosition);
                             break;
                         }
                     case AnimationMode.MoveLeft:
                         {
-                            Vector3 newPos = startLocation;
-                            newPos.x += pixelOffset * (1f - eased);
-                            targetObj.GetComponent<RectTransform>().localPosition = newPos;
+                            Vector3 newPosition = startPosition;
+                            newPosition.x += pixelOffset * (1f - eased);
+                            RectTransformUtils.SetPosition(targetObj, newPosition);
                             break;
                         }
                     case AnimationMode.MoveRight:
                         {
-                            Vector3 newPos = startLocation;
-                            newPos.x -= pixelOffset * (1f - eased);
-                            targetObj.GetComponent<RectTransform>().localPosition = newPos;
+                            Vector3 newPosition = startPosition;
+                            newPosition.x -= pixelOffset * (1f - eased);
+                            RectTransformUtils.SetPosition(targetObj, newPosition);
                             break;
                         }
                     case AnimationMode.MoveTo:
                         {
                             Vector3 newPosition = new Vector3(
-                                targetPoint.x == float.PositiveInfinity ? startLocation.x : startLocation.x + ((targetPoint.x - startLocation.x) * eased),
-                                targetPoint.y == float.PositiveInfinity ? startLocation.y : startLocation.y + ((targetPoint.y - startLocation.y) * eased),
-                                targetPoint.z == float.PositiveInfinity ? startLocation.z : startLocation.z + ((targetPoint.z - startLocation.z) * eased)
+                                targetPoint.x == float.PositiveInfinity ? startPosition.x : startPosition.x + ((targetPoint.x - startPosition.x) * eased),
+                                targetPoint.y == float.PositiveInfinity ? startPosition.y : startPosition.y + ((targetPoint.y - startPosition.y) * eased),
+                                targetPoint.z == float.PositiveInfinity ? startPosition.z : startPosition.z + ((targetPoint.z - startPosition.z) * eased)
                             );
 
-                            targetObj.GetComponent<RectTransform>().localPosition = newPosition;
+                            RectTransformUtils.SetPosition(targetObj, newPosition);
                             break;
                         }
                     case AnimationMode.MoveFrom:
                         {
                             Vector3 newPosition = new Vector3(
-                                targetPoint.x == float.PositiveInfinity ? startLocation.x : targetPoint.x + ((startLocation.x - targetPoint.x) * eased),
-                                targetPoint.y == float.PositiveInfinity ? startLocation.y : targetPoint.y + ((startLocation.y - targetPoint.y) * eased),
-                                targetPoint.z == float.PositiveInfinity ? startLocation.z : targetPoint.z + ((startLocation.z - targetPoint.z) * eased)
+                                targetPoint.x == float.PositiveInfinity ? startPosition.x : targetPoint.x + ((startPosition.x - targetPoint.x) * eased),
+                                targetPoint.y == float.PositiveInfinity ? startPosition.y : targetPoint.y + ((startPosition.y - targetPoint.y) * eased),
+                                targetPoint.z == float.PositiveInfinity ? startPosition.z : targetPoint.z + ((startPosition.z - targetPoint.z) * eased)
                             );
 
-                            targetObj.GetComponent<RectTransform>().localPosition = newPosition;
+                            RectTransformUtils.SetPosition(targetObj, newPosition);
                             break;
                         }
                     case AnimationMode.ScaleTo:
@@ -670,7 +1139,7 @@ namespace net.puk06.CanvasAnimation
                                 targetScale.z == float.PositiveInfinity ? startScale.z : startScale.z + ((targetScale.z - startScale.z) * eased)
                             );
 
-                            targetObj.GetComponent<RectTransform>().localScale = newScale;
+                            RectTransformUtils.SetScale(targetObj, newScale);
                             break;
                         }
                     case AnimationMode.ScaleFrom:
@@ -681,7 +1150,7 @@ namespace net.puk06.CanvasAnimation
                                 targetScale.z == float.PositiveInfinity ? startScale.z : targetScale.z + ((startScale.z - targetScale.z) * eased)
                             );
 
-                            targetObj.GetComponent<RectTransform>().localScale = newScale;
+                            RectTransformUtils.SetScale(targetObj, newScale);
                             break;
                         }
                     case AnimationMode.RotateTo:
@@ -692,7 +1161,7 @@ namespace net.puk06.CanvasAnimation
                                 targetRotation.z == float.PositiveInfinity ? startRotation.z : startRotation.z + ((targetRotation.z - startRotation.z) * eased)
                             );
 
-                            targetObj.GetComponent<RectTransform>().localEulerAngles = newEulerAngles;
+                            RectTransformUtils.SetRotation(targetObj, newEulerAngles);
                             break;
                         }
                     case AnimationMode.RotateFrom:
@@ -703,7 +1172,7 @@ namespace net.puk06.CanvasAnimation
                                 targetRotation.z == float.PositiveInfinity ? startRotation.z : targetRotation.z + ((startRotation.z - targetRotation.z) * eased)
                             );
 
-                            targetObj.GetComponent<RectTransform>().localEulerAngles = newEulerAngles;
+                            RectTransformUtils.SetRotation(targetObj, newEulerAngles);
                             break;
                         }
                     case AnimationMode.ColorTo:
@@ -730,6 +1199,39 @@ namespace net.puk06.CanvasAnimation
                             ColorUtils.SetColor(targetObj, elementType, newColor);
                             break;
                         }
+                    case AnimationMode.FlipX:
+                        {
+                            Vector3 newEulerAngles = new Vector3(
+                                Mathf.LerpAngle(startRotation.x, startRotation.x + 180f, eased),
+                                startRotation.y,
+                                startRotation.z
+                            );
+
+                            RectTransformUtils.SetRotation(targetObj, newEulerAngles);
+                            break;
+                        }
+                    case AnimationMode.FlipY:
+                        {
+                            Vector3 newEulerAngles = new Vector3(
+                                startRotation.x,
+                                Mathf.LerpAngle(startRotation.y, startRotation.y + 180f, eased),
+                                startRotation.z
+                            );
+
+                            RectTransformUtils.SetRotation(targetObj, newEulerAngles);
+                            break;
+                        }
+                    case AnimationMode.FlipZ:
+                        {
+                            Vector3 newEulerAngles = new Vector3(
+                                startRotation.x,
+                                startRotation.y,
+                                Mathf.LerpAngle(startRotation.z, startRotation.z + 180f, eased)
+                            );
+
+                            RectTransformUtils.SetRotation(targetObj, newEulerAngles);
+                            break;
+                        }
                 }
 
                 if (t >= 1f)
@@ -748,23 +1250,14 @@ namespace net.puk06.CanvasAnimation
             int objectIndex = int.Parse(parsedTaskDataString[OBJECT_INDEX]);
             if (objectIndex == -1) return;
 
-            ElementType elementType = int.Parse(parsedTaskDataString[ELEMENT_TYPE_INDEX]) == -1 ? ElementType.None : m_elementTypes[int.Parse(parsedTaskDataString[ELEMENT_TYPE_INDEX])];
-
-            switch (elementType)
-            {
-                case ElementType.Text: m_targetTexts[objectIndex] = null; break;
-                case ElementType.TMP_Text: m_targetTMPTexts[objectIndex] = null; break;
-                case ElementType.Image: m_targetImages[objectIndex] = null; break;
-                case ElementType.RawImage: m_targetRawImages[objectIndex] = null; break;
-                case ElementType.Button: m_targetButtons[objectIndex] = null; break;
-            }
+            m_targetObjects[objectIndex] = null;
 
             if (int.Parse(parsedTaskDataString[DURATION_INDEX]) != -1) m_durations[int.Parse(parsedTaskDataString[DURATION_INDEX])] = -1;
             if (int.Parse(parsedTaskDataString[PIXEL_OFFSET_INDEX]) != -1) m_pixelOffsets[int.Parse(parsedTaskDataString[PIXEL_OFFSET_INDEX])] = -1;
             if (int.Parse(parsedTaskDataString[START_TIME_INDEX]) != -1) m_startTimes[int.Parse(parsedTaskDataString[START_TIME_INDEX])] = -1;
             if (int.Parse(parsedTaskDataString[TIME_OUT_INDEX]) != -1) m_timeoutTimes[int.Parse(parsedTaskDataString[TIME_OUT_INDEX])] = -1;
 
-            if (int.Parse(parsedTaskDataString[START_LOCATION_INDEX]) != -1) m_startLocations[int.Parse(parsedTaskDataString[START_LOCATION_INDEX])] = Vector3.positiveInfinity;
+            if (int.Parse(parsedTaskDataString[START_POSITION_INDEX]) != -1) m_startPositions[int.Parse(parsedTaskDataString[START_POSITION_INDEX])] = Vector3.positiveInfinity;
             if (int.Parse(parsedTaskDataString[START_ROTATION_INDEX]) != -1) m_startRotations[int.Parse(parsedTaskDataString[START_ROTATION_INDEX])] = Vector3.positiveInfinity;
             if (int.Parse(parsedTaskDataString[START_SCALE_INDEX]) != -1) m_startScales[int.Parse(parsedTaskDataString[START_SCALE_INDEX])] = Vector3.positiveInfinity;
             if (int.Parse(parsedTaskDataString[START_COLOR_INDEX]) != -1) m_startColors[int.Parse(parsedTaskDataString[START_COLOR_INDEX])] = ColorUtils.GetInvalidColor();

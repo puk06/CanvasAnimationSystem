@@ -16,6 +16,9 @@ namespace net.puk06.CanvasAnimation.Models
         RotateTo,
         RotateFrom,
         ColorTo,
-        ColorFrom
+        ColorFrom,
+        FlipX,
+        FlipY,
+        FlipZ
     }
 }
