@@ -192,17 +192,7 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region Move
-        public CanvasAnimationSystem Move(Text element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType, bool useDefinedPosition = true)
-            => MoveInternal(element, ElementType.Text, duration, after, pixelOffset, moveDirection, transitionType, useDefinedPosition);
-        public CanvasAnimationSystem Move(Button element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType, bool useDefinedPosition = true)
-            => MoveInternal(element, ElementType.Button, duration, after, pixelOffset, moveDirection, transitionType, useDefinedPosition);
-        public CanvasAnimationSystem Move(Image element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType, bool useDefinedPosition = true)
-            => MoveInternal(element, ElementType.Image, duration, after, pixelOffset, moveDirection, transitionType, useDefinedPosition);
-        public CanvasAnimationSystem Move(RawImage element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType, bool useDefinedPosition = true)
-            => MoveInternal(element, ElementType.RawImage, duration, after, pixelOffset, moveDirection, transitionType, useDefinedPosition);
-        public CanvasAnimationSystem Move(TMP_Text element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType, bool useDefinedPosition = true)
-            => MoveInternal(element, ElementType.TMP_Text, duration, after, pixelOffset, moveDirection, transitionType, useDefinedPosition);
-        private CanvasAnimationSystem MoveInternal(Component element, ElementType elementType, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType, bool useDefinedPosition)
+        public CanvasAnimationSystem Move(Component element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType, bool useDefinedPosition = true)
         {
             AnimationMode animationMode;
             switch (moveDirection)
@@ -214,23 +204,13 @@ namespace net.puk06.CanvasAnimation
                 default: animationMode = AnimationMode.MoveUp; break;
             }
 
-            AddTask(element, duration, after, pixelOffset, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), useDefinedPosition, true, true, true);
+            AddTask(element, duration, after, pixelOffset, transitionType, animationMode, ElementType.None, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), useDefinedPosition, true, true, true);
             return this;
         }
         #endregion
 
         #region MovePosition
-        public CanvasAnimationSystem MovePosition(Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType, bool useDefinedPosition = true)
-            => MovePositionInternal(element, ElementType.Text, duration, after, animationDirection, targetPoint, transitionType, useDefinedPosition);
-        public CanvasAnimationSystem MovePosition(Button element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType, bool useDefinedPosition = true)
-            => MovePositionInternal(element, ElementType.Button, duration, after, animationDirection, targetPoint, transitionType, useDefinedPosition);
-        public CanvasAnimationSystem MovePosition(Image element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType, bool useDefinedPosition = true)
-            => MovePositionInternal(element, ElementType.Image, duration, after, animationDirection, targetPoint, transitionType, useDefinedPosition);
-        public CanvasAnimationSystem MovePosition(RawImage element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType, bool useDefinedPosition = true)
-            => MovePositionInternal(element, ElementType.RawImage, duration, after, animationDirection, targetPoint, transitionType, useDefinedPosition);
-        public CanvasAnimationSystem MovePosition(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType, bool useDefinedPosition = true)
-            => MovePositionInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetPoint, transitionType, useDefinedPosition);
-        private CanvasAnimationSystem MovePositionInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType, bool useDefinedPosition)
+        public CanvasAnimationSystem MovePosition(Component element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPoint, TransitionType transitionType, bool useDefinedPosition = true)
         {
             AnimationMode animationMode = AnimationMode.None;
             switch (animationDirection)
@@ -239,41 +219,21 @@ namespace net.puk06.CanvasAnimation
                 case AnimationDirection.From: animationMode = AnimationMode.MoveFrom; break;
             }
 
-            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, targetPoint, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), useDefinedPosition, true, true, true);
+            AddTask(element, duration, after, -1, transitionType, animationMode, ElementType.None, targetPoint, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), useDefinedPosition, true, true, true);
             return this;
         }
         #endregion
 
         #region MoveFromTo
-        public CanvasAnimationSystem MoveFromTo(Text element, float duration, float after, Vector3 startPoint, Vector3 targetPoint, TransitionType transitionType)
-            => MoveFromToInternal(element, ElementType.Text, duration, after, startPoint, targetPoint, transitionType);
-        public CanvasAnimationSystem MoveFromTo(Button element, float duration, float after, Vector3 startPoint, Vector3 targetPoint, TransitionType transitionType)
-            => MoveFromToInternal(element, ElementType.Button, duration, after, startPoint, targetPoint, transitionType);
-        public CanvasAnimationSystem MoveFromTo(Image element, float duration, float after, Vector3 startPoint, Vector3 targetPoint, TransitionType transitionType)
-            => MoveFromToInternal(element, ElementType.Image, duration, after, startPoint, targetPoint, transitionType);
-        public CanvasAnimationSystem MoveFromTo(RawImage element, float duration, float after, Vector3 startPoint, Vector3 targetPoint, TransitionType transitionType)
-            => MoveFromToInternal(element, ElementType.RawImage, duration, after, startPoint, targetPoint, transitionType);
-        public CanvasAnimationSystem MoveFromTo(TMP_Text element, float duration, float after, Vector3 startPoint, Vector3 targetPoint, TransitionType transitionType)
-            => MoveFromToInternal(element, ElementType.TMP_Text, duration, after, startPoint, targetPoint, transitionType);
-        private CanvasAnimationSystem MoveFromToInternal(Component element, ElementType elementType, float duration, float after, Vector3 startPoint, Vector3 targetPoint, TransitionType transitionType)
+        public CanvasAnimationSystem MoveFromTo(Component element, float duration, float after, Vector3 startPoint, Vector3 targetPoint, TransitionType transitionType)
         {
-            AddTask(element, duration, after, -1, transitionType, AnimationMode.MoveTo, elementType, targetPoint, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), startPoint, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, true, true, true);
+            AddTask(element, duration, after, -1, transitionType, AnimationMode.MoveTo, ElementType.None, targetPoint, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), startPoint, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, true, true, true);
             return this;
         }
         #endregion
 
         #region Rotate
-        public CanvasAnimationSystem Rotate(Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType, bool useDefinedRotation = true)
-            => RotateInternal(element, ElementType.Text, duration, after, animationDirection, targetRotation, transitionType, useDefinedRotation);
-        public CanvasAnimationSystem Rotate(Button element, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType, bool useDefinedRotation = true)
-            => RotateInternal(element, ElementType.Button, duration, after, animationDirection, targetRotation, transitionType, useDefinedRotation);
-        public CanvasAnimationSystem Rotate(Image element, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType, bool useDefinedRotation = true)
-            => RotateInternal(element, ElementType.Image, duration, after, animationDirection, targetRotation, transitionType, useDefinedRotation);
-        public CanvasAnimationSystem Rotate(RawImage element, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType, bool useDefinedRotation = true)
-            => RotateInternal(element, ElementType.RawImage, duration, after, animationDirection, targetRotation, transitionType, useDefinedRotation);
-        public CanvasAnimationSystem Rotate(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType, bool useDefinedRotation = true)
-            => RotateInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetRotation, transitionType, useDefinedRotation);
-        private CanvasAnimationSystem RotateInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType, bool useDefinedRotation)
+        public CanvasAnimationSystem Rotate(Component element, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType, bool useDefinedRotation = true)
         {
             AnimationMode animationMode = AnimationMode.None;
             switch (animationDirection)
@@ -282,41 +242,21 @@ namespace net.puk06.CanvasAnimation
                 case AnimationDirection.From: animationMode = AnimationMode.RotateFrom; break;
             }
 
-            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, useDefinedRotation, true, true);
+            AddTask(element, duration, after, -1, transitionType, animationMode, ElementType.None, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, useDefinedRotation, true, true);
             return this;
         }
         #endregion
 
         #region RotateFromTo
-        public CanvasAnimationSystem RotateFromTo(Text element, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
-            => RotateFromToInternal(element, ElementType.Text, duration, after, startRotation, targetRotation, transitionType);
-        public CanvasAnimationSystem RotateFromTo(Button element, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
-            => RotateFromToInternal(element, ElementType.Button, duration, after, startRotation, targetRotation, transitionType);
-        public CanvasAnimationSystem RotateFromTo(Image element, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
-            => RotateFromToInternal(element, ElementType.Image, duration, after, startRotation, targetRotation, transitionType);
-        public CanvasAnimationSystem RotateFromTo(RawImage element, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
-            => RotateFromToInternal(element, ElementType.RawImage, duration, after, startRotation, targetRotation, transitionType);
-        public CanvasAnimationSystem RotateFromTo(TMP_Text element, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
-            => RotateFromToInternal(element, ElementType.TMP_Text, duration, after, startRotation, targetRotation, transitionType);
-        private CanvasAnimationSystem RotateFromToInternal(Component element, ElementType elementType, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
+        public CanvasAnimationSystem RotateFromTo(Component element, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
         {
-            AddTask(element, duration, after, -1, transitionType, AnimationMode.RotateTo, elementType, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, startRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, true, true, true);
+            AddTask(element, duration, after, -1, transitionType, AnimationMode.RotateTo, ElementType.None, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, startRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, true, true, true);
             return this;
         }
         #endregion
 
         #region Scale
-        public CanvasAnimationSystem Scale(Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType, bool useDefinedScale = true)
-            => ScaleInternal(element, ElementType.Text, duration, after, animationDirection, targetScale, transitionType, useDefinedScale);
-        public CanvasAnimationSystem Scale(Button element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType, bool useDefinedScale = true)
-            => ScaleInternal(element, ElementType.Button, duration, after, animationDirection, targetScale, transitionType, useDefinedScale);
-        public CanvasAnimationSystem Scale(Image element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType, bool useDefinedScale = true)
-            => ScaleInternal(element, ElementType.Image, duration, after, animationDirection, targetScale, transitionType, useDefinedScale);
-        public CanvasAnimationSystem Scale(RawImage element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType, bool useDefinedScale = true)
-            => ScaleInternal(element, ElementType.RawImage, duration, after, animationDirection, targetScale, transitionType, useDefinedScale);
-        public CanvasAnimationSystem Scale(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType, bool useDefinedScale = true)
-            => ScaleInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetScale, transitionType, useDefinedScale);
-        private CanvasAnimationSystem ScaleInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType, bool useDefinedScale)
+        public CanvasAnimationSystem Scale(Component element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType, bool useDefinedScale = true)
         {
             AnimationMode animationMode = AnimationMode.None;
             switch (animationDirection)
@@ -325,25 +265,15 @@ namespace net.puk06.CanvasAnimation
                 case AnimationDirection.From: animationMode = AnimationMode.ScaleFrom; break;
             }
 
-            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, targetScale, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, true, useDefinedScale, true);
+            AddTask(element, duration, after, -1, transitionType, animationMode, ElementType.None, Vector3.positiveInfinity, Vector3.positiveInfinity, targetScale, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, true, useDefinedScale, true);
             return this;
         }
         #endregion
 
         #region ScaleFromTo
-        public CanvasAnimationSystem ScaleFromTo(Text element, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
-            => ScaleFromToInternal(element, ElementType.Text, duration, after, startScale, targetScale, transitionType);
-        public CanvasAnimationSystem ScaleFromTo(Button element, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
-            => ScaleFromToInternal(element, ElementType.Button, duration, after, startScale, targetScale, transitionType);
-        public CanvasAnimationSystem ScaleFromTo(Image element, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
-            => ScaleFromToInternal(element, ElementType.Image, duration, after, startScale, targetScale, transitionType);
-        public CanvasAnimationSystem ScaleFromTo(RawImage element, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
-            => ScaleFromToInternal(element, ElementType.RawImage, duration, after, startScale, targetScale, transitionType);
-        public CanvasAnimationSystem ScaleFromTo(TMP_Text element, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
-            => ScaleFromToInternal(element, ElementType.TMP_Text, duration, after, startScale, targetScale, transitionType);
-        private CanvasAnimationSystem ScaleFromToInternal(Component element, ElementType elementType, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
+        public CanvasAnimationSystem ScaleFromTo(Component element, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
         {
-            AddTask(element, duration, after, -1, transitionType, AnimationMode.ScaleTo, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, targetScale, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, startScale, ColorUtils.GetInvalidColor(), true, true, true, true);
+            AddTask(element, duration, after, -1, transitionType, AnimationMode.ScaleTo, ElementType.None, Vector3.positiveInfinity, Vector3.positiveInfinity, targetScale, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, startScale, ColorUtils.GetInvalidColor(), true, true, true, true);
             return this;
         }
         #endregion
@@ -392,17 +322,7 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region Flip
-        public CanvasAnimationSystem Flip(Text element, float duration, float after, CoordinateAxis coordinateAxis, TransitionType transitionType, bool useDefinedRotation = true)
-            => FlipInternal(element, ElementType.Text, duration, after, coordinateAxis, transitionType, useDefinedRotation);
-        public CanvasAnimationSystem Flip(Button element, float duration, float after, CoordinateAxis coordinateAxis, TransitionType transitionType, bool useDefinedRotation = true)
-            => FlipInternal(element, ElementType.Button, duration, after, coordinateAxis, transitionType, useDefinedRotation);
-        public CanvasAnimationSystem Flip(Image element, float duration, float after, CoordinateAxis coordinateAxis, TransitionType transitionType, bool useDefinedRotation = true)
-            => FlipInternal(element, ElementType.Image, duration, after, coordinateAxis, transitionType, useDefinedRotation);
-        public CanvasAnimationSystem Flip(RawImage element, float duration, float after, CoordinateAxis coordinateAxis, TransitionType transitionType, bool useDefinedRotation = true)
-            => FlipInternal(element, ElementType.RawImage, duration, after, coordinateAxis, transitionType, useDefinedRotation);
-        public CanvasAnimationSystem Flip(TMP_Text element, float duration, float after, CoordinateAxis coordinateAxis, TransitionType transitionType, bool useDefinedRotation = true)
-            => FlipInternal(element, ElementType.TMP_Text, duration, after, coordinateAxis, transitionType, useDefinedRotation);
-        private CanvasAnimationSystem FlipInternal(Component element, ElementType elementType, float duration, float after, CoordinateAxis coordinateAxis, TransitionType transitionType, bool useDefinedRotation)
+        public CanvasAnimationSystem Flip(Component element, float duration, float after, CoordinateAxis coordinateAxis, TransitionType transitionType, bool useDefinedRotation = true)
         {
             AnimationMode animationMode = AnimationMode.None;
             switch (coordinateAxis)
@@ -412,7 +332,7 @@ namespace net.puk06.CanvasAnimation
                 case CoordinateAxis.Z: animationMode = AnimationMode.FlipZ; break;
             }
 
-            AddTask(element, duration, after, -1, transitionType, animationMode, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, useDefinedRotation, true, true);
+            AddTask(element, duration, after, -1, transitionType, animationMode, ElementType.None, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, useDefinedRotation, true, true);
             return this;
         }
         #endregion
@@ -800,17 +720,7 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region Cancel
-        public CanvasAnimationSystem Cancel(Text element)
-            => CancelInternal(element, ElementType.Text);
-        public CanvasAnimationSystem Cancel(Button element)
-            => CancelInternal(element, ElementType.Button);
-        public CanvasAnimationSystem Cancel(Image element)
-            => CancelInternal(element, ElementType.Image);
-        public CanvasAnimationSystem Cancel(RawImage element)
-            => CancelInternal(element, ElementType.RawImage);
-        public CanvasAnimationSystem Cancel(TMP_Text element)
-            => CancelInternal(element, ElementType.TMP_Text);
-        private CanvasAnimationSystem CancelInternal(Component element, ElementType elementType)
+        public CanvasAnimationSystem Cancel(Component element)
         {
             for (int i = 0; i < m_currentTasks.Length; i++)
             {
@@ -821,13 +731,10 @@ namespace net.puk06.CanvasAnimation
                 int objectIndex = int.Parse(parsedStrData[OBJECT_INDEX]);
                 if (objectIndex == -1) continue;
 
-                ElementType objectElementType = int.Parse(parsedStrData[ELEMENT_TYPE_INDEX]) == -1 ? ElementType.None : m_elementTypes[int.Parse(parsedStrData[ELEMENT_TYPE_INDEX])];
-                if (elementType != objectElementType) continue;
-
                 Component targetObj = m_targetObjects[objectIndex];
                 if (targetObj == null || targetObj != element) continue;
 
-                Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Cannceled - Object: {targetObj.name} - Task: {i}");
+                Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Canceled - Object: {targetObj.name} - Task: {i}");
                 RemoveTask(parsedStrData, i);
             }
 
@@ -846,7 +753,7 @@ namespace net.puk06.CanvasAnimation
 
                 string[] parsedStrData = UdonUtils.ParseDataString(m_currentTasks[i]);
 
-                Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Cannceled - Task: {i}");
+                Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Canceled - Task: {i}");
                 RemoveTask(parsedStrData, i);
             }
 
