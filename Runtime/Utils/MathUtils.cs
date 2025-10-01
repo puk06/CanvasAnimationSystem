@@ -29,5 +29,13 @@ namespace net.puk06.CanvasAnimation.Utils
                 && float.IsPositiveInfinity(vector3.y)
                 && float.IsPositiveInfinity(vector3.z);
         }
+
+        public static bool IsPositiveInfinity(Color color)
+        {
+            return float.IsPositiveInfinity(color.r)
+                && float.IsPositiveInfinity(color.g)
+                && float.IsPositiveInfinity(color.b)
+                && float.IsPositiveInfinity(color.a);
+        }
     }
 }

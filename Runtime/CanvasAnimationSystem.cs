@@ -1020,153 +1020,198 @@ namespace net.puk06.CanvasAnimation
                         }
                     case AnimationMode.MoveDown:
                         {
-                            Vector3 newPosition = startPosition;
-                            newPosition.y += pixelOffset * (1f - eased);
-                            RectTransformUtils.SetPosition(targetObj, newPosition);
+                            if (!MathUtils.IsPositiveInfinity(startPosition))
+                            {
+                                Vector3 newPosition = startPosition;
+                                newPosition.y += pixelOffset * (1f - eased);
+                                RectTransformUtils.SetPosition(targetObj, newPosition);
+                            }
                             break;
                         }
                     case AnimationMode.MoveUp:
                         {
-                            Vector3 newPosition = startPosition;
-                            newPosition.y -= pixelOffset * (1f - eased);
-                            RectTransformUtils.SetPosition(targetObj, newPosition);
+                            if (!MathUtils.IsPositiveInfinity(startPosition))
+                            {
+                                Vector3 newPosition = startPosition;
+                                newPosition.y -= pixelOffset * (1f - eased);
+                                RectTransformUtils.SetPosition(targetObj, newPosition);
+                            }
                             break;
                         }
                     case AnimationMode.MoveLeft:
                         {
-                            Vector3 newPosition = startPosition;
-                            newPosition.x += pixelOffset * (1f - eased);
-                            RectTransformUtils.SetPosition(targetObj, newPosition);
+                            if (!MathUtils.IsPositiveInfinity(startPosition))
+                            {
+                                Vector3 newPosition = startPosition;
+                                newPosition.x += pixelOffset * (1f - eased);
+                                RectTransformUtils.SetPosition(targetObj, newPosition);
+                            }
                             break;
                         }
                     case AnimationMode.MoveRight:
                         {
-                            Vector3 newPosition = startPosition;
-                            newPosition.x -= pixelOffset * (1f - eased);
-                            RectTransformUtils.SetPosition(targetObj, newPosition);
+                            if (!MathUtils.IsPositiveInfinity(startPosition))
+                            {
+                                Vector3 newPosition = startPosition;
+                                newPosition.x -= pixelOffset * (1f - eased);
+                                RectTransformUtils.SetPosition(targetObj, newPosition);
+                            }
                             break;
                         }
                     case AnimationMode.MoveTo:
                         {
-                            Vector3 newPosition = new Vector3(
-                                targetPoint.x == float.PositiveInfinity ? startPosition.x : startPosition.x + ((targetPoint.x - startPosition.x) * eased),
-                                targetPoint.y == float.PositiveInfinity ? startPosition.y : startPosition.y + ((targetPoint.y - startPosition.y) * eased),
-                                targetPoint.z == float.PositiveInfinity ? startPosition.z : startPosition.z + ((targetPoint.z - startPosition.z) * eased)
-                            );
+                            if (!MathUtils.IsPositiveInfinity(startPosition))
+                            {
+                                Vector3 newPosition = new Vector3(
+                                    targetPoint.x == float.PositiveInfinity ? startPosition.x : startPosition.x + ((targetPoint.x - startPosition.x) * eased),
+                                    targetPoint.y == float.PositiveInfinity ? startPosition.y : startPosition.y + ((targetPoint.y - startPosition.y) * eased),
+                                    targetPoint.z == float.PositiveInfinity ? startPosition.z : startPosition.z + ((targetPoint.z - startPosition.z) * eased)
+                                );
 
-                            RectTransformUtils.SetPosition(targetObj, newPosition);
+                                RectTransformUtils.SetPosition(targetObj, newPosition);
+                            }
                             break;
                         }
                     case AnimationMode.MoveFrom:
                         {
-                            Vector3 newPosition = new Vector3(
-                                targetPoint.x == float.PositiveInfinity ? startPosition.x : targetPoint.x + ((startPosition.x - targetPoint.x) * eased),
-                                targetPoint.y == float.PositiveInfinity ? startPosition.y : targetPoint.y + ((startPosition.y - targetPoint.y) * eased),
-                                targetPoint.z == float.PositiveInfinity ? startPosition.z : targetPoint.z + ((startPosition.z - targetPoint.z) * eased)
-                            );
+                            if (!MathUtils.IsPositiveInfinity(startPosition))
+                            {
+                                Vector3 newPosition = new Vector3(
+                                    targetPoint.x == float.PositiveInfinity ? startPosition.x : targetPoint.x + ((startPosition.x - targetPoint.x) * eased),
+                                    targetPoint.y == float.PositiveInfinity ? startPosition.y : targetPoint.y + ((startPosition.y - targetPoint.y) * eased),
+                                    targetPoint.z == float.PositiveInfinity ? startPosition.z : targetPoint.z + ((startPosition.z - targetPoint.z) * eased)
+                                );
 
-                            RectTransformUtils.SetPosition(targetObj, newPosition);
+                                RectTransformUtils.SetPosition(targetObj, newPosition);
+                            }
                             break;
                         }
                     case AnimationMode.ScaleTo:
                         {
-                            Vector3 newScale = new Vector3(
-                                targetScale.x == float.PositiveInfinity ? startScale.x : startScale.x + ((targetScale.x - startScale.x) * eased),
-                                targetScale.y == float.PositiveInfinity ? startScale.y : startScale.y + ((targetScale.y - startScale.y) * eased),
-                                targetScale.z == float.PositiveInfinity ? startScale.z : startScale.z + ((targetScale.z - startScale.z) * eased)
-                            );
+                            if (!MathUtils.IsPositiveInfinity(startScale))
+                            {
+                                Vector3 newScale = new Vector3(
+                                    targetScale.x == float.PositiveInfinity ? startScale.x : startScale.x + ((targetScale.x - startScale.x) * eased),
+                                    targetScale.y == float.PositiveInfinity ? startScale.y : startScale.y + ((targetScale.y - startScale.y) * eased),
+                                    targetScale.z == float.PositiveInfinity ? startScale.z : startScale.z + ((targetScale.z - startScale.z) * eased)
+                                );
 
-                            RectTransformUtils.SetScale(targetObj, newScale);
+                                RectTransformUtils.SetScale(targetObj, newScale);
+                            }
                             break;
                         }
                     case AnimationMode.ScaleFrom:
                         {
-                            Vector3 newScale = new Vector3(
-                                targetScale.x == float.PositiveInfinity ? startScale.x : targetScale.x + ((startScale.x - targetScale.x) * eased),
-                                targetScale.y == float.PositiveInfinity ? startScale.y : targetScale.y + ((startScale.y - targetScale.y) * eased),
-                                targetScale.z == float.PositiveInfinity ? startScale.z : targetScale.z + ((startScale.z - targetScale.z) * eased)
-                            );
+                            if (!MathUtils.IsPositiveInfinity(startScale))
+                            {
+                                Vector3 newScale = new Vector3(
+                                    targetScale.x == float.PositiveInfinity ? startScale.x : targetScale.x + ((startScale.x - targetScale.x) * eased),
+                                    targetScale.y == float.PositiveInfinity ? startScale.y : targetScale.y + ((startScale.y - targetScale.y) * eased),
+                                    targetScale.z == float.PositiveInfinity ? startScale.z : targetScale.z + ((startScale.z - targetScale.z) * eased)
+                                );
 
-                            RectTransformUtils.SetScale(targetObj, newScale);
+                                RectTransformUtils.SetScale(targetObj, newScale);
+                            }
                             break;
                         }
                     case AnimationMode.RotateTo:
                         {
-                            Vector3 newEulerAngles = new Vector3(
-                                targetRotation.x == float.PositiveInfinity ? startRotation.x : startRotation.x + ((targetRotation.x - startRotation.x) * eased),
-                                targetRotation.y == float.PositiveInfinity ? startRotation.y : startRotation.y + ((targetRotation.y - startRotation.y) * eased),
-                                targetRotation.z == float.PositiveInfinity ? startRotation.z : startRotation.z + ((targetRotation.z - startRotation.z) * eased)
-                            );
+                            if (!MathUtils.IsPositiveInfinity(startRotation))
+                            {
+                                Vector3 newEulerAngles = new Vector3(
+                                    targetRotation.x == float.PositiveInfinity ? startRotation.x : startRotation.x + ((targetRotation.x - startRotation.x) * eased),
+                                    targetRotation.y == float.PositiveInfinity ? startRotation.y : startRotation.y + ((targetRotation.y - startRotation.y) * eased),
+                                    targetRotation.z == float.PositiveInfinity ? startRotation.z : startRotation.z + ((targetRotation.z - startRotation.z) * eased)
+                                );
 
-                            RectTransformUtils.SetRotation(targetObj, newEulerAngles);
+                                RectTransformUtils.SetRotation(targetObj, newEulerAngles);
+                            }
                             break;
                         }
                     case AnimationMode.RotateFrom:
                         {
-                            Vector3 newEulerAngles = new Vector3(
-                                targetRotation.x == float.PositiveInfinity ? startRotation.x : targetRotation.x + ((startRotation.x - targetRotation.x) * eased),
-                                targetRotation.y == float.PositiveInfinity ? startRotation.y : targetRotation.y + ((startRotation.y - targetRotation.y) * eased),
-                                targetRotation.z == float.PositiveInfinity ? startRotation.z : targetRotation.z + ((startRotation.z - targetRotation.z) * eased)
-                            );
+                            if (!MathUtils.IsPositiveInfinity(startRotation))
+                            {
+                                Vector3 newEulerAngles = new Vector3(
+                                    targetRotation.x == float.PositiveInfinity ? startRotation.x : targetRotation.x + ((startRotation.x - targetRotation.x) * eased),
+                                    targetRotation.y == float.PositiveInfinity ? startRotation.y : targetRotation.y + ((startRotation.y - targetRotation.y) * eased),
+                                    targetRotation.z == float.PositiveInfinity ? startRotation.z : targetRotation.z + ((startRotation.z - targetRotation.z) * eased)
+                                );
 
-                            RectTransformUtils.SetRotation(targetObj, newEulerAngles);
+                                RectTransformUtils.SetRotation(targetObj, newEulerAngles);
+                            }
                             break;
                         }
                     case AnimationMode.ColorTo:
                         {
-                            Color newColor = new Color(
-                                float.IsPositiveInfinity(targetColor.r) ? startColor.r : startColor.r + ((targetColor.r - startColor.r) * eased),
-                                float.IsPositiveInfinity(targetColor.g) ? startColor.g : startColor.g + ((targetColor.g - startColor.g) * eased),
-                                float.IsPositiveInfinity(targetColor.b) ? startColor.b : startColor.b + ((targetColor.b - startColor.b) * eased),
-                                float.IsPositiveInfinity(targetColor.a) ? startColor.a : startColor.a + ((targetColor.a - startColor.a) * eased)
-                            );
+                            if (!MathUtils.IsPositiveInfinity(startColor))
+                            {
+                                Color newColor = new Color(
+                                    float.IsPositiveInfinity(targetColor.r) ? startColor.r : startColor.r + ((targetColor.r - startColor.r) * eased),
+                                    float.IsPositiveInfinity(targetColor.g) ? startColor.g : startColor.g + ((targetColor.g - startColor.g) * eased),
+                                    float.IsPositiveInfinity(targetColor.b) ? startColor.b : startColor.b + ((targetColor.b - startColor.b) * eased),
+                                    float.IsPositiveInfinity(targetColor.a) ? startColor.a : startColor.a + ((targetColor.a - startColor.a) * eased)
+                                );
 
-                            ColorUtils.SetColor(targetObj, elementType, newColor);
+                                ColorUtils.SetColor(targetObj, elementType, newColor);
+                            }
                             break;
                         }
                     case AnimationMode.ColorFrom:
                         {
-                            Color newColor = new Color(
-                                float.IsPositiveInfinity(targetColor.r) ? startColor.r : targetColor.r + ((startColor.r - targetColor.r) * eased),
-                                float.IsPositiveInfinity(targetColor.g) ? startColor.g : targetColor.g + ((startColor.g - targetColor.g) * eased),
-                                float.IsPositiveInfinity(targetColor.b) ? startColor.b : targetColor.b + ((startColor.b - targetColor.b) * eased),
-                                float.IsPositiveInfinity(targetColor.a) ? startColor.a : targetColor.a + ((startColor.a - targetColor.a) * eased)
-                            );
+                            if (!MathUtils.IsPositiveInfinity(startColor))
+                            {
+                                Color newColor = new Color(
+                                    float.IsPositiveInfinity(targetColor.r) ? startColor.r : targetColor.r + ((startColor.r - targetColor.r) * eased),
+                                    float.IsPositiveInfinity(targetColor.g) ? startColor.g : targetColor.g + ((startColor.g - targetColor.g) * eased),
+                                    float.IsPositiveInfinity(targetColor.b) ? startColor.b : targetColor.b + ((startColor.b - targetColor.b) * eased),
+                                    float.IsPositiveInfinity(targetColor.a) ? startColor.a : targetColor.a + ((startColor.a - targetColor.a) * eased)
+                                );
 
-                            ColorUtils.SetColor(targetObj, elementType, newColor);
+                                ColorUtils.SetColor(targetObj, elementType, newColor);
+                            }
                             break;
                         }
                     case AnimationMode.FlipX:
                         {
-                            Vector3 newEulerAngles = new Vector3(
-                                Mathf.LerpAngle(startRotation.x, startRotation.x + 180f, eased),
-                                startRotation.y,
-                                startRotation.z
-                            );
+                            if (!MathUtils.IsPositiveInfinity(startRotation))
+                            {
+                                Vector3 newEulerAngles = new Vector3(
+                                    Mathf.LerpAngle(startRotation.x, startRotation.x + 180f, eased),
+                                    startRotation.y,
+                                    startRotation.z
+                                );
 
-                            RectTransformUtils.SetRotation(targetObj, newEulerAngles);
+                                RectTransformUtils.SetRotation(targetObj, newEulerAngles);
+                            }
                             break;
                         }
                     case AnimationMode.FlipY:
                         {
-                            Vector3 newEulerAngles = new Vector3(
-                                startRotation.x,
-                                Mathf.LerpAngle(startRotation.y, startRotation.y + 180f, eased),
-                                startRotation.z
-                            );
+                            if (!MathUtils.IsPositiveInfinity(startRotation))
+                            {
+                                Vector3 newEulerAngles = new Vector3(
+                                    startRotation.x,
+                                    Mathf.LerpAngle(startRotation.y, startRotation.y + 180f, eased),
+                                    startRotation.z
+                                );
 
-                            RectTransformUtils.SetRotation(targetObj, newEulerAngles);
+                                RectTransformUtils.SetRotation(targetObj, newEulerAngles);
+                            }
                             break;
                         }
                     case AnimationMode.FlipZ:
                         {
-                            Vector3 newEulerAngles = new Vector3(
-                                startRotation.x,
-                                startRotation.y,
-                                Mathf.LerpAngle(startRotation.z, startRotation.z + 180f, eased)
-                            );
+                            if (!MathUtils.IsPositiveInfinity(startRotation))
+                            {
+                                Vector3 newEulerAngles = new Vector3(
+                                    startRotation.x,
+                                    startRotation.y,
+                                    Mathf.LerpAngle(startRotation.z, startRotation.z + 180f, eased)
+                                );
 
-                            RectTransformUtils.SetRotation(targetObj, newEulerAngles);
+                                RectTransformUtils.SetRotation(targetObj, newEulerAngles);
+                            }
                             break;
                         }
                 }
