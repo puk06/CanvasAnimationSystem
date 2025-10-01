@@ -194,14 +194,13 @@ namespace net.puk06.CanvasAnimation
         #region Move
         public CanvasAnimationSystem Move(Component element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType, bool useDefinedPosition = true)
         {
-            AnimationMode animationMode;
+            AnimationMode animationMode = AnimationMode.None;
             switch (moveDirection)
             {
                 case MoveDirection.Up: animationMode = AnimationMode.MoveUp; break;
                 case MoveDirection.Down: animationMode = AnimationMode.MoveDown; break;
                 case MoveDirection.Left: animationMode = AnimationMode.MoveLeft; break;
                 case MoveDirection.Right: animationMode = AnimationMode.MoveRight; break;
-                default: animationMode = AnimationMode.MoveUp; break;
             }
 
             AddTask(element, duration, after, pixelOffset, transitionType, animationMode, ElementType.None, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), useDefinedPosition, true, true, true);
