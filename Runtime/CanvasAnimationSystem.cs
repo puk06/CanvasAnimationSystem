@@ -13,7 +13,7 @@ namespace net.puk06.CanvasAnimation
     {
         [Header("同時実行できるアニメーション数（多すぎると重くなります）")]
         [Tooltip("一度に再生できるアニメーションの最大数を設定します。\nおすすめは「これまでの同時実行アニメーション最大数」か「その+1」です。")]
-        [SerializeField] private int maxConcurrentAnimations = 32;
+        [SerializeField] private int maxConcurrentAnimations = 256;
 
         #region 確認用
         [Header("現在実行中のアニメーション数（確認用）")]
