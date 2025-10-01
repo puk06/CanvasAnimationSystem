@@ -486,7 +486,7 @@ namespace net.puk06.CanvasAnimation
 
             return this;
         }
-            
+
         public CanvasAnimationSystem DefineTransform(Component element, Vector3 transform, TransformType transformType)
         {
             if (element == null)
@@ -658,7 +658,7 @@ namespace net.puk06.CanvasAnimation
 
             return this;
         }
-        
+
         public CanvasAnimationSystem DefineColor(Component element, Color color)
         {
             if (element == null)
@@ -864,6 +864,7 @@ namespace net.puk06.CanvasAnimation
         }
         #endregion
 
+        #region Task Management
         private void AddTask(
             Component element,
             float time, float after,
@@ -902,6 +903,36 @@ namespace net.puk06.CanvasAnimation
             if (statsIndex == -1) Debug.LogError($"{string.Format(LogTag, ColoredTag)} Failed to create Animation Task");
             else Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Task Created - Object: {element.name} - Task: {statsIndex}");
         }
+
+        private void RemoveTask(string[] parsedTaskDataString, int taskIndex)
+        {
+            int objectIndex = int.Parse(parsedTaskDataString[OBJECT_INDEX]);
+            if (objectIndex == -1) return;
+
+            m_targetObjects[objectIndex] = null;
+
+            if (int.Parse(parsedTaskDataString[DURATION_INDEX]) != -1) m_durations[int.Parse(parsedTaskDataString[DURATION_INDEX])] = -1;
+            if (int.Parse(parsedTaskDataString[PIXEL_OFFSET_INDEX]) != -1) m_pixelOffsets[int.Parse(parsedTaskDataString[PIXEL_OFFSET_INDEX])] = -1;
+            if (int.Parse(parsedTaskDataString[START_TIME_INDEX]) != -1) m_startTimes[int.Parse(parsedTaskDataString[START_TIME_INDEX])] = -1;
+            if (int.Parse(parsedTaskDataString[TIME_OUT_INDEX]) != -1) m_timeoutTimes[int.Parse(parsedTaskDataString[TIME_OUT_INDEX])] = -1;
+
+            if (int.Parse(parsedTaskDataString[START_POSITION_INDEX]) != -1) m_startPositions[int.Parse(parsedTaskDataString[START_POSITION_INDEX])] = Vector3.positiveInfinity;
+            if (int.Parse(parsedTaskDataString[START_ROTATION_INDEX]) != -1) m_startRotations[int.Parse(parsedTaskDataString[START_ROTATION_INDEX])] = Vector3.positiveInfinity;
+            if (int.Parse(parsedTaskDataString[START_SCALE_INDEX]) != -1) m_startScales[int.Parse(parsedTaskDataString[START_SCALE_INDEX])] = Vector3.positiveInfinity;
+            if (int.Parse(parsedTaskDataString[START_COLOR_INDEX]) != -1) m_startColors[int.Parse(parsedTaskDataString[START_COLOR_INDEX])] = ColorUtils.GetInvalidColor();
+
+            if (int.Parse(parsedTaskDataString[TRANSITION_TYPE_INDEX]) != -1) m_transitionTypes[int.Parse(parsedTaskDataString[TRANSITION_TYPE_INDEX])] = TransitionType.None;
+            if (int.Parse(parsedTaskDataString[ANIMATION_MODE_INDEX]) != -1) m_animationModes[int.Parse(parsedTaskDataString[ANIMATION_MODE_INDEX])] = AnimationMode.None;
+            if (int.Parse(parsedTaskDataString[ELEMENT_TYPE_INDEX]) != -1) m_elementTypes[int.Parse(parsedTaskDataString[ELEMENT_TYPE_INDEX])] = ElementType.None;
+
+            if (int.Parse(parsedTaskDataString[TARGET_POINT_INDEX]) != -1) m_targetPoints[int.Parse(parsedTaskDataString[TARGET_POINT_INDEX])] = Vector3.positiveInfinity;
+            if (int.Parse(parsedTaskDataString[TARGET_ROTATION_INDEX]) != -1) m_targetRotations[int.Parse(parsedTaskDataString[TARGET_ROTATION_INDEX])] = Vector3.positiveInfinity;
+            if (int.Parse(parsedTaskDataString[TARGET_SCALE_INDEX]) != -1) m_targetScales[int.Parse(parsedTaskDataString[TARGET_SCALE_INDEX])] = Vector3.positiveInfinity;
+            if (int.Parse(parsedTaskDataString[TARGET_COLOR_INDEX]) != -1) m_targetColors[int.Parse(parsedTaskDataString[TARGET_COLOR_INDEX])] = ColorUtils.GetInvalidColor();
+
+            m_currentTasks[taskIndex] = null;
+        }
+        #endregion
 
         private void Update()
         {
@@ -1243,35 +1274,6 @@ namespace net.puk06.CanvasAnimation
 
             if (peakConcurrentAnimations < currentWorkingTasks) peakConcurrentAnimations = currentWorkingTasks;
             runningAnimations = currentWorkingTasks;
-        }
-
-        private void RemoveTask(string[] parsedTaskDataString, int taskIndex)
-        {
-            int objectIndex = int.Parse(parsedTaskDataString[OBJECT_INDEX]);
-            if (objectIndex == -1) return;
-
-            m_targetObjects[objectIndex] = null;
-
-            if (int.Parse(parsedTaskDataString[DURATION_INDEX]) != -1) m_durations[int.Parse(parsedTaskDataString[DURATION_INDEX])] = -1;
-            if (int.Parse(parsedTaskDataString[PIXEL_OFFSET_INDEX]) != -1) m_pixelOffsets[int.Parse(parsedTaskDataString[PIXEL_OFFSET_INDEX])] = -1;
-            if (int.Parse(parsedTaskDataString[START_TIME_INDEX]) != -1) m_startTimes[int.Parse(parsedTaskDataString[START_TIME_INDEX])] = -1;
-            if (int.Parse(parsedTaskDataString[TIME_OUT_INDEX]) != -1) m_timeoutTimes[int.Parse(parsedTaskDataString[TIME_OUT_INDEX])] = -1;
-
-            if (int.Parse(parsedTaskDataString[START_POSITION_INDEX]) != -1) m_startPositions[int.Parse(parsedTaskDataString[START_POSITION_INDEX])] = Vector3.positiveInfinity;
-            if (int.Parse(parsedTaskDataString[START_ROTATION_INDEX]) != -1) m_startRotations[int.Parse(parsedTaskDataString[START_ROTATION_INDEX])] = Vector3.positiveInfinity;
-            if (int.Parse(parsedTaskDataString[START_SCALE_INDEX]) != -1) m_startScales[int.Parse(parsedTaskDataString[START_SCALE_INDEX])] = Vector3.positiveInfinity;
-            if (int.Parse(parsedTaskDataString[START_COLOR_INDEX]) != -1) m_startColors[int.Parse(parsedTaskDataString[START_COLOR_INDEX])] = ColorUtils.GetInvalidColor();
-
-            if (int.Parse(parsedTaskDataString[TRANSITION_TYPE_INDEX]) != -1) m_transitionTypes[int.Parse(parsedTaskDataString[TRANSITION_TYPE_INDEX])] = TransitionType.None;
-            if (int.Parse(parsedTaskDataString[ANIMATION_MODE_INDEX]) != -1) m_animationModes[int.Parse(parsedTaskDataString[ANIMATION_MODE_INDEX])] = AnimationMode.None;
-            if (int.Parse(parsedTaskDataString[ELEMENT_TYPE_INDEX]) != -1) m_elementTypes[int.Parse(parsedTaskDataString[ELEMENT_TYPE_INDEX])] = ElementType.None;
-
-            if (int.Parse(parsedTaskDataString[TARGET_POINT_INDEX]) != -1) m_targetPoints[int.Parse(parsedTaskDataString[TARGET_POINT_INDEX])] = Vector3.positiveInfinity;
-            if (int.Parse(parsedTaskDataString[TARGET_ROTATION_INDEX]) != -1) m_targetRotations[int.Parse(parsedTaskDataString[TARGET_ROTATION_INDEX])] = Vector3.positiveInfinity;
-            if (int.Parse(parsedTaskDataString[TARGET_SCALE_INDEX]) != -1) m_targetScales[int.Parse(parsedTaskDataString[TARGET_SCALE_INDEX])] = Vector3.positiveInfinity;
-            if (int.Parse(parsedTaskDataString[TARGET_COLOR_INDEX]) != -1) m_targetColors[int.Parse(parsedTaskDataString[TARGET_COLOR_INDEX])] = ColorUtils.GetInvalidColor();
-
-            m_currentTasks[taskIndex] = null;
         }
     }
 }
