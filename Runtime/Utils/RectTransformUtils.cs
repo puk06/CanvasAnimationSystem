@@ -18,12 +18,12 @@ namespace net.puk06.CanvasAnimation.Utils
             return rectTransform.localPosition;
         }
 
-        public static void SetPosition(Component targetObject, Vector3 location)
+        public static void SetPosition(Component targetObject, Vector3 position)
         {
             RectTransform rectTransform = GetRectTransform(targetObject);
             if (rectTransform == null) return;
 
-            rectTransform.localPosition = location;
+            rectTransform.localPosition = position;
         }
 
         public static Vector3 GetRotation(Component targetObject)
