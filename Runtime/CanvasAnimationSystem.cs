@@ -321,14 +321,14 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region Flip
-        public CanvasAnimationSystem Flip(Component element, float duration, float after, CoordinateAxis coordinateAxis, TransitionType transitionType, bool useDefinedRotation = true)
+        public CanvasAnimationSystem Flip(Component element, float duration, float after, RotationAxis rotationAxis, TransitionType transitionType, bool useDefinedRotation = true)
         {
             AnimationMode animationMode = AnimationMode.None;
-            switch (coordinateAxis)
+            switch (rotationAxis)
             {
-                case CoordinateAxis.X: animationMode = AnimationMode.FlipX; break;
-                case CoordinateAxis.Y: animationMode = AnimationMode.FlipY; break;
-                case CoordinateAxis.Z: animationMode = AnimationMode.FlipZ; break;
+                case RotationAxis.X: animationMode = AnimationMode.FlipX; break;
+                case RotationAxis.Y: animationMode = AnimationMode.FlipY; break;
+                case RotationAxis.Z: animationMode = AnimationMode.FlipZ; break;
             }
 
             AddTask(element, duration, after, -1, transitionType, animationMode, ElementType.None, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, useDefinedRotation, true, true);

@@ -1,6 +1,6 @@
 namespace net.puk06.CanvasAnimation.Models
 {
-    public enum CoordinateAxis
+    public enum RotationAxis
     {
         X,
         Y,
