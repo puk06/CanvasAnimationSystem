@@ -10,7 +10,7 @@ namespace net.puk06.CanvasAnimation.Utils
         {
             for (int i = 0; i < array.Length; i++)
             {
-                array[i] = -1;
+                array[i] = float.PositiveInfinity;
             }
         }
 
@@ -58,11 +58,11 @@ namespace net.puk06.CanvasAnimation.Utils
 
         public static int AssignArrayValue(float[] array, float value)
         {
-            if (value == -1) return -1;
+            if (value == float.PositiveInfinity) return -1;
 
             for (int i = 0; i < array.Length; i++)
             {
-                if (array[i] == -1)
+                if (array[i] == float.PositiveInfinity)
                 {
                     array[i] = value;
                     return i;
