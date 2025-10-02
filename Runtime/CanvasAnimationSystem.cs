@@ -817,10 +817,10 @@ namespace net.puk06.CanvasAnimation
 
             m_targetObjects[objectIndex] = null;
 
-            if (int.Parse(parsedTaskDataString[DURATION_INDEX]) != -1) m_durations[int.Parse(parsedTaskDataString[DURATION_INDEX])] = -1;
+            if (int.Parse(parsedTaskDataString[DURATION_INDEX]) != -1) m_durations[int.Parse(parsedTaskDataString[DURATION_INDEX])] = float.PositiveInfinity;
             if (int.Parse(parsedTaskDataString[PIXEL_OFFSET_INDEX]) != -1) m_pixelOffsets[int.Parse(parsedTaskDataString[PIXEL_OFFSET_INDEX])] = -1;
-            if (int.Parse(parsedTaskDataString[START_TIME_INDEX]) != -1) m_startTimes[int.Parse(parsedTaskDataString[START_TIME_INDEX])] = -1;
-            if (int.Parse(parsedTaskDataString[TIME_OUT_INDEX]) != -1) m_timeoutTimes[int.Parse(parsedTaskDataString[TIME_OUT_INDEX])] = -1;
+            if (int.Parse(parsedTaskDataString[START_TIME_INDEX]) != -1) m_startTimes[int.Parse(parsedTaskDataString[START_TIME_INDEX])] = float.PositiveInfinity;
+            if (int.Parse(parsedTaskDataString[TIME_OUT_INDEX]) != -1) m_timeoutTimes[int.Parse(parsedTaskDataString[TIME_OUT_INDEX])] = float.PositiveInfinity;
 
             if (int.Parse(parsedTaskDataString[START_POSITION_INDEX]) != -1) m_startPositions[int.Parse(parsedTaskDataString[START_POSITION_INDEX])] = Vector3.positiveInfinity;
             if (int.Parse(parsedTaskDataString[START_ROTATION_INDEX]) != -1) m_startRotations[int.Parse(parsedTaskDataString[START_ROTATION_INDEX])] = Vector3.positiveInfinity;
