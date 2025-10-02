@@ -167,6 +167,7 @@ namespace net.puk06.CanvasAnimation.Utils
         public static int AssignArrayValue(ElementType[] array, ElementType value)
         {
             if (value == ElementType.None) return -1;
+            
             for (int i = 0; i < array.Length; i++)
             {
                 if (array[i] == ElementType.None)
