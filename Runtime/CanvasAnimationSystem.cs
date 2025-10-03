@@ -141,40 +141,147 @@ namespace net.puk06.CanvasAnimation
         }
 
         #region Show
+        /// <summary>
+        /// Displays the provided UI element using an alpha value.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Show(Text element)
             => FadeInternal(element, ElementType.Text, 0f, 0f, FadeType.In, TransitionType.None);
+
+        /// <summary>
+        /// Displays the provided UI element using an alpha value.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Show(Button element)
             => FadeInternal(element, ElementType.Button, 0f, 0f, FadeType.In, TransitionType.None);
+
+        /// <summary>
+        /// Displays the provided UI element using an alpha value.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Show(Image element)
             => FadeInternal(element, ElementType.Image, 0f, 0f, FadeType.In, TransitionType.None);
+
+        /// <summary>
+        /// Displays the provided UI element using an alpha value.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Show(RawImage element)
             => FadeInternal(element, ElementType.RawImage, 0f, 0f, FadeType.In, TransitionType.None);
+
+        /// <summary>
+        /// Displays the provided UI element using an alpha value.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Show(TMP_Text element)
             => FadeInternal(element, ElementType.TMP_Text, 0f, 0f, FadeType.In, TransitionType.None);
         #endregion
 
         #region Hide
+        /// <summary>
+        /// Hide the provided UI element using its alpha value.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Hide(Text element)
             => FadeInternal(element, ElementType.Text, 0f, 0f, FadeType.Out, TransitionType.None);
+
+        /// <summary>
+        /// Hide the provided UI element using its alpha value.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Hide(Button element)
             => FadeInternal(element, ElementType.Button, 0f, 0f, FadeType.Out, TransitionType.None);
+
+        /// <summary>
+        /// Hide the provided UI element using its alpha value.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Hide(Image element)
             => FadeInternal(element, ElementType.Image, 0f, 0f, FadeType.Out, TransitionType.None);
+
+        /// <summary>
+        /// Hide the provided UI element using its alpha value.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Hide(RawImage element)
             => FadeInternal(element, ElementType.RawImage, 0f, 0f, FadeType.Out, TransitionType.None);
+
+        /// <summary>
+        /// Hide the provided UI element using its alpha value.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Hide(TMP_Text element)
             => FadeInternal(element, ElementType.TMP_Text, 0f, 0f, FadeType.Out, TransitionType.None);
         #endregion
 
         #region Fade
+        /// <summary>
+        /// Gradually displays or hides the provided UI element.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="fadeType"></param>
+        /// <param name="transitionType"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Fade(Text element, float duration, float after, FadeType fadeType, TransitionType transitionType)
             => FadeInternal(element, ElementType.Text, duration, after, fadeType, transitionType);
+
+        /// <summary>
+        /// Gradually displays or hides the provided UI element.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="fadeType"></param>
+        /// <param name="transitionType"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Fade(Button element, float duration, float after, FadeType fadeType, TransitionType transitionType)
             => FadeInternal(element, ElementType.Button, duration, after, fadeType, transitionType);
+
+        /// <summary>
+        /// Gradually displays or hides the provided UI element.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="fadeType"></param>
+        /// <param name="transitionType"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Fade(Image element, float duration, float after, FadeType fadeType, TransitionType transitionType)
             => FadeInternal(element, ElementType.Image, duration, after, fadeType, transitionType);
+
+        /// <summary>
+        /// Gradually displays or hides the provided UI element.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="fadeType"></param>
+        /// <param name="transitionType"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Fade(RawImage element, float duration, float after, FadeType fadeType, TransitionType transitionType)
             => FadeInternal(element, ElementType.RawImage, duration, after, fadeType, transitionType);
+
+        /// <summary>
+        /// Gradually displays or hides the provided UI element.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="fadeType"></param>
+        /// <param name="transitionType"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Fade(TMP_Text element, float duration, float after, FadeType fadeType, TransitionType transitionType)
             => FadeInternal(element, ElementType.TMP_Text, duration, after, fadeType, transitionType);
         private CanvasAnimationSystem FadeInternal(Component element, ElementType elementType, float duration, float after, FadeType fadeType, TransitionType transitionType)
@@ -192,6 +299,17 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region Move
+        /// <summary>
+        /// The UI element is moved from its current position, shifted by the number of pixels provided, back to its original location.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="pixelOffset"></param>
+        /// <param name="moveDirection"></param>
+        /// <param name="transitionType"></param>
+        /// <param name="useDefinedPosition"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Move(Component element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType, bool useDefinedPosition = true)
         {
             AnimationMode animationMode = AnimationMode.None;
@@ -209,6 +327,17 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region MovePosition
+        /// <summary>
+        /// Move the UI element to the specified coordinates, or move from that point to the current position.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="animationDirection"></param>
+        /// <param name="targetPosition"></param>
+        /// <param name="transitionType"></param>
+        /// <param name="useDefinedPosition"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem MovePosition(Component element, float duration, float after, AnimationDirection animationDirection, Vector3 targetPosition, TransitionType transitionType, bool useDefinedPosition = true)
         {
             AnimationMode animationMode = AnimationMode.None;
@@ -224,6 +353,16 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region MoveFromTo
+        /// <summary>
+        /// Moves the provided UI Element from the provided coordinates to another set of provided coordinates.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="startPosition"></param>
+        /// <param name="targetPosition"></param>
+        /// <param name="transitionType"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem MoveFromTo(Component element, float duration, float after, Vector3 startPosition, Vector3 targetPosition, TransitionType transitionType)
         {
             AddTask(element, duration, after, -1, transitionType, AnimationMode.MoveTo, ElementType.None, targetPosition, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), startPosition, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, true, true, true);
@@ -232,6 +371,17 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region Rotate
+        /// <summary>
+        /// Rotates the provided UI Element to the specified orientation, or rotates it from the specified orientation to its current orientation.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="animationDirection"></param>
+        /// <param name="targetRotation"></param>
+        /// <param name="transitionType"></param>
+        /// <param name="useDefinedRotation"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Rotate(Component element, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType, bool useDefinedRotation = true)
         {
             AnimationMode animationMode = AnimationMode.None;
@@ -247,6 +397,16 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region RotateFromTo
+        /// <summary>
+        /// Rotates the provided UI element from the provided orientation to another provided orientation.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="startRotation"></param>
+        /// <param name="targetRotation"></param>
+        /// <param name="transitionType"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem RotateFromTo(Component element, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
         {
             AddTask(element, duration, after, -1, transitionType, AnimationMode.RotateTo, ElementType.None, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, startRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, true, true, true);
@@ -255,6 +415,17 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region Scale
+        /// <summary>
+        /// Scales the provided UI element to the specified scale, or scales it from the specified scale to the current scale.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="animationDirection"></param>
+        /// <param name="targetScale"></param>
+        /// <param name="transitionType"></param>
+        /// <param name="useDefinedScale"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Scale(Component element, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType, bool useDefinedScale = true)
         {
             AnimationMode animationMode = AnimationMode.None;
@@ -270,6 +441,16 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region ScaleFromTo
+        /// <summary>
+        /// Changes the UI Element from the provided scale to another provided scale.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="startScale"></param>
+        /// <param name="targetScale"></param>
+        /// <param name="transitionType"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem ScaleFromTo(Component element, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
         {
             AddTask(element, duration, after, -1, transitionType, AnimationMode.ScaleTo, ElementType.None, Vector3.positiveInfinity, Vector3.positiveInfinity, targetScale, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, startScale, ColorUtils.GetInvalidColor(), true, true, true, true);
@@ -278,14 +459,73 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region Color
+        /// <summary>
+        /// Changes the UI element to the specified color, or changes it from the specified color to the current color.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="animationDirection"></param>
+        /// <param name="targetColor"></param>
+        /// <param name="transitionType"></param>
+        /// <param name="useDefinedColor"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Color(Text element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType, bool useDefinedColor = true)
             => ColorInternal(element, ElementType.Text, duration, after, animationDirection, targetColor, transitionType, useDefinedColor);
+
+        /// <summary>
+        /// Changes the UI element to the specified color, or changes it from the specified color to the current color.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="animationDirection"></param>
+        /// <param name="targetColor"></param>
+        /// <param name="transitionType"></param>
+        /// <param name="useDefinedColor"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Color(Button element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType, bool useDefinedColor = true)
             => ColorInternal(element, ElementType.Button, duration, after, animationDirection, targetColor, transitionType, useDefinedColor);
+
+        /// <summary>
+        /// Changes the UI element to the specified color, or changes it from the specified color to the current color.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="animationDirection"></param>
+        /// <param name="targetColor"></param>
+        /// <param name="transitionType"></param>
+        /// <param name="useDefinedColor"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Color(Image element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType, bool useDefinedColor = true)
             => ColorInternal(element, ElementType.Image, duration, after, animationDirection, targetColor, transitionType, useDefinedColor);
+
+        /// <summary>
+        /// Changes the UI element to the specified color, or changes it from the specified color to the current color.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="animationDirection"></param>
+        /// <param name="targetColor"></param>
+        /// <param name="transitionType"></param>
+        /// <param name="useDefinedColor"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Color(RawImage element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType, bool useDefinedColor = true)
             => ColorInternal(element, ElementType.RawImage, duration, after, animationDirection, targetColor, transitionType, useDefinedColor);
+
+        /// <summary>
+        /// Changes the UI element to the specified color, or changes it from the specified color to the current color.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="animationDirection"></param>
+        /// <param name="targetColor"></param>
+        /// <param name="transitionType"></param>
+        /// <param name="useDefinedColor"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Color(TMP_Text element, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType, bool useDefinedColor = true)
             => ColorInternal(element, ElementType.TMP_Text, duration, after, animationDirection, targetColor, transitionType, useDefinedColor);
         private CanvasAnimationSystem ColorInternal(Component element, ElementType elementType, float duration, float after, AnimationDirection animationDirection, Color targetColor, TransitionType transitionType, bool useDefinedColor)
@@ -303,14 +543,68 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region ColorFromTo
+        /// <summary>
+        /// Changes the color of the provided UI element from the first provided color to the second provided color.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="startColor"></param>
+        /// <param name="targetColor"></param>
+        /// <param name="transitionType"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem ColorFromTo(Text element, float duration, float after, Color startColor, Color targetColor, TransitionType transitionType)
             => ColorFromToInternal(element, ElementType.Text, duration, after, startColor, targetColor, transitionType);
+
+        /// <summary>
+        /// Changes the color of the provided UI element from the first provided color to the second provided color.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="startColor"></param>
+        /// <param name="targetColor"></param>
+        /// <param name="transitionType"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem ColorFromTo(Button element, float duration, float after, Color startColor, Color targetColor, TransitionType transitionType)
             => ColorFromToInternal(element, ElementType.Button, duration, after, startColor, targetColor, transitionType);
+
+        /// <summary>
+        /// Changes the color of the provided UI element from the first provided color to the second provided color.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="startColor"></param>
+        /// <param name="targetColor"></param>
+        /// <param name="transitionType"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem ColorFromTo(Image element, float duration, float after, Color startColor, Color targetColor, TransitionType transitionType)
             => ColorFromToInternal(element, ElementType.Image, duration, after, startColor, targetColor, transitionType);
+
+        /// <summary>
+        /// Changes the color of the provided UI element from the first provided color to the second provided color.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="startColor"></param>
+        /// <param name="targetColor"></param>
+        /// <param name="transitionType"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem ColorFromTo(RawImage element, float duration, float after, Color startColor, Color targetColor, TransitionType transitionType)
             => ColorFromToInternal(element, ElementType.RawImage, duration, after, startColor, targetColor, transitionType);
+
+        /// <summary>
+        /// Changes the color of the provided UI element from the first provided color to the second provided color.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="startColor"></param>
+        /// <param name="targetColor"></param>
+        /// <param name="transitionType"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem ColorFromTo(TMP_Text element, float duration, float after, Color startColor, Color targetColor, TransitionType transitionType)
             => ColorFromToInternal(element, ElementType.TMP_Text, duration, after, startColor, targetColor, transitionType);
         private CanvasAnimationSystem ColorFromToInternal(Component element, ElementType elementType, float duration, float after, Color startColor, Color targetColor, TransitionType transitionType)
@@ -321,6 +615,16 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region Flip
+        /// <summary>
+        /// Rotates the provided UI element 180 degrees around the specified axis.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="rotationAxis"></param>
+        /// <param name="transitionType"></param>
+        /// <param name="useDefinedRotation"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Flip(Component element, float duration, float after, RotationAxis rotationAxis, TransitionType transitionType, bool useDefinedRotation = true)
         {
             AnimationMode animationMode = AnimationMode.None;
@@ -337,6 +641,12 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region Save & Define & Reset Transform
+        /// <summary>
+        /// The specified type of Transform for the UI Element is saved in advance. If it exists, it is used as the initial Transform for this UI Element. It will not be removed unless RemoveDefine is called. Overwriting is possible.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="transformTypes"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem SaveTransform(Component element, TransformType[] transformTypes)
         {
             if (element == null)
@@ -406,6 +716,12 @@ namespace net.puk06.CanvasAnimation
             return this;
         }
 
+        /// <summary>
+        /// 渡されたUI ElementのTransformの指定された種類を指定した値で事前に定義します。これは存在した場合、このUI Elementの初めのTransformとして使用されます。RemoveDefineしない限り消えません。上書きは可能です。
+        /// <param name="element"></param>
+        /// <param name="transform"></param>
+        /// <param name="transformType"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem DefineTransform(Component element, Vector3 transform, TransformType transformType)
         {
             if (element == null)
@@ -471,6 +787,12 @@ namespace net.puk06.CanvasAnimation
             return this;
         }
 
+        /// <summary>
+        /// Restores the Transform of the provided UI Element based on the definition information. Only values present in the definition are applied.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="transformTypes"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem ResetTransform(Component element, TransformType[] transformTypes)
         {
             if (element == null)
@@ -518,14 +840,43 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region Save & Define & Reset Color
+        /// <summary>
+        /// The color of the UI element passed to you is saved beforehand. If it exists, it will be used as the initial color for this UI element. It will not disappear unless you use RemoveDefine. Overwriting is possible.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem SaveColor(Text element)
             => SaveColorInternal(element, ElementType.Text);
+        
+        /// <summary>
+        /// The color of the UI element passed to you is saved beforehand. If it exists, it will be used as the initial color for this UI element. It will not disappear unless you use RemoveDefine. Overwriting is possible.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem SaveColor(Button element)
             => SaveColorInternal(element, ElementType.Button);
+        
+        /// <summary>
+        /// The color of the UI element passed to you is saved beforehand. If it exists, it will be used as the initial color for this UI element. It will not disappear unless you use RemoveDefine. Overwriting is possible.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem SaveColor(Image element)
             => SaveColorInternal(element, ElementType.Image);
+
+        /// <summary>
+        /// The color of the UI element passed to you is saved beforehand. If it exists, it will be used as the initial color for this UI element. It will not disappear unless you use RemoveDefine. Overwriting is possible.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem SaveColor(RawImage element)
             => SaveColorInternal(element, ElementType.RawImage);
+
+        /// <summary>
+        /// The color of the UI element passed to you is saved beforehand. If it exists, it will be used as the initial color for this UI element. It will not disappear unless you use RemoveDefine. Overwriting is possible.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem SaveColor(TMP_Text element)
             => SaveColorInternal(element, ElementType.TMP_Text);
         public CanvasAnimationSystem SaveColorInternal(Component element, ElementType elementType)
@@ -578,6 +929,12 @@ namespace net.puk06.CanvasAnimation
             return this;
         }
 
+        /// <summary>
+        /// Predefine the color for the UI element passed to you using the specified color. If it exists, it will be used as the initial color for this UI element. It will not disappear unless you use RemoveDefine. Overwriting is possible.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="color"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem DefineColor(Component element, Color color)
         {
             if (element == null)
@@ -626,14 +983,43 @@ namespace net.puk06.CanvasAnimation
             return this;
         }
 
+        /// <summary>
+        /// Restores the color of the provided UI element based on the definition information. This applies only if the definition exists.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem ResetColor(Text element)
             => ResetColorInternal(element, ElementType.Text);
+
+        /// <summary>
+        /// Restores the color of the provided UI element based on the definition information. This applies only if the definition exists.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem ResetColor(Button element)
             => ResetColorInternal(element, ElementType.Button);
+
+        /// <summary>
+        /// Restores the color of the provided UI element based on the definition information. This applies only if the definition exists.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem ResetColor(Image element)
             => ResetColorInternal(element, ElementType.Image);
+
+        /// <summary>
+        /// Restores the color of the provided UI element based on the definition information. This applies only if the definition exists.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem ResetColor(RawImage element)
             => ResetColorInternal(element, ElementType.RawImage);
+
+        /// <summary>
+        /// Restores the color of the provided UI element based on the definition information. This applies only if the definition exists.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem ResetColor(TMP_Text element)
             => ResetColorInternal(element, ElementType.TMP_Text);
         public CanvasAnimationSystem ResetColorInternal(Component element, ElementType elementType)
@@ -666,6 +1052,11 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region Remove Define
+        /// <summary>
+        /// Delete all definition information for the UI element that was passed.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem RemoveDefine(Component element)
         {
             if (element == null)
@@ -719,6 +1110,11 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region Cancel
+        /// <summary>
+        /// Cancels the currently running animation for the provided UI element.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public CanvasAnimationSystem Cancel(Component element)
         {
             for (int i = 0; i < m_currentTasks.Length; i++)
@@ -742,9 +1138,11 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region CancelAll
+        /// <summary>
+        /// Cancel all animations. We do not recommend using this, as it will stop animations even if other tools are using them.
+        /// </summary>
+        /// <returns></returns>
         public CanvasAnimationSystem CancelAll()
-            => CancelAllInternal();
-        private CanvasAnimationSystem CancelAllInternal()
         {
             for (int i = 0; i < m_currentTasks.Length; i++)
             {
@@ -761,6 +1159,9 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region Exit
+        /// <summary>
+        /// Immediately disables the component.
+        /// </summary>
         public void Exit()
         {
             Debug.Log($"{string.Format(LogTag, ColoredTag)} Exit triggered - disabling component...");
