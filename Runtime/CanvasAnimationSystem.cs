@@ -1428,7 +1428,7 @@ namespace net.puk06.CanvasAnimation
 
                 if (int.Parse(parsedStrData[START_SCALE_INDEX]) == -1)
                 {
-                    Vector3 startScaleLocal = targetObj.GetComponent<RectTransform>().localEulerAngles;
+                    Vector3 startScaleLocal = RectTransformUtils.GetScale(targetObj);
 
                     if (TypeUtils.IntToBool(int.Parse(parsedStrData[USE_DEFINED_SCALE_INDEX])))
                     {
