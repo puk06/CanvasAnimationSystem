@@ -441,6 +441,32 @@ namespace net.puk06.CanvasAnimation
             return this;
         }
         #endregion
+        
+        #region Flip
+        /// <summary>
+        /// Rotates the provided UI element 180 degrees around the specified axis.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="rotationAxis"></param>
+        /// <param name="transitionType"></param>
+        /// <param name="useDefinedRotation"></param>
+        /// <returns></returns>
+        public CanvasAnimationSystem Flip(Component element, float duration, float after, RotationAxis rotationAxis, TransitionType transitionType, bool useDefinedRotation = true)
+        {
+            AnimationMode animationMode = AnimationMode.None;
+            switch (rotationAxis)
+            {
+                case RotationAxis.X: animationMode = AnimationMode.FlipX; break;
+                case RotationAxis.Y: animationMode = AnimationMode.FlipY; break;
+                case RotationAxis.Z: animationMode = AnimationMode.FlipZ; break;
+            }
+
+            AddTask(element, duration, after, -1, transitionType, animationMode, ElementType.None, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, useDefinedRotation, true, true);
+            return this;
+        }
+        #endregion
 
         #region Scale
         /// <summary>
@@ -638,32 +664,6 @@ namespace net.puk06.CanvasAnimation
         private CanvasAnimationSystem ColorFromToInternal(Component element, ElementType elementType, float duration, float after, Color startColor, Color targetColor, TransitionType transitionType)
         {
             AddTask(element, duration, after, -1, transitionType, AnimationMode.ColorTo, elementType, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, targetColor, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, startColor, true, true, true, true);
-            return this;
-        }
-        #endregion
-
-        #region Flip
-        /// <summary>
-        /// Rotates the provided UI element 180 degrees around the specified axis.
-        /// </summary>
-        /// <param name="element"></param>
-        /// <param name="duration"></param>
-        /// <param name="after"></param>
-        /// <param name="rotationAxis"></param>
-        /// <param name="transitionType"></param>
-        /// <param name="useDefinedRotation"></param>
-        /// <returns></returns>
-        public CanvasAnimationSystem Flip(Component element, float duration, float after, RotationAxis rotationAxis, TransitionType transitionType, bool useDefinedRotation = true)
-        {
-            AnimationMode animationMode = AnimationMode.None;
-            switch (rotationAxis)
-            {
-                case RotationAxis.X: animationMode = AnimationMode.FlipX; break;
-                case RotationAxis.Y: animationMode = AnimationMode.FlipY; break;
-                case RotationAxis.Z: animationMode = AnimationMode.FlipZ; break;
-            }
-
-            AddTask(element, duration, after, -1, transitionType, animationMode, ElementType.None, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, useDefinedRotation, true, true);
             return this;
         }
         #endregion
