@@ -1207,7 +1207,7 @@ namespace net.puk06.CanvasAnimation
             string stats = $"{objectIndex},,,{durationIndex},,,{startTimeIndex},,,{pixelOffsetIndex},,,{timeoutTimesIndex},,,{startPositionIndex},,,{startRotationIndex},,,{startScaleIndex},,,{startColorIndex},,,{transitionTypeIndex},,,{modesIndex},,,{elementTypeIndex},,,{targetPositionIndex},,,{targetRotationIndex},,,{targetScaleIndex},,,{targetColorIndex},,,{TypeUtils.BoolToInt(useDefinedPosition)},,,{TypeUtils.BoolToInt(useDefinedRotation)},,,{TypeUtils.BoolToInt(useDefinedScale)},,,{TypeUtils.BoolToInt(useDefinedColor)}";
             int statsIndex = ArrayUtils.AssignArrayValue(m_currentTasks, stats);
 
-            if (statsIndex == -1) Debug.LogError($"{string.Format(LogTag, ColoredTag)} Failed to create Animation Task");
+            if (statsIndex == -1) Debug.LogError($"{string.Format(LogTag, ColoredTag)} Failed to create Animation Task. You have likely exceeded the maximum number of simultaneous animations.");
             else Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Task Created - Object: {element.name} - Task: {statsIndex}");
         }
 
