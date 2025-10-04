@@ -317,8 +317,8 @@ namespace net.puk06.CanvasAnimation
             {
                 case MoveDirection.Up: animationMode = AnimationMode.MoveUp; break;
                 case MoveDirection.Down: animationMode = AnimationMode.MoveDown; break;
-                case MoveDirection.Left: animationMode = AnimationMode.MoveLeft; break;
                 case MoveDirection.Right: animationMode = AnimationMode.MoveRight; break;
+                case MoveDirection.Left: animationMode = AnimationMode.MoveLeft; break;
             }
 
             AddTask(element, duration, after, pixelOffset, transitionType, animationMode, ElementType.None, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), useDefinedPosition, true, true, true);
@@ -345,8 +345,8 @@ namespace net.puk06.CanvasAnimation
             {
                 case MoveDirection.Up: animationMode = AnimationMode.MoveToUp; break;
                 case MoveDirection.Down: animationMode = AnimationMode.MoveToDown; break;
-                case MoveDirection.Left: animationMode = AnimationMode.MoveToLeft; break;
                 case MoveDirection.Right: animationMode = AnimationMode.MoveToRight; break;
+                case MoveDirection.Left: animationMode = AnimationMode.MoveToLeft; break;
             }
 
             AddTask(element, duration, after, pixelOffset, transitionType, animationMode, ElementType.None, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), useDefinedPosition, true, true, true);
