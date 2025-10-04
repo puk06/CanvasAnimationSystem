@@ -1084,6 +1084,24 @@ namespace net.puk06.CanvasAnimation
         }
         #endregion
 
+        #region Define Database Check
+        /// <summary>
+        /// Checks whether the specified UI Element is registered in the Define Database.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        public bool IsRegisteredInDefineDatabase(Component element)
+        {
+            if (element == null)
+            {
+                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Element is Null - Object: {element.name}");
+                return false;
+            }
+
+            return UdonUtils.ArrayContains(m_definedObjects, element) != -1;
+        }
+        #endregion
+
         #region Remove Define
         /// <summary>
         /// Delete all definition information for the UI element that was passed.
