@@ -88,6 +88,9 @@ namespace net.puk06.CanvasAnimation
         private Vector3[] m_definedScales;
         private Color[] m_definedColors;
 
+        private bool _initialized = false;
+        public bool Initialized => _initialized;
+
         void Start()
         {
             m_currentTasks = new string[maxConcurrentAnimations];
@@ -138,6 +141,8 @@ namespace net.puk06.CanvasAnimation
             ArrayUtils.InitializeValues(m_definedScales);
             ArrayUtils.InitializeValues(m_definedRotations);
             ArrayUtils.InitializeValues(m_definedColors);
+
+            _initialized = true;
         }
 
         #region Show
@@ -1261,6 +1266,12 @@ namespace net.puk06.CanvasAnimation
             bool useDefinedPosition, bool useDefinedRotation, bool useDefinedScale, bool useDefinedColor
         )
         {
+            if (!_initialized)
+            {
+                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Task creation was canceled because you attempted to create a task before initialization.");
+                return;
+            }
+
             int objectIndex = ArrayUtils.AssignArrayValue(m_targetObjects, element);
             int durationIndex = ArrayUtils.AssignArrayValue(m_durations, time);
             int startTimeIndex = ArrayUtils.AssignArrayValue(m_startTimes, Time.time);
