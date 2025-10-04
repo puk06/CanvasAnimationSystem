@@ -1187,11 +1187,37 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region Exit
+        private bool cancelExit = false;
+        /// <summary>
+        /// Disables the component after the specified number of seconds. To disable it immediately, use Exit() or ExitImmediate().
+        /// </summary>
+        public void Exit(float after = 0f)
+        {
+            Debug.Log($"{string.Format(LogTag, ColoredTag)} Exit triggered -  The component will be disabled in {after} seconds.");
+            SendCustomEventDelayedSeconds(nameof(ExitImmediate), after);
+        }
+
+        /// <summary>
+        /// Each time you call Exit(), you can cancel the exit exactly once.
+        /// </summary>
+        public void CancelExit()
+        {
+            cancelExit = true;
+            Debug.Log($"{string.Format(LogTag, ColoredTag)} The next exit process will be ignored.");
+        }
+
         /// <summary>
         /// Immediately disables the component.
         /// </summary>
-        public void Exit()
+        public void ExitImmediate()
         {
+            if (cancelExit)
+            {
+                cancelExit = false;
+                Debug.Log($"{string.Format(LogTag, ColoredTag)} The exit process has been canceled.");
+                return;
+            }
+
             Debug.Log($"{string.Format(LogTag, ColoredTag)} Exit triggered - disabling component...");
             if (runningAnimations > 0) Debug.LogWarning($"{string.Format(LogTag, ColoredTag)} Some animations are still playing, but the component is being disabled.");
 
