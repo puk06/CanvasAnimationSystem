@@ -1187,39 +1187,62 @@ namespace net.puk06.CanvasAnimation
         #endregion
 
         #region Exit
-        private bool cancelExit = false;
+        private bool isExitCancelScheduled = false;
+        
         /// <summary>
-        /// Disables the component after the specified number of seconds. To disable it immediately, use Exit() or ExitImmediate().
+        /// Disables the component after a specified delay.
         /// </summary>
+        /// <param name="after">
+        /// The number of seconds to wait before disabling the component.
+        /// Pass 0 or use <see cref="ExitImmediate"/> to disable it right away.
+        /// </param>
+        /// <remarks>
+        /// You can cancel the next scheduled exit exactly once by calling <see cref="CancelExit"/> before the delay ends.
+        /// </remarks>
         public void Exit(float after = 0f)
         {
-            Debug.Log($"{string.Format(LogTag, ColoredTag)} Exit triggered -  The component will be disabled in {after} seconds.");
+            if (after <= 0f)
+            {
+                Debug.Log($"{string.Format(LogTag, ColoredTag)} Exit triggered immediately.");
+                ExitImmediate();
+                return;
+            }
+
+            Debug.Log($"{string.Format(LogTag, ColoredTag)} Exit scheduled — the component will be disabled in {after} second{(after == 1f ? "" : "s")}.");
             SendCustomEventDelayedSeconds(nameof(ExitImmediate), after);
         }
 
         /// <summary>
-        /// Each time you call Exit(), you can cancel the exit exactly once.
+        /// Cancels the next scheduled exit process once.
         /// </summary>
+        /// <remarks>
+        /// Sets a one-time flag that prevents the next call to <see cref="ExitImmediate"/> from disabling the component.
+        /// The flag is automatically cleared after one use.
+        /// </remarks>
         public void CancelExit()
         {
-            cancelExit = true;
-            Debug.Log($"{string.Format(LogTag, ColoredTag)} The next exit process will be ignored.");
+            isExitCancelScheduled = true;
+            Debug.Log($"{string.Format(LogTag, ColoredTag)} Exit cancellation scheduled — the next exit attempt will be ignored.");
         }
 
         /// <summary>
-        /// Immediately disables the component.
+        /// Immediately disables the component, unless the cancel flag is active.
         /// </summary>
+        /// <remarks>
+        /// If <see cref="CancelExit"/> was called beforehand, this exit will be canceled and the flag cleared automatically.
+        /// </remarks>
         public void ExitImmediate()
         {
-            if (cancelExit)
+            if (isExitCancelScheduled)
             {
-                cancelExit = false;
-                Debug.Log($"{string.Format(LogTag, ColoredTag)} The exit process has been canceled.");
+                isExitCancelScheduled = false;
+                Debug.Log($"{string.Format(LogTag, ColoredTag)} Exit process canceled successfully — the component remains active.");
                 return;
             }
 
-            Debug.Log($"{string.Format(LogTag, ColoredTag)} Exit triggered - disabling component...");
-            if (runningAnimations > 0) Debug.LogWarning($"{string.Format(LogTag, ColoredTag)} Some animations are still playing, but the component is being disabled.");
+            Debug.Log($"{string.Format(LogTag, ColoredTag)} Executing Exit — the component is now being disabled.");
+            if (runningAnimations > 0)
+                Debug.LogWarning($"{string.Format(LogTag, ColoredTag)} Warning: {runningAnimations} animation(s) are still playing, but the component is being disabled.");
 
             enabled = false;
         }
