@@ -326,6 +326,34 @@ namespace net.puk06.CanvasAnimation
         }
         #endregion
 
+        #region MoveTo
+        /// <summary>
+        /// The UI element is moved from its current position by the number of pixels provided.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="pixelOffset"></param>
+        /// <param name="moveDirection"></param>
+        /// <param name="transitionType"></param>
+        /// <param name="useDefinedPosition"></param>
+        /// <returns></returns>
+        public CanvasAnimationSystem MoveTo(Component element, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType, bool useDefinedPosition = true)
+        {
+            AnimationMode animationMode = AnimationMode.None;
+            switch (moveDirection)
+            {
+                case MoveDirection.Up: animationMode = AnimationMode.MoveToUp; break;
+                case MoveDirection.Down: animationMode = AnimationMode.MoveToDown; break;
+                case MoveDirection.Left: animationMode = AnimationMode.MoveToLeft; break;
+                case MoveDirection.Right: animationMode = AnimationMode.MoveToRight; break;
+            }
+
+            AddTask(element, duration, after, pixelOffset, transitionType, animationMode, ElementType.None, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), useDefinedPosition, true, true, true);
+            return this;
+        }
+        #endregion
+
         #region MovePosition
         /// <summary>
         /// Move the UI element to the specified coordinates, or move from that point to the current position.
@@ -1419,6 +1447,16 @@ namespace net.puk06.CanvasAnimation
                             ColorUtils.SetColor(targetObj, elementType, objectColor);
                             break;
                         }
+                    case AnimationMode.MoveUp:
+                        {
+                            if (!MathUtils.IsPositiveInfinity(startPosition))
+                            {
+                                Vector3 newPosition = startPosition;
+                                newPosition.y -= pixelOffset * (1f - eased);
+                                RectTransformUtils.SetPosition(targetObj, newPosition);
+                            }
+                            break;
+                        }
                     case AnimationMode.MoveDown:
                         {
                             if (!MathUtils.IsPositiveInfinity(startPosition))
@@ -1429,12 +1467,12 @@ namespace net.puk06.CanvasAnimation
                             }
                             break;
                         }
-                    case AnimationMode.MoveUp:
+                    case AnimationMode.MoveRight:
                         {
                             if (!MathUtils.IsPositiveInfinity(startPosition))
                             {
                                 Vector3 newPosition = startPosition;
-                                newPosition.y -= pixelOffset * (1f - eased);
+                                newPosition.x -= pixelOffset * (1f - eased);
                                 RectTransformUtils.SetPosition(targetObj, newPosition);
                             }
                             break;
@@ -1449,12 +1487,42 @@ namespace net.puk06.CanvasAnimation
                             }
                             break;
                         }
-                    case AnimationMode.MoveRight:
+                    case AnimationMode.MoveToUp:
                         {
                             if (!MathUtils.IsPositiveInfinity(startPosition))
                             {
                                 Vector3 newPosition = startPosition;
-                                newPosition.x -= pixelOffset * (1f - eased);
+                                newPosition.y += pixelOffset * eased;
+                                RectTransformUtils.SetPosition(targetObj, newPosition);
+                            }
+                            break;
+                        }
+                    case AnimationMode.MoveToDown:
+                        {
+                            if (!MathUtils.IsPositiveInfinity(startPosition))
+                            {
+                                Vector3 newPosition = startPosition;
+                                newPosition.y -= pixelOffset * eased;
+                                RectTransformUtils.SetPosition(targetObj, newPosition);
+                            }
+                            break;
+                        }
+                    case AnimationMode.MoveToRight:
+                        {
+                            if (!MathUtils.IsPositiveInfinity(startPosition))
+                            {
+                                Vector3 newPosition = startPosition;
+                                newPosition.x += pixelOffset * eased;
+                                RectTransformUtils.SetPosition(targetObj, newPosition);
+                            }
+                            break;
+                        }
+                    case AnimationMode.MoveToLeft:
+                        {
+                            if (!MathUtils.IsPositiveInfinity(startPosition))
+                            {
+                                Vector3 newPosition = startPosition;
+                                newPosition.x -= pixelOffset * eased;
                                 RectTransformUtils.SetPosition(targetObj, newPosition);
                             }
                             break;
