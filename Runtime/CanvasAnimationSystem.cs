@@ -745,7 +745,7 @@ namespace net.puk06.CanvasAnimation
         }
 
         /// <summary>
-        /// 渡されたUI ElementのTransformの指定された種類を指定した値で事前に定義します。これは存在した場合、このUI Elementの初めのTransformとして使用されます。RemoveDefineしない限り消えません。上書きは可能です。
+        /// Predefine the specified type of Transform for the UI element passed to you using the given value. If it exists, it will be used as the initial Transform for this UI element. It will not be removed unless you use RemoveDefine. Overwriting is possible.
         /// <param name="element"></param>
         /// <param name="transform"></param>
         /// <param name="transformType"></param>
