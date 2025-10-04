@@ -1,7 +1,7 @@
 {
     "name": "net.puk06.canvas-animation-system",
     "displayName": "Canvas Animation System",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "vpmDependencies": {
         "com.vrchat.worlds": ">=3.5.0",
         "net.puk06.udon-utils": ">=1.0.0"
@@ -13,5 +13,5 @@
     },
     "unity": "2022.3",
     "description": "Easy-to-use animation system for Unity Canvas with UdonSharp.",
-    "url": "https://github.com/puk06/CanvasAnimationSystem/releases/download/v0.1.0/net.puk06.canvas-animation-system-v0.1.0.zip?"
+    "url": "https://github.com/puk06/CanvasAnimationSystem/releases/download/v0.1.1/net.puk06.canvas-animation-system-v0.1.1.zip?"
 }
