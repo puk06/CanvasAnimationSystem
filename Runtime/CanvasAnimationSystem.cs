@@ -92,6 +92,13 @@ namespace net.puk06.CanvasAnimation
         public bool Initialized => _initialized;
 
         void Start()
+            => SetupArrays();
+
+        void Update()
+            => ProcessAllAnimations();
+
+        #region Initialize
+        private void SetupArrays()
         {
             m_currentTasks = new string[maxConcurrentAnimations];
 
@@ -144,6 +151,7 @@ namespace net.puk06.CanvasAnimation
 
             _initialized = true;
         }
+        #endregion
 
         #region Show
         /// <summary>
@@ -446,7 +454,7 @@ namespace net.puk06.CanvasAnimation
             return this;
         }
         #endregion
-        
+
         #region Flip
         /// <summary>
         /// Rotates the provided UI element 180 degrees around the specified axis.
@@ -880,7 +888,7 @@ namespace net.puk06.CanvasAnimation
         /// <returns></returns>
         public CanvasAnimationSystem SaveColor(Text element)
             => SaveColorInternal(element, ElementType.Text);
-        
+
         /// <summary>
         /// The color of the UI element passed to you is saved beforehand. If it exists, it will be used as the initial color for this UI element. It will not disappear unless you use RemoveDefine. Overwriting is possible.
         /// </summary>
@@ -888,7 +896,7 @@ namespace net.puk06.CanvasAnimation
         /// <returns></returns>
         public CanvasAnimationSystem SaveColor(Button element)
             => SaveColorInternal(element, ElementType.Button);
-        
+
         /// <summary>
         /// The color of the UI element passed to you is saved beforehand. If it exists, it will be used as the initial color for this UI element. It will not disappear unless you use RemoveDefine. Overwriting is possible.
         /// </summary>
@@ -1211,7 +1219,7 @@ namespace net.puk06.CanvasAnimation
 
         #region Exit
         private bool isExitCancelScheduled = false;
-        
+
         /// <summary>
         /// Disables the component after a specified delay.
         /// </summary>
@@ -1347,7 +1355,9 @@ namespace net.puk06.CanvasAnimation
         }
         #endregion
 
-        private void Update()
+
+        #region Process All Animations
+        private void ProcessAllAnimations()
         {
             int currentWorkingTasks = 0;
             for (int i = 0; i < m_currentTasks.Length; i++)
@@ -1773,5 +1783,6 @@ namespace net.puk06.CanvasAnimation
             if (peakConcurrentAnimations < currentWorkingTasks) peakConcurrentAnimations = currentWorkingTasks;
             runningAnimations = currentWorkingTasks;
         }
+        #endregion
     }
 }
