@@ -16,10 +16,10 @@ It is continuously updated to help users create high-quality message displays an
 
 ## 📖 Documentation
 
-Detailed setup instructions, API reference, and examples are available in the [Wiki](https://github.com/YourUsername/CanvasAnimationSystem/wiki).
+Detailed setup instructions, API reference, and examples are available in the [Wiki](https://github.com/puk06/CanvasAnimationSystem/wiki).
 
 📚 **Wiki Sections:**
-- [Getting Started](https://github.com/YourUsername/CanvasAnimationSystem/wiki/Getting-Started)
-- [Available Methods](https://github.com/YourUsername/CanvasAnimationSystem/wiki/Available-Methods)
+- [Getting Started](https://github.com/puk06/CanvasAnimationSystem/wiki/Getting-Started)
+- [Available Methods](https://github.com/puk06/CanvasAnimationSystem/wiki/Available-Methods)
 
 ---
