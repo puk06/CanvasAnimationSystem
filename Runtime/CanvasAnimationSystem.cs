@@ -25,8 +25,7 @@ namespace net.puk06.CanvasAnimation
         [SerializeField] private int peakConcurrentAnimations = 0;
         #endregion
 
-        private const string LogTag = "[{0}]";
-        private readonly string ColoredTag = UdonUtils.ColorizeString("Canvas Animation System", "#4eb3ee");
+        private readonly string LogPrefix = $"[{UdonUtils.ColorizeString("Canvas Animation System", "#4eb3ee")}]";
 
         private const int OBJECT_INDEX = 0;
         private const int DURATION_INDEX = 1;
@@ -337,6 +336,27 @@ namespace net.puk06.CanvasAnimation
             AddTask(element, duration, after, pixelOffset, transitionType, animationMode, ElementType.None, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), useDefinedPosition, true, true, true);
             return this;
         }
+
+        /// <summary>
+        /// The UI elements are moved from its current position, shifted by the number of pixels provided, back to its original location.
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="pixelOffset"></param>
+        /// <param name="moveDirection"></param>
+        /// <param name="transitionType"></param>
+        /// <param name="useDefinedPosition"></param>
+        /// <returns></returns>
+        public CanvasAnimationSystem Move(Component[] elements, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType, bool useDefinedPosition = true)
+        {
+            foreach (Component element in elements)
+            {
+                Move(element, duration, after, pixelOffset, moveDirection, transitionType, useDefinedPosition);
+            }
+
+            return this;
+        }
         #endregion
 
         #region MoveTo
@@ -365,6 +385,27 @@ namespace net.puk06.CanvasAnimation
             AddTask(element, duration, after, pixelOffset, transitionType, animationMode, ElementType.None, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), useDefinedPosition, true, true, true);
             return this;
         }
+
+        /// <summary>
+        /// The UI elements are moved from its current position by the number of pixels provided.
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="pixelOffset"></param>
+        /// <param name="moveDirection"></param>
+        /// <param name="transitionType"></param>
+        /// <param name="useDefinedPosition"></param>
+        /// <returns></returns>
+        public CanvasAnimationSystem MoveTo(Component[] elements, float duration, float after, int pixelOffset, MoveDirection moveDirection, TransitionType transitionType, bool useDefinedPosition = true)
+        {
+            foreach (Component element in elements)
+            {
+                MoveTo(element, duration, after, pixelOffset, moveDirection, transitionType, useDefinedPosition);
+            }
+
+            return this;
+        }
         #endregion
 
         #region MovePosition
@@ -391,6 +432,27 @@ namespace net.puk06.CanvasAnimation
             AddTask(element, duration, after, -1, transitionType, animationMode, ElementType.None, targetPosition, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), useDefinedPosition, true, true, true);
             return this;
         }
+
+        /// <summary>
+        /// Move the UI elements to the specified coordinates, or move from that point to the current position.
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="animationDirection"></param>
+        /// <param name="targetPosition"></param>
+        /// <param name="transitionType"></param>
+        /// <param name="useDefinedPosition"></param>
+        /// <returns></returns>
+        public CanvasAnimationSystem MovePosition(Component[] elements, float duration, float after, AnimationDirection animationDirection, Vector3 targetPosition, TransitionType transitionType, bool useDefinedPosition = true)
+        {
+            foreach (Component element in elements)
+            {
+                MovePosition(element, duration, after, animationDirection, targetPosition, transitionType, useDefinedPosition);
+            }
+
+            return this;
+        }
         #endregion
 
         #region MoveFromTo
@@ -407,6 +469,26 @@ namespace net.puk06.CanvasAnimation
         public CanvasAnimationSystem MoveFromTo(Component element, float duration, float after, Vector3 startPosition, Vector3 targetPosition, TransitionType transitionType)
         {
             AddTask(element, duration, after, -1, transitionType, AnimationMode.MoveTo, ElementType.None, targetPosition, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), startPosition, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, true, true, true);
+            return this;
+        }
+
+        /// <summary>
+        /// Moves the provided UI Elements from the provided coordinates to another set of provided coordinates.
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="startPosition"></param>
+        /// <param name="targetPosition"></param>
+        /// <param name="transitionType"></param>
+        /// <returns></returns>
+        public CanvasAnimationSystem MoveFromTo(Component[] elements, float duration, float after, Vector3 startPosition, Vector3 targetPosition, TransitionType transitionType)
+        {
+            foreach (Component element in elements)
+            {
+                MoveFromTo(element, duration, after, startPosition, targetPosition, transitionType);
+            }
+
             return this;
         }
         #endregion
@@ -435,6 +517,27 @@ namespace net.puk06.CanvasAnimation
             AddTask(element, duration, after, -1, transitionType, animationMode, ElementType.None, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, useDefinedRotation, true, true);
             return this;
         }
+
+        /// <summary>
+        /// Rotates the provided UI Elements to the specified orientation, or rotates it from the specified orientation to its current orientation.
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="animationDirection"></param>
+        /// <param name="targetRotation"></param>
+        /// <param name="transitionType"></param>
+        /// <param name="useDefinedRotation"></param>
+        /// <returns></returns>
+        public CanvasAnimationSystem Rotate(Component[] elements, float duration, float after, AnimationDirection animationDirection, Vector3 targetRotation, TransitionType transitionType, bool useDefinedRotation = true)
+        {
+            foreach (Component element in elements)
+            {
+                Rotate(element, duration, after, animationDirection, targetRotation, transitionType, useDefinedRotation);
+            }
+
+            return this;
+        }
         #endregion
 
         #region RotateFromTo
@@ -451,6 +554,26 @@ namespace net.puk06.CanvasAnimation
         public CanvasAnimationSystem RotateFromTo(Component element, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
         {
             AddTask(element, duration, after, -1, transitionType, AnimationMode.RotateTo, ElementType.None, Vector3.positiveInfinity, targetRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, startRotation, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, true, true, true);
+            return this;
+        }
+
+        /// <summary>
+        /// Rotates the provided UI elements from the provided orientation to another provided orientation.
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="startRotation"></param>
+        /// <param name="targetRotation"></param>
+        /// <param name="transitionType"></param>
+        /// <returns></returns>
+        public CanvasAnimationSystem RotateFromTo(Component[] elements, float duration, float after, Vector3 startRotation, Vector3 targetRotation, TransitionType transitionType)
+        {
+            foreach (Component element in elements)
+            {
+                RotateFromTo(element, duration, after, startRotation, targetRotation, transitionType);
+            }
+
             return this;
         }
         #endregion
@@ -479,6 +602,26 @@ namespace net.puk06.CanvasAnimation
             AddTask(element, duration, after, -1, transitionType, animationMode, ElementType.None, Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, useDefinedRotation, true, true);
             return this;
         }
+
+        /// <summary>
+        /// Rotates the provided UI elements 180 degrees around the specified axis.
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="rotationAxis"></param>
+        /// <param name="transitionType"></param>
+        /// <param name="useDefinedRotation"></param>
+        /// <returns></returns>
+        public CanvasAnimationSystem Flip(Component[] elements, float duration, float after, RotationAxis rotationAxis, TransitionType transitionType, bool useDefinedRotation = true)
+        {
+            foreach (Component element in elements)
+            {
+                Flip(element, duration, after, rotationAxis, transitionType, useDefinedRotation);
+            }
+
+            return this;
+        }
         #endregion
 
         #region Scale
@@ -505,6 +648,27 @@ namespace net.puk06.CanvasAnimation
             AddTask(element, duration, after, -1, transitionType, animationMode, ElementType.None, Vector3.positiveInfinity, Vector3.positiveInfinity, targetScale, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, Vector3.positiveInfinity, ColorUtils.GetInvalidColor(), true, true, useDefinedScale, true);
             return this;
         }
+
+        /// <summary>
+        /// Scales the provided UI elements to the specified scale, or scales it from the specified scale to the current scale.
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="animationDirection"></param>
+        /// <param name="targetScale"></param>
+        /// <param name="transitionType"></param>
+        /// <param name="useDefinedScale"></param>
+        /// <returns></returns>
+        public CanvasAnimationSystem Scale(Component[] elements, float duration, float after, AnimationDirection animationDirection, Vector3 targetScale, TransitionType transitionType, bool useDefinedScale = true)
+        {
+            foreach (Component element in elements)
+            {
+                Scale(element, duration, after, animationDirection, targetScale, transitionType, useDefinedScale);
+            }
+
+            return this;
+        }
         #endregion
 
         #region ScaleFromTo
@@ -521,6 +685,26 @@ namespace net.puk06.CanvasAnimation
         public CanvasAnimationSystem ScaleFromTo(Component element, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
         {
             AddTask(element, duration, after, -1, transitionType, AnimationMode.ScaleTo, ElementType.None, Vector3.positiveInfinity, Vector3.positiveInfinity, targetScale, ColorUtils.GetInvalidColor(), Vector3.positiveInfinity, Vector3.positiveInfinity, startScale, ColorUtils.GetInvalidColor(), true, true, true, true);
+            return this;
+        }
+
+        /// <summary>
+        /// Changes the UI Elements from the provided scale to another provided scale.
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <param name="duration"></param>
+        /// <param name="after"></param>
+        /// <param name="startScale"></param>
+        /// <param name="targetScale"></param>
+        /// <param name="transitionType"></param>
+        /// <returns></returns>
+        public CanvasAnimationSystem ScaleFromTo(Component[] elements, float duration, float after, Vector3 startScale, Vector3 targetScale, TransitionType transitionType)
+        {
+            foreach (Component element in elements)
+            {
+                ScaleFromTo(element, duration, after, startScale, targetScale, transitionType);
+            }
+
             return this;
         }
         #endregion
@@ -692,14 +876,14 @@ namespace net.puk06.CanvasAnimation
         {
             if (element == null)
             {
-                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Element is Null - Object: {element.name}");
+                Debug.LogError($"{LogPrefix} Element is null. Processing was skipped.");
                 return this;
             }
 
             RectTransform currentObjectRectTransform = RectTransformUtils.GetRectTransform(element);
             if (currentObjectRectTransform == null)
             {
-                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Couldn't Get RectTransform - Object: {element.name}");
+                Debug.LogError($"{LogPrefix} Couldn't Get RectTransform - Object: {element.name}");
                 return this;
             }
 
@@ -736,7 +920,7 @@ namespace net.puk06.CanvasAnimation
 
                 string stats = $"{objectIndex},,,{positionIndex},,,{rotationIndex},,,{scaleIndex},,,{colorIndex}";
                 m_definedStats[definedStatsIndex] = stats;
-                Debug.Log($"{string.Format(LogTag, ColoredTag)} Object Definition Updated - Object: {element.name} - Definition: {definedStatsIndex}");
+                Debug.Log($"{LogPrefix} Object Definition Updated - Object: {element.name} - Definition: {definedStatsIndex}");
             }
             else
             {
@@ -750,8 +934,24 @@ namespace net.puk06.CanvasAnimation
                 string stats = $"{objectIndex},,,{positionIndex},,,{rotationIndex},,,{scaleIndex},,,{colorIndex}";
                 int statsIndex = ArrayUtils.AssignArrayValue(m_definedStats, stats);
 
-                if (statsIndex == -1) Debug.LogError($"{string.Format(LogTag, ColoredTag)} Failed to Define Object");
-                else Debug.Log($"{string.Format(LogTag, ColoredTag)} Object Definition Created - Object: {element.name} - Definition: {statsIndex}");
+                if (statsIndex == -1) Debug.LogError($"{LogPrefix} Failed to Define Object");
+                else Debug.Log($"{LogPrefix} Object Definition Created - Object: {element.name} - Definition: {statsIndex}");
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// The specified type of Transform for the UI Elements is saved in advance. If they exist, they are used as the initial Transforms for these UI Elements. They will not be removed unless RemoveDefine is called. Overwriting is possible.
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <param name="transformTypes"></param>
+        /// <returns></returns>
+        public CanvasAnimationSystem SaveTransform(Component[] elements, TransformType[] transformTypes)
+        {
+            foreach (Component element in elements)
+            {
+                SaveTransform(element, transformTypes);
             }
 
             return this;
@@ -767,14 +967,14 @@ namespace net.puk06.CanvasAnimation
         {
             if (element == null)
             {
-                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Element is Null - Object: {element.name}");
+                Debug.LogError($"{LogPrefix} Element is null. Processing was skipped.");
                 return this;
             }
 
             RectTransform currentObjectRectTransform = RectTransformUtils.GetRectTransform(element);
             if (currentObjectRectTransform == null)
             {
-                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Couldn't Get RectTransform from Object: {element.name}");
+                Debug.LogError($"{LogPrefix} Couldn't Get RectTransform from Object: {element.name}");
                 return this;
             }
 
@@ -807,7 +1007,7 @@ namespace net.puk06.CanvasAnimation
 
                 string stats = $"{objectIndex},,,{positionIndex},,,{rotationIndex},,,{scaleIndex},,,{colorIndex}";
                 m_definedStats[definedStatsIndex] = stats;
-                Debug.Log($"{string.Format(LogTag, ColoredTag)} Object Definition Updated - Object: {element.name} - Definition: {definedStatsIndex}");
+                Debug.Log($"{LogPrefix} Object Definition Updated - Object: {element.name} - Definition: {definedStatsIndex}");
             }
             else
             {
@@ -821,8 +1021,25 @@ namespace net.puk06.CanvasAnimation
                 string stats = $"{objectIndex},,,{positionIndex},,,{rotationIndex},,,{scaleIndex},,,{colorIndex}";
                 int statsIndex = ArrayUtils.AssignArrayValue(m_definedStats, stats);
 
-                if (statsIndex == -1) Debug.LogError($"{string.Format(LogTag, ColoredTag)} Failed to Define Object");
-                else Debug.Log($"{string.Format(LogTag, ColoredTag)} Object Define Created - Object: {element.name} - Definition: {statsIndex}");
+                if (statsIndex == -1) Debug.LogError($"{LogPrefix} Failed to Define Object");
+                else Debug.Log($"{LogPrefix} Object Define Created - Object: {element.name} - Definition: {statsIndex}");
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Predefine the specified type of Transform for the UI elements passed to you using the given value. If it exists, it will be used as the initial Transforms for these UI elements. It will not be removed unless you use RemoveDefine. Overwriting is possible.
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <param name="transform"></param>
+        /// <param name="transformType"></param>
+        /// <returns></returns>
+        public CanvasAnimationSystem DefineTransform(Component[] elements, Vector3 transform, TransformType transformType)
+        {
+            foreach (Component element in elements)
+            {
+                DefineTransform(element, transform, transformType);
             }
 
             return this;
@@ -838,7 +1055,7 @@ namespace net.puk06.CanvasAnimation
         {
             if (element == null)
             {
-                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Element is Null - Object: {element.name}");
+                Debug.LogError($"{LogPrefix} Element is null. Processing was skipped.");
                 return this;
             }
 
@@ -852,7 +1069,7 @@ namespace net.puk06.CanvasAnimation
                 RectTransform currentObjectRectTransform = RectTransformUtils.GetRectTransform(element);
                 if (currentObjectRectTransform == null)
                 {
-                    Debug.LogError($"{string.Format(LogTag, ColoredTag)} Couldn't Get RectTransform - Object: {element.name}");
+                    Debug.LogError($"{LogPrefix} Couldn't Get RectTransform - Object: {element.name}");
                     return this;
                 }
 
@@ -873,7 +1090,23 @@ namespace net.puk06.CanvasAnimation
             }
             else
             {
-                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Object Definition not found - Object: {element.name}");
+                Debug.LogError($"{LogPrefix} Object Definition not found - Object: {element.name}");
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Restores the Transform of the provided UI Elements based on the definition information. Only values present in the definition are applied.
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <param name="transformTypes"></param>
+        /// <returns></returns>
+        public CanvasAnimationSystem ResetTransform(Component[] elements, TransformType[] transformTypes)
+        {
+            foreach (Component element in elements)
+            {
+                ResetTransform(element, transformTypes);
             }
 
             return this;
@@ -924,7 +1157,7 @@ namespace net.puk06.CanvasAnimation
         {
             if (element == null)
             {
-                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Element is Null - Object: {element.name}");
+                Debug.LogError($"{LogPrefix} Element is null. Processing was skipped.");
                 return this;
             }
 
@@ -949,7 +1182,7 @@ namespace net.puk06.CanvasAnimation
 
                 string stats = $"{objectIndex},,,{positionIndex},,,{rotationIndex},,,{scaleIndex},,,{colorIndex}";
                 m_definedStats[definedStatsIndex] = stats;
-                Debug.Log($"{string.Format(LogTag, ColoredTag)} Object Definition Updated - Object: {element.name} - Definition: {definedStatsIndex}");
+                Debug.Log($"{LogPrefix} Object Definition Updated - Object: {element.name} - Definition: {definedStatsIndex}");
             }
             else
             {
@@ -963,8 +1196,8 @@ namespace net.puk06.CanvasAnimation
                 string stats = $"{objectIndex},,,{positionIndex},,,{rotationIndex},,,{scaleIndex},,,{colorIndex}";
                 int statsIndex = ArrayUtils.AssignArrayValue(m_definedStats, stats);
 
-                if (statsIndex == -1) Debug.LogError($"{string.Format(LogTag, ColoredTag)} Failed to Define Object");
-                else Debug.Log($"{string.Format(LogTag, ColoredTag)} Object Definition Created - Object: {element.name} - Definition: {statsIndex}");
+                if (statsIndex == -1) Debug.LogError($"{LogPrefix} Failed to Define Object");
+                else Debug.Log($"{LogPrefix} Object Definition Created - Object: {element.name} - Definition: {statsIndex}");
             }
 
             return this;
@@ -980,7 +1213,7 @@ namespace net.puk06.CanvasAnimation
         {
             if (element == null)
             {
-                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Element is Null - Object: {element.name}");
+                Debug.LogError($"{LogPrefix} Element is null. Processing was skipped.");
                 return this;
             }
 
@@ -1003,7 +1236,7 @@ namespace net.puk06.CanvasAnimation
 
                 string stats = $"{objectIndex},,,{positionIndex},,,{rotationIndex},,,{scaleIndex},,,{colorIndex}";
                 m_definedStats[definedStatsIndex] = stats;
-                Debug.Log($"{string.Format(LogTag, ColoredTag)} Object Definition Updated - Object: {element.name} - Definition: {definedStatsIndex}");
+                Debug.Log($"{LogPrefix} Object Definition Updated - Object: {element.name} - Definition: {definedStatsIndex}");
             }
             else
             {
@@ -1017,8 +1250,8 @@ namespace net.puk06.CanvasAnimation
                 string stats = $"{objectIndex},,,{positionIndex},,,{rotationIndex},,,{scaleIndex},,,{colorIndex}";
                 int statsIndex = ArrayUtils.AssignArrayValue(m_definedStats, stats);
 
-                if (statsIndex == -1) Debug.LogError($"{string.Format(LogTag, ColoredTag)} Failed to Define Object");
-                else Debug.Log($"{string.Format(LogTag, ColoredTag)} Object Definition Created - Object: {element.name} - Definition: {statsIndex}");
+                if (statsIndex == -1) Debug.LogError($"{LogPrefix} Failed to Define Object");
+                else Debug.Log($"{LogPrefix} Object Definition Created - Object: {element.name} - Definition: {statsIndex}");
             }
 
             return this;
@@ -1067,7 +1300,7 @@ namespace net.puk06.CanvasAnimation
         {
             if (element == null)
             {
-                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Element is Null - Object: {element.name}");
+                Debug.LogError($"{LogPrefix} Element is null. Processing was skipped.");
                 return this;
             }
 
@@ -1085,7 +1318,7 @@ namespace net.puk06.CanvasAnimation
             }
             else
             {
-                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Object Definition not found - Object: {element.name}");
+                Debug.LogError($"{LogPrefix} Object Definition not found - Object: {element.name}");
             }
 
             return this;
@@ -1102,7 +1335,7 @@ namespace net.puk06.CanvasAnimation
         {
             if (element == null)
             {
-                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Element is Null - Object: {element.name}");
+                Debug.LogError($"{LogPrefix} Element is null. Processing was skipped.");
                 return false;
             }
 
@@ -1120,7 +1353,7 @@ namespace net.puk06.CanvasAnimation
         {
             if (element == null)
             {
-                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Element is Null - Object: {element.name}");
+                Debug.LogError($"{LogPrefix} Element is null. Processing was skipped.");
                 return this;
             }
 
@@ -1157,11 +1390,26 @@ namespace net.puk06.CanvasAnimation
                 }
 
                 m_definedStats[definedStatsIndex] = null;
-                Debug.Log($"{string.Format(LogTag, ColoredTag)} Object Definition Removed - Object: {element.name} - Definition: {definedStatsIndex}");
+                Debug.Log($"{LogPrefix} Object Definition Removed - Object: {element.name} - Definition: {definedStatsIndex}");
             }
             else
             {
-                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Object Definition not found - Object: {element.name}");
+                Debug.LogError($"{LogPrefix} Object Definition not found - Object: {element.name}");
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Delete all definition information for the UI elements that was passed.
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <returns></returns>
+        public CanvasAnimationSystem RemoveDefine(Component[] elements)
+        {
+            foreach (Component element in elements)
+            {
+                RemoveDefine(element);
             }
 
             return this;
@@ -1176,6 +1424,12 @@ namespace net.puk06.CanvasAnimation
         /// <returns></returns>
         public CanvasAnimationSystem Cancel(Component element)
         {
+            if (element == null)
+            {
+                Debug.LogError($"{LogPrefix} Element is null. Processing was skipped.");
+                return this;
+            }
+
             for (int i = 0; i < m_currentTasks.Length; i++)
             {
                 if (m_currentTasks[i] == null || m_currentTasks[i] == "") continue;
@@ -1188,8 +1442,23 @@ namespace net.puk06.CanvasAnimation
                 Component targetObj = m_targetObjects[objectIndex];
                 if (targetObj == null || targetObj != element) continue;
 
-                Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Canceled - Object: {targetObj.name} - Task: {i}");
+                Debug.Log($"{LogPrefix} Animation Canceled - Object: {targetObj.name} - Task: {i}");
                 RemoveTask(parsedStrData, i);
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Cancels the currently running animation for the provided UI elements.
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <returns></returns>
+        public CanvasAnimationSystem Cancel(Component[] elements)
+        {
+            foreach (Component element in elements)
+            {
+                Cancel(element);
             }
 
             return this;
@@ -1209,7 +1478,7 @@ namespace net.puk06.CanvasAnimation
 
                 string[] parsedStrData = UdonUtils.ParseDataString(m_currentTasks[i]);
 
-                Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Canceled - Task: {i}");
+                Debug.Log($"{LogPrefix} Animation Canceled - Task: {i}");
                 RemoveTask(parsedStrData, i);
             }
 
@@ -1234,12 +1503,12 @@ namespace net.puk06.CanvasAnimation
         {
             if (after <= 0f)
             {
-                Debug.Log($"{string.Format(LogTag, ColoredTag)} Exit triggered immediately.");
+                Debug.Log($"{LogPrefix} Exit triggered immediately.");
                 ExitImmediate();
                 return;
             }
 
-            Debug.Log($"{string.Format(LogTag, ColoredTag)} Exit scheduled — the component will be disabled in {after} second{(after == 1f ? "" : "s")}.");
+            Debug.Log($"{LogPrefix} Exit scheduled — the component will be disabled in {after} second{(after == 1f ? "" : "s")}.");
             SendCustomEventDelayedSeconds(nameof(ExitImmediate), after);
         }
 
@@ -1253,7 +1522,7 @@ namespace net.puk06.CanvasAnimation
         public void CancelExit()
         {
             isExitCancelScheduled = true;
-            Debug.Log($"{string.Format(LogTag, ColoredTag)} Exit cancellation scheduled — the next exit attempt will be ignored.");
+            Debug.Log($"{LogPrefix} Exit cancellation scheduled — the next exit attempt will be ignored.");
         }
 
         /// <summary>
@@ -1267,13 +1536,13 @@ namespace net.puk06.CanvasAnimation
             if (isExitCancelScheduled)
             {
                 isExitCancelScheduled = false;
-                Debug.Log($"{string.Format(LogTag, ColoredTag)} Exit process canceled successfully — the component remains active.");
+                Debug.Log($"{LogPrefix} Exit process canceled successfully — the component remains active.");
                 return;
             }
 
-            Debug.Log($"{string.Format(LogTag, ColoredTag)} Executing Exit — the component is now being disabled.");
+            Debug.Log($"{LogPrefix} Executing Exit — the component is now being disabled.");
             if (runningAnimations > 0)
-                Debug.LogWarning($"{string.Format(LogTag, ColoredTag)} Warning: {runningAnimations} animation(s) are still playing, but the component is being disabled.");
+                Debug.LogWarning($"{LogPrefix} Warning: {runningAnimations} animation(s) are still playing, but the component is being disabled.");
 
             enabled = false;
         }
@@ -1294,7 +1563,7 @@ namespace net.puk06.CanvasAnimation
         {
             if (!_initialized)
             {
-                Debug.LogError($"{string.Format(LogTag, ColoredTag)} Task creation was canceled because you attempted to create a task before initialization.");
+                Debug.LogError($"{LogPrefix} Task creation was canceled because you attempted to create a task before initialization.");
                 return;
             }
 
@@ -1321,8 +1590,8 @@ namespace net.puk06.CanvasAnimation
             string stats = $"{objectIndex},,,{durationIndex},,,{startTimeIndex},,,{pixelOffsetIndex},,,{timeoutTimesIndex},,,{startPositionIndex},,,{startRotationIndex},,,{startScaleIndex},,,{startColorIndex},,,{transitionTypeIndex},,,{modesIndex},,,{elementTypeIndex},,,{targetPositionIndex},,,{targetRotationIndex},,,{targetScaleIndex},,,{targetColorIndex},,,{TypeUtils.BoolToInt(useDefinedPosition)},,,{TypeUtils.BoolToInt(useDefinedRotation)},,,{TypeUtils.BoolToInt(useDefinedScale)},,,{TypeUtils.BoolToInt(useDefinedColor)}";
             int statsIndex = ArrayUtils.AssignArrayValue(m_currentTasks, stats);
 
-            if (statsIndex == -1) Debug.LogError($"{string.Format(LogTag, ColoredTag)} Failed to create Animation Task. You have likely exceeded the maximum number of simultaneous animations.");
-            else Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Task Created - Object: {element.name} - Task: {statsIndex}");
+            if (statsIndex == -1) Debug.LogError($"{LogPrefix} Failed to create Animation Task. You have likely exceeded the maximum number of simultaneous animations.");
+            else Debug.Log($"{LogPrefix} Animation Task Created - Object: {element.name} - Task: {statsIndex}");
         }
 
         private void RemoveTask(string[] parsedTaskDataString, int taskIndex)
@@ -1775,7 +2044,7 @@ namespace net.puk06.CanvasAnimation
 
                 if (t >= 1f)
                 {
-                    Debug.Log($"{string.Format(LogTag, ColoredTag)} Animation Finished - Object: {targetObj.name} - Task: {i}");
+                    Debug.Log($"{LogPrefix} Animation Finished - Object: {targetObj.name} - Task: {i}");
                     RemoveTask(parsedStrData, i);
                 }
             }
