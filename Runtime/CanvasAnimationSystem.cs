@@ -1153,7 +1153,7 @@ namespace net.puk06.CanvasAnimation
         /// <returns></returns>
         public CanvasAnimationSystem SaveColor(TMP_Text element)
             => SaveColorInternal(element, ElementType.TMP_Text);
-        public CanvasAnimationSystem SaveColorInternal(Component element, ElementType elementType)
+        private CanvasAnimationSystem SaveColorInternal(Component element, ElementType elementType)
         {
             if (element == null)
             {
@@ -1296,7 +1296,7 @@ namespace net.puk06.CanvasAnimation
         /// <returns></returns>
         public CanvasAnimationSystem ResetColor(TMP_Text element)
             => ResetColorInternal(element, ElementType.TMP_Text);
-        public CanvasAnimationSystem ResetColorInternal(Component element, ElementType elementType)
+        private CanvasAnimationSystem ResetColorInternal(Component element, ElementType elementType)
         {
             if (element == null)
             {
