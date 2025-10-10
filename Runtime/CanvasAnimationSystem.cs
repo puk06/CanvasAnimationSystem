@@ -91,14 +91,16 @@ namespace net.puk06.CanvasAnimation
         public bool Initialized => _initialized;
 
         void Start()
-            => SetupArrays();
+            => Initialize();
 
         void Update()
             => ProcessAllAnimations();
 
         #region Initialize
-        private void SetupArrays()
+        public void Initialize()
         {
+            if (_initialized) return;
+            
             m_currentTasks = new string[maxConcurrentAnimations];
 
             m_targetObjects = new Component[maxConcurrentAnimations];
