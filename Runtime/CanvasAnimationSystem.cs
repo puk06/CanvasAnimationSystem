@@ -1795,14 +1795,14 @@ namespace net.puk06.CanvasAnimation
                     case AnimationMode.FadeIn:
                         {
                             Color objectColor = ColorUtils.GetColor(targetObj, elementType);
-                            objectColor.a = eased;
+                            objectColor.a = startColor.a + ((1f - startColor.a) * eased);
                             ColorUtils.SetColor(targetObj, elementType, objectColor);
                             break;
                         }
                     case AnimationMode.FadeOut:
                         {
                             Color objectColor = ColorUtils.GetColor(targetObj, elementType);
-                            objectColor.a = 1f - eased;
+                            objectColor.a = startColor.a - (startColor.a * eased);
                             ColorUtils.SetColor(targetObj, elementType, objectColor);
                             break;
                         }
