@@ -27,6 +27,7 @@ namespace net.puk06.CanvasAnimation
 
         private readonly string LogPrefix = $"[{UdonUtils.ColorizeString("Canvas Animation System", "#4eb3ee")}]";
 
+        #region Index Constants
         private const int OBJECT_INDEX = 0;
         private const int DURATION_INDEX = 1;
         private const int START_TIME_INDEX = 2;
@@ -57,7 +58,9 @@ namespace net.puk06.CanvasAnimation
         private const int DEFINITION_ROTATION_INDEX = 2;
         private const int DEFINITION_SCALE_INDEX = 3;
         private const int DEFINITION_COLOR_INDEX = 4;
+        #endregion
 
+        #region Task Data Fields
         private string[] m_currentTasks;
 
         private Component[] m_targetObjects;
@@ -79,13 +82,16 @@ namespace net.puk06.CanvasAnimation
         private Vector3[] m_targetScales;
         private Vector3[] m_targetRotations;
         private Color[] m_targetColors;
+        #endregion
 
+        #region Definition Data Fields
         private string[] m_definedStats;
         private Component[] m_definedObjects;
         private Vector3[] m_definedPosition;
         private Vector3[] m_definedRotations;
         private Vector3[] m_definedScales;
         private Color[] m_definedColors;
+        #endregion
 
         private bool _initialized = false;
         public bool Initialized => _initialized;
@@ -1652,7 +1658,7 @@ namespace net.puk06.CanvasAnimation
         private void ProcessAllAnimations()
         {
             if (!_initialized) Initialize();
-            
+
             int currentWorkingTasks = 0;
             for (int i = 0; i < m_currentTasks.Length; i++)
             {
