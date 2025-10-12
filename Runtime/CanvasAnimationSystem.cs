@@ -876,6 +876,8 @@ namespace net.puk06.CanvasAnimation
         /// <returns></returns>
         public CanvasAnimationSystem SaveTransform(Component element, TransformType[] transformTypes)
         {
+            if (!_initialized) Initialize();
+
             if (element == null)
             {
                 Debug.LogError($"{LogPrefix} Element is null. Processing was skipped.");
@@ -967,6 +969,8 @@ namespace net.puk06.CanvasAnimation
         /// <returns></returns>
         public CanvasAnimationSystem DefineTransform(Component element, Vector3 transform, TransformType transformType)
         {
+            if (!_initialized) Initialize();
+
             if (element == null)
             {
                 Debug.LogError($"{LogPrefix} Element is null. Processing was skipped.");
@@ -1055,6 +1059,8 @@ namespace net.puk06.CanvasAnimation
         /// <returns></returns>
         public CanvasAnimationSystem ResetTransform(Component element, TransformType[] transformTypes)
         {
+            if (!_initialized) Initialize();
+
             if (element == null)
             {
                 Debug.LogError($"{LogPrefix} Element is null. Processing was skipped.");
@@ -1157,6 +1163,8 @@ namespace net.puk06.CanvasAnimation
             => SaveColorInternal(element, ElementType.TMP_Text);
         private CanvasAnimationSystem SaveColorInternal(Component element, ElementType elementType)
         {
+            if (!_initialized) Initialize();
+
             if (element == null)
             {
                 Debug.LogError($"{LogPrefix} Element is null. Processing was skipped.");
@@ -1213,6 +1221,8 @@ namespace net.puk06.CanvasAnimation
         /// <returns></returns>
         public CanvasAnimationSystem DefineColor(Component element, Color color)
         {
+            if (!_initialized) Initialize();
+
             if (element == null)
             {
                 Debug.LogError($"{LogPrefix} Element is null. Processing was skipped.");
@@ -1300,6 +1310,8 @@ namespace net.puk06.CanvasAnimation
             => ResetColorInternal(element, ElementType.TMP_Text);
         private CanvasAnimationSystem ResetColorInternal(Component element, ElementType elementType)
         {
+            if (!_initialized) Initialize();
+            
             if (element == null)
             {
                 Debug.LogError($"{LogPrefix} Element is null. Processing was skipped.");
@@ -1335,6 +1347,8 @@ namespace net.puk06.CanvasAnimation
         /// <returns></returns>
         public bool IsRegisteredInDefineDatabase(Component element)
         {
+            if (!_initialized) Initialize();
+
             if (element == null)
             {
                 Debug.LogError($"{LogPrefix} Element is null. Processing was skipped.");
@@ -1353,6 +1367,8 @@ namespace net.puk06.CanvasAnimation
         /// <returns></returns>
         public CanvasAnimationSystem RemoveDefine(Component element)
         {
+            if (!_initialized) Initialize();
+
             if (element == null)
             {
                 Debug.LogError($"{LogPrefix} Element is null. Processing was skipped.");
@@ -1426,6 +1442,8 @@ namespace net.puk06.CanvasAnimation
         /// <returns></returns>
         public CanvasAnimationSystem Cancel(Component element)
         {
+            if (!_initialized) Initialize();
+
             if (element == null)
             {
                 Debug.LogError($"{LogPrefix} Element is null. Processing was skipped.");
@@ -1474,6 +1492,8 @@ namespace net.puk06.CanvasAnimation
         /// <returns></returns>
         public CanvasAnimationSystem CancelAll()
         {
+            if (!_initialized) Initialize();
+
             for (int i = 0; i < m_currentTasks.Length; i++)
             {
                 if (m_currentTasks[i] == null || m_currentTasks[i] == "") continue;
@@ -1563,9 +1583,11 @@ namespace net.puk06.CanvasAnimation
             bool useDefinedPosition, bool useDefinedRotation, bool useDefinedScale, bool useDefinedColor
         )
         {
-            if (!_initialized)
+            if (!_initialized) Initialize();
+
+            if (element == null)
             {
-                Debug.LogError($"{LogPrefix} Task creation was canceled because you attempted to create a task before initialization.");
+                Debug.LogError($"{LogPrefix} Task creation was canceled because element is null.");
                 return;
             }
 
@@ -1626,10 +1648,11 @@ namespace net.puk06.CanvasAnimation
         }
         #endregion
 
-
         #region Process All Animations
         private void ProcessAllAnimations()
         {
+            if (!_initialized) Initialize();
+            
             int currentWorkingTasks = 0;
             for (int i = 0; i < m_currentTasks.Length; i++)
             {
