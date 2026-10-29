@@ -1092,12 +1092,12 @@ namespace net.puk06.CanvasAnimation
                     currentObjectRectTransform.localPosition = m_definedPosition[int.Parse(parsedStrData[DEFINITION_POSITION_INDEX])];
                 }
 
-                if (UdonUtils.ArrayContains(transformTypes, TransformType.Position) != -1 && int.Parse(parsedStrData[DEFINITION_ROTATION_INDEX]) != -1)
+                if (UdonUtils.ArrayContains(transformTypes, TransformType.Rotation) != -1 && int.Parse(parsedStrData[DEFINITION_ROTATION_INDEX]) != -1)
                 {
                     currentObjectRectTransform.localEulerAngles = m_definedRotations[int.Parse(parsedStrData[DEFINITION_ROTATION_INDEX])];
                 }
 
-                if (UdonUtils.ArrayContains(transformTypes, TransformType.Position) != -1 && int.Parse(parsedStrData[DEFINITION_SCALE_INDEX]) != -1)
+                if (UdonUtils.ArrayContains(transformTypes, TransformType.Scale) != -1 && int.Parse(parsedStrData[DEFINITION_SCALE_INDEX]) != -1)
                 {
                     currentObjectRectTransform.localScale = m_definedScales[int.Parse(parsedStrData[DEFINITION_SCALE_INDEX])];
                 }
